@@ -15,7 +15,7 @@ require('dotenv').config()
 
 export default class DatabaseConnection {
     // class variable
-    mongoDbUri:string
+    private mongoDbUri:string
 
     constructor () {
         if (process.env.MONGODB_URI){
