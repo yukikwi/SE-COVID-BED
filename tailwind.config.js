@@ -3,7 +3,16 @@ module.exports = {
   prefix: 'tw-',
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'dark-green': '#354F52',
+        'matcha-green': '#CAD2C5',
+        'dark-matcha-green': {
+          medium: '#84A98C',
+          dark: '#354F52'
+        }
+      }
+    },
   },
   variants: {
     extend: {},
