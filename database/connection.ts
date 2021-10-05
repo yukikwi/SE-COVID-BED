@@ -14,32 +14,32 @@ import mongoose from "mongoose"
 require('dotenv').config()
 
 export default class DatabaseConnection {
-    // class variable
-    private mongoDbUri:string
+  // class variable
+  private mongoDbUri:string
 
-    constructor () {
-        if (process.env.MONGODB_URI){
-            this.mongoDbUri = process.env.MONGODB_URI
-        }
-        else{
-            // if not specific MONGODB_URI then throw error.
-            throw new Error(
-                'Please define the MONGODB_URI environment variable inside .env'
-            )
-        }
+  constructor () {
+    if (process.env.MONGODB_URI){
+      this.mongoDbUri = process.env.MONGODB_URI
     }
+    else{
+      // if not specific MONGODB_URI then throw error.
+      throw new Error(
+          'Please define the MONGODB_URI environment variable inside .env'
+      )
+    }
+  }
 
-    // get database connection
-    async connectDatabase () {
-        // try connect to mongodb
-        try{
-            await mongoose.connect(this.mongoDbUri)
-            return true
-        }
-        catch(e){
-            console.log('mongoose: connection failed')
-            console.log(e)
-            return false
-        }
+  // get database connection
+  async connectDatabase () {
+    // try connect to mongodb
+    try{
+      await mongoose.connect(this.mongoDbUri)
+      return true
     }
+    catch(e){
+      console.log('mongoose: connection failed')
+      console.log(e)
+      return false
+    }
+  }
 }
