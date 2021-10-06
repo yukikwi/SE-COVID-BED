@@ -26,7 +26,7 @@ function LoginForm({}: Props): ReactElement {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input size="large" placeholder="PASSWORD" prefix={<LockOutlined />} />
+          <Input.Password size="large" placeholder="PASSWORD" prefix={<LockOutlined />} />
         </Form.Item>
 
         <Form.Item className="tw-text-center">
