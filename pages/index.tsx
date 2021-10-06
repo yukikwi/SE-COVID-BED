@@ -8,7 +8,7 @@ const Home: NextPage = () => {
       <Logo />
       <div className="tw-flex tw-justify-center tw-flex-col md:tw-flex-row">
         <PositiveButton className="md:tw-mr-5 tw-w-full md:tw-w-auto" target="/" text="Patient" />
-        <PositiveButton className="tw-mt-3 md:tw-mt-0 tw-w-full md:tw-w-auto" target="/" text="Staff" />
+        <PositiveButton className="tw-mt-3 md:tw-mt-0 tw-w-full md:tw-w-auto" target="/login" text="Staff" />
       </div>
     </div>
   )
