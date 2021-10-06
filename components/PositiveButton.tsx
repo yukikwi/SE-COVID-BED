@@ -14,7 +14,7 @@ function PositiveButton(props: Props): ReactElement {
   const goToTarget = () => {
     router.push(target)
   }
-  const componentClassName = `${className} tw-rounded-full tw-bg-dark-green tw-p-5 tw-text-white tw-w-3/5 md:tw-w-2/5 tw-text-2xl`
+  const componentClassName = `${className} tw-rounded-full tw-bg-dark-green tw-p-5 tw-text-white tw-min-w-3/5 md:tw-min-w-2/5 tw-text-2xl`
 
   return (
     <button onClick={goToTarget} className={componentClassName} type={htmlType}>
