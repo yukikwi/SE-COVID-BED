@@ -30,7 +30,7 @@ function LoginForm({}: Props): ReactElement {
         </Form.Item>
 
         <Form.Item className="tw-text-center">
-          <PositiveButton className="tw-mt-3 md:tw-mt-0 tw-w-full md:tw-w-4/5" htmlType="submit" text="Login"/>
+          <PositiveButton className="tw-mt-3 md:tw-mt-0 tw-w-full" htmlType="submit" text="Login"/>
         </Form.Item>
       </Form>
     </div>
