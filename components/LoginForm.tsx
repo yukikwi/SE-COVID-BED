@@ -3,7 +3,6 @@ import { Form, Input, Button, Alert, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import PositiveButton from "./PositiveButton";
 import axios from "axios";
-import { NEXT_API } from "../path";
 import { useRouter } from "next/router";
 
 interface Props {}
