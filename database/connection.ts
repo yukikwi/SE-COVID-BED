@@ -15,7 +15,7 @@ require('dotenv').config()
 
 export default class DatabaseConnection {
     // class variable
-    private mongoDbUri:string
+    private mongoDbUri: string
 
     constructor () {
         if (process.env.MONGODB_URI){
@@ -38,7 +38,6 @@ export default class DatabaseConnection {
         }
         catch(e){
             console.log('mongoose: connection failed')
-            console.log(e)
             return false
         }
     }
