@@ -14,36 +14,40 @@ export default async function login(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  try {
-    const database = new connection();
-    // can connect database or not
-    const isDatabaseConnected = await database.connectDatabase();
-    if (isDatabaseConnected === true) {
-      // const {username, password} = req.body;
-      
-      //test variable
-      const password = "123456";
-      const username = "capybara";
+  if (req.method === "POST") {
+    try {
+      const database = new connection();
+      // can connect database or not
+      const isDatabaseConnected = await database.connectDatabase();
+      if (isDatabaseConnected === true) {
+        const { username, password } = req.body;
 
-      //query userData by username
-      const userData = await User.findOne({ username });
-      //compare password
-      if (userData && userData.password) {
-        const isUser = await compare(password, userData.password);
-        if (isUser) {
-          res.status(200).json({ code: "Success" });
+        //test variable
+        // const password = "123456";
+        // const username = "capybara";
+
+        //query userData by username
+        const userData = await User.findOne({ username });
+        //compare password
+        if (userData && userData.password) {
+          const isUser = await compare(password, userData.password);
+          if (isUser) {
+            res.status(200).json({ code: "login successful" });
+          } else {
+            res.status(401).json({ error: "password not correct" });
+          }
+          console.log(userData);
         } else {
-          res.status(401).json({ error: "fail to login" });
+          res.status(404).json({ error: "username not found" });
         }
-        console.log(userData);
       } else {
-        res.status(404).json({ error: "username not found" });
+        // database connection fail
+        res.status(500).json({ error: "fail to connect to database" });
       }
-    } else {
-      // database connection fail
-      res.status(500).json({ error: "fail to connect to database" });
+    } catch (err) {
+      res.status(400).end();
     }
-  } catch (err) {
+  } else {
     res.status(400).end();
   }
 }
