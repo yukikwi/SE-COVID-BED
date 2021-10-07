@@ -1,5 +1,5 @@
 
-**This folder is for mongodb interface and document model**
+**This folder is for mongodb document model**
 
   
 
