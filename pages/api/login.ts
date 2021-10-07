@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Connection from "../../database/connection";
-import User from "../../database/user";
+import Connection from "../../class/connection";
+import User from "../../class/user";
 
 export default async function login(
   req: NextApiRequest,
