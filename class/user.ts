@@ -1,12 +1,14 @@
 import { TUser } from './data_struct/user'
-import { UserModel } from './model/index'
 import { compare } from "bcrypt";
+import Database from "./database";
 
 class User {
   private user:TUser
+  private database:Database
 
   constructor () {
     this.user = {}
+    this.database = new Database()
   }
 
   getUser() {
@@ -15,7 +17,7 @@ class User {
 
   async login(username:string, password:string){
     //query userData by username
-    const userData = await UserModel.findOne({ username });
+    const userData = await this.database.getAUser({ username });
     //compare password
     if (userData && userData.password) {
       const isUser = await compare(password, userData.password);
