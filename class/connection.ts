@@ -10,6 +10,9 @@
 
 // load mongoose dependency
 import mongoose from "mongoose"
+// load data_struct and model
+import { TUser } from "./data_struct/user"
+import { UserModel } from "./model/index"
 // load dotenv for load environment variable from .env file
 require('dotenv').config()
 
@@ -41,5 +44,9 @@ export default class DatabaseConnection {
       console.log(e)
       return false
     }
+  }
+
+  async getAUser (condition:TUser) {
+    return await UserModel.findOne(condition)
   }
 }

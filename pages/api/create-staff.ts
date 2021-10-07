@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connection from "../../database/connection";
-import { User } from "../../database/model/index";
+import connection from "../../class/connection";
+import { UserModel } from "../../class/model/index";
 import { hash } from "bcrypt";
 
 type Data = {
@@ -22,7 +22,7 @@ export default async function createStaff(
         const password = "123456"
         const hashpassword = await hash(password, 12);
         console.log("isDatabaseConnected")
-        const newUser = new User({username: username, password: hashpassword})
+        const newUser = new UserModel({username: username, password: hashpassword})
         const userdata = await newUser.save()
         
         console.log("success", userdata)

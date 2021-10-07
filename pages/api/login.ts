@@ -1,45 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connection from "../../database/connection";
-import { User, IUser } from "../../database/model/index";
-import { compare } from "bcrypt";
+import Connection from "../../class/connection";
+import User from "../../class/user";
 
-type Data = {
-  name?: string;
-  error?: string;
-  data?: IUser | null;
-  code?: string;
-};
 
 export default async function login(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
   if (req.method === "POST") {
     try {
-      const database = new connection();
+      const database = new Connection();
+      const user = new User();
       // can connect database or not
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const { username, password } = req.body;
+        
+        // use method login from userlogin class
+        const loginData = await user.login(username, password);
+        res.status(loginData.http).json(loginData.data);
 
-        //test variable
-        // const password = "123456";
-        // const username = "capybara";
-
-        //query userData by username
-        const userData = await User.findOne({ username });
-        //compare password
-        if (userData && userData.password) {
-          const isUser = await compare(password, userData.password);
-          if (isUser) {
-            res.status(200).json({ code: "login successful" });
-          } else {
-            res.status(401).json({ error: "password not correct" });
-          }
-          console.log(userData);
-        } else {
-          res.status(404).json({ error: "username not found" });
-        }
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
