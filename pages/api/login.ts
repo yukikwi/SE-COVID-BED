@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connection from "../../database/connection";
+import Connection from "../../database/connection";
 import { User, IUser } from "../../database/model/index";
 import { compare } from "bcrypt";
 
@@ -15,7 +15,7 @@ export default async function login(
   res: NextApiResponse<Data>
 ) {
   try {
-    const database = new connection();
+    const database = new Connection();
     // can connect database or not
     const isDatabaseConnected = await database.connectDatabase();
     if (isDatabaseConnected === true) {
