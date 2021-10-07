@@ -5,7 +5,7 @@
 * Created by Pachara Chantawong, 04 October 2021 as part of the SE COVID BED
 *
 * Revision 1.0 2021/10/04 17:54:00 pachara
-* initial DatabaseConnection with method getConnection: Boolean
+* initial Database with method getConnection: Boolean
 */
 
 // load mongoose dependency
@@ -13,7 +13,7 @@ import mongoose from "mongoose"
 // load dotenv for load environment variable from .env file
 require('dotenv').config()
 
-export default class DatabaseConnection {
+export default class Database {
   // class variable
   private mongoDbUri:string
 
