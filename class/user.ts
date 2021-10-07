@@ -1,4 +1,4 @@
-import { TUser } from './interface/user'
+import { TUser } from './data_struct/user'
 import { UserModel } from './model/index'
 import { compare } from "bcrypt";
 
@@ -48,4 +48,3 @@ class User {
 }
 
 export default User
-// export const User: Model<IUser> = mongoose.models.User || model("User", UserSchema, "User")

@@ -1,6 +1,7 @@
 import mongoose, { Document, model, Model, Schema } from "mongoose"
-import { IUser } from '../interface/user'
+import { IUser } from '../data_struct/user'
 
+// create mongoose.schema
 const UserSchema: Schema = new Schema({
   username: {
     type: String
@@ -10,5 +11,5 @@ const UserSchema: Schema = new Schema({
   }
 })
 
-
+// create mongoose.model
 export const UserModel: Model<IUser> = mongoose.models.User || model("User", UserSchema, "User")
