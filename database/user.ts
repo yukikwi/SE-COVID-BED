@@ -1,5 +1,5 @@
 import { TUser } from './interface/user'
-import { UserModel } from './model/User'
+import { UserModel } from './model/index'
 import { compare } from "bcrypt";
 
 class User {
@@ -21,11 +21,28 @@ class User {
       const isUser = await compare(password, userData.password);
       if (isUser) {
         this.user = userData
+        return {
+          http: 200,
+          data: {
+            code: "Success",
+            userData
+          }
+        }
       } else {
-        return { error: "fail to login" }
+        return {
+          http: 401,
+          data: {
+            error: "fail to login"
+          }
+        }
       }
     } else {
-      return { error: "username not found" }
+      return {
+        http: 404,
+        data: {
+          error: "username not found"
+        }
+      }
     }
   }
 }
