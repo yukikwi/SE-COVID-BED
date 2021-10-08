@@ -16,7 +16,7 @@ import { UserModel } from "./model/index"
 // load dotenv for load environment variable from .env file
 require('dotenv').config()
 
-export default class DatabaseConnection {
+export default class Database {
   // class variable
   private mongoDbUri:string
 

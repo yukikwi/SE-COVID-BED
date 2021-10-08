@@ -1,14 +1,14 @@
 import { TUser } from "./data_struct/user";
 import { compare } from "bcrypt";
-import DatabaseConnection from "./connection";
+import Database from "./database";
 
 class User {
   private user: TUser;
-  private database: DatabaseConnection;
+  private database: Database;
 
   constructor() {
     this.user = {};
-    this.database = new DatabaseConnection();
+    this.database = new Database();
   }
 
   getUser() {
