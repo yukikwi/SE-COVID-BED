@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Connection from "../../class/connection";
+import Connection from "../../class/database";
 import User from "../../class/user";
 
 

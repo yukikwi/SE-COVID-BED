@@ -1,6 +1,6 @@
 import { TUser } from "./data_struct/user";
 import { compare } from "bcrypt";
-import DatabaseConnection from "./connection";
+import DatabaseConnection from "./database";
 
 class User {
   private user: TUser;
