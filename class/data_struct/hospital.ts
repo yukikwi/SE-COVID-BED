@@ -9,3 +9,12 @@ export interface IHospital extends Document {
   hospitalLocation: object;
   hospitalStatus: string;
 }
+
+export type THospital = {
+  hospitalName?: string,
+  hospitalPhoneNumber?: string,
+  hospitalConvince?: string,
+  hospitalAddress?: string,
+  hospitalLocation?: object,
+  hospitalStatus?: string
+}

@@ -55,4 +55,9 @@ export default class Database {
   async editHospital(id: string, newdata: any) {
     return await HospitalModel.updateOne({ _id: id }, newdata);
   }
+
+  async addHospital(newHospitalData: Object) {
+    const newHospital = new HospitalModel(newHospitalData);
+    return await newHospital.save();
+  }
 }
