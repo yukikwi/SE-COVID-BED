@@ -52,8 +52,8 @@ export default class Database {
     return await HospitalModel.find({});
   }
 
-  async editHospital(id: string, newdata: any) {
-    return await HospitalModel.updateOne({ _id: id }, newdata);
+  async getAHospital(id: any) {
+    return await HospitalModel.findById(id);
   }
 
   async addHospital(newHospitalData: Object) {
