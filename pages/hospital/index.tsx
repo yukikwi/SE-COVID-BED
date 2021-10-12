@@ -32,7 +32,7 @@ const HospitalIndex: NextPage = () => {
     <LayoutHospital
       title="Capybara Hospital : Resource list"
       button={
-        <Button className="tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto tw-w-full md:tw-w-auto" type="primary" shape="round" icon={<PlusSquareOutlined />} size="large">add resource</Button>
+        <Button className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto" type="primary" shape="round" icon={<PlusSquareOutlined />} size="large">add resource</Button>
       }
     >
       <List
