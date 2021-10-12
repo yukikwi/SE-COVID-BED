@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import LayoutHospital from '../../../components/Layout/Hospital'
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import Status from '../../../components/Hospital/Status'
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { EyeOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 type TResource = {
   key: string,
@@ -65,7 +65,12 @@ const HospitalResourceIndex: NextPage = () => {
   ];
 
   return (
-    <LayoutHospital title="Capybara Hospital : Resource list">
+    <LayoutHospital
+      title="Capybara Hospital : Resource list"
+      button={
+        <Button className="tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto tw-w-full md:tw-w-auto" type="primary" shape="round" icon={<PlusSquareOutlined />} size="large">add resource</Button>
+      }
+    >
       <div className="tw-overflow-x-scroll">
         <Table columns={columns} dataSource={data} />
       </div>

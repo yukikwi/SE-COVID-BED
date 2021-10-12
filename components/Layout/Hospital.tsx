@@ -1,15 +1,18 @@
 import React, { ReactChild, ReactElement } from 'react'
 import HospitalNavbar from '../Navbar'
-import { Button } from 'antd'
-import { PlusSquareOutlined } from '@ant-design/icons'
 
 interface Props {
   children: ReactChild,
+  button: ReactElement,
   title: string
 }
 
+LayoutHospital.defaultProps = {
+  button: <></>
+}
+
 function LayoutHospital(props: Props): ReactElement {
-  const {children, title} = props
+  const {children, title, button} = props
   return (
     <div>
       <HospitalNavbar />
@@ -18,7 +21,7 @@ function LayoutHospital(props: Props): ReactElement {
           <h1 className="tw-text-charcoal tw-text-3xl tw-font-bold">{ title }</h1>
         </div>
         <div className="tw-col-span-2 md:tw-col-span-1 tw-mt-5 md:tw-mt-0">
-          <Button className="tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto tw-w-full md:tw-w-auto" type="primary" shape="round" icon={<PlusSquareOutlined />} size="large">add resource</Button>
+          { button }
         </div>
 
         <div className="tw-bg-white tw-p-5 tw-mt-5 tw-col-span-2 tw-rounded-lg">
