@@ -1,5 +1,5 @@
 import React, { ReactChild, ReactElement } from 'react'
-import HospitalNavbar from '../../components/Hospital/Navbar'
+import HospitalNavbar from '../Navbar'
 import { Button } from 'antd'
 import { PlusSquareOutlined } from '@ant-design/icons'
 
@@ -12,7 +12,7 @@ function LayoutHospital(props: Props): ReactElement {
   const {children, title} = props
   return (
     <div>
-      <HospitalNavbar />
+      <HospitalNavbar system/>
       <div className="tw-mx-10 tw-my-5 tw-grid tw-grid-cols-2">
         <div>
           <h1 className="tw-text-charcoal tw-text-3xl tw-font-bold">{ title }</h1>
