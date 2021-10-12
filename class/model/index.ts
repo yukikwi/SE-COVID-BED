@@ -1,1 +1,2 @@
-export { UserModel } from "./User"
+export { UserModel } from "./User";
+export { HospitalModel } from "./Hospital";
