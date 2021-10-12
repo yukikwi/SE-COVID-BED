@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { showModal } from "../../store/deleteModal/actions";
 
 type TResource = {
-    avaliable: number,
-    amount: number,
-    isClose: boolean
+  hospital: string,
+  avaliable: number,
+  amount: number,
+  isClose: boolean
 }
 
 const HospitalResourceIndex: NextPage = () => {
@@ -19,7 +20,10 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: 'Hospital',
       dataIndex: 'hospital',
-      key: 'hospital'
+      key: 'hospital',
+      sorter: {
+        compare: (a:TResource,b:TResource) => a.hospital.localeCompare(b.hospital)
+      }
     },
     {
       title: 'Convince',
@@ -76,7 +80,7 @@ const HospitalResourceIndex: NextPage = () => {
       isClose: false
     },
     {
-      key: '2',
+      key: '3',
       hospital: 'KIKK Hospital',
       convince: 'MARS',
       staff: 'Dr.SINOVAC',
