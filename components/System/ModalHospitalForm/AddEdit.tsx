@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react'
-import { Form, Input, Button, Switch } from 'antd';
+import { Form, Input, Button } from 'antd';
+import HospitalStatus from './HospitalStatus'
+import Resources from './Resources'
 
 interface Props {
   
@@ -19,17 +21,6 @@ function AddEditForm({}: Props): ReactElement {
   // If fetch data from api
   hospitalData = { hospitalName: 'Capybara Hospital', hospitalStatus: 'close' }
 
-  // UI status
-  const HospitalStatus = () => {
-    const hospitalStatus = hospitalData.hospitalStatus
-    if(hospitalStatus === 'open'){
-      return <Switch onChange={ updateHospitalStatus } checkedChildren="Open" unCheckedChildren="Close" defaultChecked />
-    }
-    else{
-      return <Switch onChange={ updateHospitalStatus } checkedChildren="Open" unCheckedChildren="Close" />
-    }
-  }
-
   // get Changed value 
   const updateHospitalData = (changed:IHospitalData) => {
     formData = {...formData, ...changed}
@@ -38,6 +29,8 @@ function AddEditForm({}: Props): ReactElement {
 
   // update status toggle value on change
   const updateHospitalStatus = (status:boolean) => {updateHospitalData({hospitalStatus: (status)? 'open':'close'})}
+  // status getter
+  const hospitalstatus = () => { return hospitalData.hospitalStatus }
 
   return (
     <Form
@@ -73,12 +66,17 @@ function AddEditForm({}: Props): ReactElement {
       </Form.Item>
 
       <Form.Item
-        label="Staff"
-        name="staff"
-        rules={[{ required: true, message: 'Please input Staff!' }]}
+        label="Status"
       >
-        <HospitalStatus />
+        <HospitalStatus hospitalStatus={hospitalstatus()} updateHospitalStatus={updateHospitalStatus}/>
       </Form.Item>
+
+      <div className="tw-mb-5">
+        <label>
+          Resources
+        </label>
+        <Resources />
+      </div>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
