@@ -62,6 +62,10 @@ export default class Database {
   }
 
   async deleteHospital(id: string) {
-    return await HospitalModel.findByIdAndUpdate(id, {isDelete: true});
+    return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
+  }
+
+  async editHospital(id: string, newData: Object) {
+    return await HospitalModel.findByIdAndUpdate(id, newData);
   }
 }

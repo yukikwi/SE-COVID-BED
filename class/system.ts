@@ -1,11 +1,11 @@
-import { THospital } from "./data_struct/hospital"
+import { THospital } from "./data_struct/hospital";
 import Database from "./database";
 
 class System {
   private newHospitalData: THospital;
   private database: Database;
 
-  constructor(){
+  constructor() {
     this.database = new Database();
     this.newHospitalData = {};
   }
@@ -17,30 +17,29 @@ class System {
     hospitalAddress: String,
     hospitalLocationLat: String,
     hospitalLocationLong: String,
-    hospitalStatus: String,
+    hospitalStatus: String
   ) {
-
     this.newHospitalData = {
       hospitalName: `${hospitalName}`,
       hospitalPhoneNumber: `${hospitalPhoneNumber}`,
       hospitalConvince: `${hospitalConvince}`,
       hospitalAddress: `${hospitalAddress}`,
       hospitalLocation: {
-        lat: `${hospitalLocationLat}`, 
-        long: `${hospitalLocationLong}`
+        lat: `${hospitalLocationLat}`,
+        long: `${hospitalLocationLong}`,
       },
       hospitalStatus: `${hospitalStatus}`,
-      isDelete: false
-    }
-    
+      isDelete: false,
+    };
+
     console.log(this.newHospitalData);
-    if(this.newHospitalData){
+    if (this.newHospitalData) {
       this.database.addHospital(this.newHospitalData);
       return {
         http: 201,
         data: {
           code: "Success to add hospital",
-          hospitalData: this.newHospitalData
+          hospitalData: this.newHospitalData,
         },
       };
     } else {
@@ -51,24 +50,42 @@ class System {
         },
       };
     }
-    
-
   }
 
-  async deleteHospital(id: string){
-    try{
+  async deleteHospital(id: string) {
+    try {
       this.database.deleteHospital(id);
       return {
         http: 200,
         data: {
-          code: "Success to delete hospital"
+          code: "Success to delete hospital",
         },
       };
-    } catch(error) {
+    } catch (error) {
       return {
         http: 500,
         data: {
           error: "Fail to delete hospital",
+        },
+      };
+    }
+  }
+
+  async editHospital(id: string, newData: object) {
+    try {
+      this.database.editHospital(id, newData);
+
+      return {
+        http: 200,
+        data: {
+          code: "Success to edit hospital",
+        },
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to edit hospital",
         },
       };
     }
