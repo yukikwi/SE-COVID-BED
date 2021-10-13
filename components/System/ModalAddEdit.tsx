@@ -3,6 +3,7 @@ import { Modal } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
 import { getaddOrEditModalState } from "../../store/addOrEditModal/selectors";
 import { hideAddOrEditModal } from '../../store/addOrEditModal/actions';
+import AddEditForm from './ModalHospitalForm/AddEdit'
 
 interface Props {
 
@@ -21,9 +22,10 @@ function ModalAddEdit({}: Props): ReactElement {
       visible={show}
       onCancel={() => dispatch(hideAddOrEditModal())}
       okText="Save"
+      width = { 1000 }
       centered
     >
-      <p>click "Confirm" if you’re sure that you want to remove this hospital, if not click cancel</p>
+      <AddEditForm />
     </Modal>
   )
 }
