@@ -17,7 +17,7 @@ class System {
     hospitalAddress: String,
     hospitalLocationLat: String,
     hospitalLocationLong: String,
-    hospitalStatus: String
+    hospitalStatus: String,
   ) {
 
     this.newHospitalData = {
@@ -29,7 +29,8 @@ class System {
         lat: `${hospitalLocationLat}`, 
         long: `${hospitalLocationLong}`
       },
-      hospitalStatus: `${hospitalStatus}`
+      hospitalStatus: `${hospitalStatus}`,
+      isDelete: false
     }
     
     console.log(this.newHospitalData);
@@ -52,6 +53,25 @@ class System {
     }
     
 
+  }
+
+  async deleteHospital(id: string){
+    try{
+      this.database.deleteHospital(id);
+      return {
+        http: 200,
+        data: {
+          code: "Success to delete hospital"
+        },
+      };
+    } catch(error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to delete hospital",
+        },
+      };
+    }
   }
 }
 

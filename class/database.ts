@@ -60,4 +60,8 @@ export default class Database {
     const newHospital = new HospitalModel(newHospitalData);
     return await newHospital.save();
   }
+
+  async deleteHospital(id: string) {
+    return await HospitalModel.findByIdAndUpdate(id, {isDelete: true});
+  }
 }

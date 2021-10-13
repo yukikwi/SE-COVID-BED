@@ -20,6 +20,9 @@ const HospitalSchema: Schema = new Schema({
   hospitalStatus: {
     type: String,
   },
+  isDelete: {
+    type: Boolean,
+  }
 });
 
 export const HospitalModel: Model<IHospital> =
