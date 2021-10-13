@@ -18,8 +18,8 @@ export default async function addHospital(
           hospitalStatus } = req.body;
 
         // use method login from userlogin class
-        const loginData = await system.addHospital(hospitalName, hospitalPhoneNumber, hospitalConvince, hospitalAddress, hospitalLocationLat, hospitalLocationLong, hospitalStatus);
-        res.status(loginData.http).json(loginData.data);
+        const addHospitalStatus = await system.addHospital(hospitalName, hospitalPhoneNumber, hospitalConvince, hospitalAddress, hospitalLocationLat, hospitalLocationLong, hospitalStatus);
+        res.status(addHospitalStatus.http).json(addHospitalStatus.data);
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
