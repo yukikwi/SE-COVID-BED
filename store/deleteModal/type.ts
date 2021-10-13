@@ -3,8 +3,8 @@ export interface deleteModalState {
 }
 
 export enum deleteModalActionType {
-  SHOW_MODAL = "SHOW_MODAL",
-  HIDE_MODAL = "HIDE_MODAL"
+  SHOW_DELETE_MODAL = "SHOW_DELETE_MODAL",
+  HIDE_DELETE_MODAL = "HIDE_DELETE_MODAL"
 }
 
 export type deleteModalAction = deleteModalActionType;

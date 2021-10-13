@@ -2,13 +2,13 @@ import { addOrEdit, addOrEditModalActionType, addOrEditModalActionInterface } fr
 
 export function showAddOrEditModal(mode:addOrEdit): addOrEditModalActionInterface {
 	return {
-		type: addOrEditModalActionType.SHOW_MODAL,
+		type: addOrEditModalActionType.SHOW_AOR_MODAL,
 		payload: mode,
 	};
 }
 
 export function hideAddOrEditModal(): addOrEditModalActionInterface {
 	return {
-		type: addOrEditModalActionType.HIDE_MODAL
+		type: addOrEditModalActionType.HIDE_AOR_MODAL
 	};
 }

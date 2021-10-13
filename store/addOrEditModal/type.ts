@@ -6,8 +6,8 @@ export interface addOrEditModalState {
 }
 
 export enum addOrEditModalActionType {
-  SHOW_MODAL = "SHOW_MODAL",
-  HIDE_MODAL = "HIDE_MODAL"
+  SHOW_AOR_MODAL = "SHOW_AOR_MODAL",
+  HIDE_AOR_MODAL = "HIDE_AOR_MODAL"
 }
 
 export type addOrEditModalAction = addOrEditModalActionType;

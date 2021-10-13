@@ -6,9 +6,9 @@ const initialState: deleteModalState = {
 
 export function deleteModalReducer(state = initialState, action: deleteModalActionInterface): deleteModalState {
 	switch (action.type) {
-		case deleteModalActionType.SHOW_MODAL:
+		case deleteModalActionType.SHOW_DELETE_MODAL:
 			return { show: true };
-    case deleteModalActionType.HIDE_MODAL:
+    case deleteModalActionType.HIDE_DELETE_MODAL:
       return { show: false };
 		default:
 			return state;
