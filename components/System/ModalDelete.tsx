@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 import { Modal } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
-import { hideModal } from '../../store/deleteModal/actions';
+import { hideDeleteModal } from '../../store/deleteModal/actions';
 
 interface Props {
 
@@ -18,7 +18,7 @@ function ModalDelete({}: Props): ReactElement {
     <Modal
       title="Delete Hospital"
       visible={showDeleteModal}
-      onCancel={() => dispatch(hideModal())}
+      onCancel={() => dispatch(hideDeleteModal())}
       okText="Confirm"
       centered
     >
