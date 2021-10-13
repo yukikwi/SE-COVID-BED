@@ -1,9 +1,11 @@
 import { createStore, combineReducers } from "redux";
 
 import { deleteModalReducer } from "./deleteModal/reducers";
+import { addOrEditModalReducer } from "./addOrEditModal/reducers";
 
 const rootReducer = combineReducers({
 	deleteModalReducer,
+	addOrEditModalReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

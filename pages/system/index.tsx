@@ -1,11 +1,13 @@
 import type { NextPage } from 'next'
 import LayoutHospital from '../../components/Layout/Hospital'
 import ModalDelete from '../../components/System/ModalDelete'
+import ModalAddEdit from '../../components/System/ModalAddEdit'
 import { Table, Button } from 'antd';
 import Status from '../../components/System/Status'
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import { useDispatch } from "react-redux";
-import { showModal } from "../../store/deleteModal/actions";
+import { showDeleteModal } from "../../store/deleteModal/actions";
+import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
 
 type TResource = {
   hospital: string,
@@ -52,9 +54,9 @@ const HospitalResourceIndex: NextPage = () => {
       key: 'action',
       render: (record:TResource) => (
         <div>
-          <a className="hover:tw-text-green-500" href="#"><EyeOutlined className="tw-font-base tw-mr-3" /></a>
-          <a className="hover:tw-text-yellow-500" href="#"><EditOutlined className="tw-font-base tw-mr-3" /></a>
-          <a className="hover:tw-text-red-500" onClick={() => { dispatch(showModal()) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
+          <a className="hover:tw-text-green-500" onClick={() => { dispatch(showAddOrEditModal('Add')) }}><EyeOutlined className="tw-font-base tw-mr-3" /></a>
+          <a className="hover:tw-text-yellow-500" onClick={() => { dispatch(showAddOrEditModal('Edit')) }}><EditOutlined className="tw-font-base tw-mr-3" /></a>
+          <a className="hover:tw-text-red-500" onClick={() => { dispatch(showDeleteModal()) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
         </div>
       )
     }
@@ -102,6 +104,7 @@ const HospitalResourceIndex: NextPage = () => {
     >
       <div>
         <ModalDelete />
+        <ModalAddEdit />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
         </div>
