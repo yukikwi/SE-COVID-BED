@@ -38,10 +38,13 @@ function Resources({}: Props): ReactElement {
   const [data, setData] = useState(originData);
   const [form] = Form.useForm();
   
+  // check is row in edit state
   const isEditing = (record: Record) => record.key === editingKey;
 
+  // if user click edit do this
   const edit = (record: Partial<Record> & { key: React.Key }) => {
     form.setFieldsValue({ resource: '', maximum: 0, avaliable: 0, remark: '', ...record });
+    // set editing key to specific row
     setEditingKey(record.key);
   };
 
@@ -90,6 +93,7 @@ function Resources({}: Props): ReactElement {
       title: 'operation',
       dataIndex: 'operation',
       render: (_: any, record: Record) => {
+        // render option: save, cancel
         const editable = isEditing(record);
         return editable ? (
           <span>
@@ -109,15 +113,18 @@ function Resources({}: Props): ReactElement {
     }
   ];
 
+  // patch cell
   const mergedColumns = columns.map(col => {
+    // if cannot edit
     if (!col.editable) {
       return col;
     }
+    // else allow edit
     return {
       ...col,
       onCell: (record: Record) => ({
         record,
-        inputType: (col.dataIndex === 'maximum' || col.dataIndex === 'minimum') ? 'number' : 'text',
+        inputType: (col.dataIndex === 'maximum' || col.dataIndex === 'avaliable') ? 'number' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -125,21 +132,27 @@ function Resources({}: Props): ReactElement {
     };
   });
 
+  // save data to datastate
   const save = async (key: React.Key) => {
     try {
+      // validate field
       const row = (await form.validateFields()) as Record;
 
       const newData = [...data];
+      // is row already exist
       const index = newData.findIndex(item => key === item.key);
+      // if found replace old one
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
+        // save datastate
         setData(newData);
         setEditingKey('');
       } else {
+        // save as new row
         newData.push(row);
         setData(newData);
         setEditingKey('');
@@ -159,6 +172,7 @@ function Resources({}: Props): ReactElement {
     children: React.ReactNode;
   }
   
+  // Edit cell UI
   const EditableCell: React.FC<EditableCellProps> = ({
     editing,
     dataIndex,
@@ -169,6 +183,7 @@ function Resources({}: Props): ReactElement {
     children,
     ...restProps
   }) => {
+    // Number input or text input
     const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   
     return (
@@ -193,6 +208,7 @@ function Resources({}: Props): ReactElement {
     );
   };
 
+  // Add new resource function
   const addNewResource = () => {
     let newDataKey = '1'
     if(data.length !== 0 && typeof(parseInt(data[data.length - 1]?.key)) === 'number')
