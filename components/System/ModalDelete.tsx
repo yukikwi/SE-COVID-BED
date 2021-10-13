@@ -15,7 +15,13 @@ function ModalDelete({}: Props): ReactElement {
   const showDeleteModal = useSelector(getDeleteModalState);
 
   return (
-    <Modal title="Basic Modal" visible={showDeleteModal} onCancel={() => dispatch(hideModal())} centered>
+    <Modal
+      title="Delete Hospital"
+      visible={showDeleteModal}
+      onCancel={() => dispatch(hideModal())}
+      okText="Confirm"
+      centered
+    >
       <p>click "Confirm" if you’re sure that you want to remove this hospital, if not click cancel</p>
     </Modal>
   )
