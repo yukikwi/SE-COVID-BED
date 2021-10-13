@@ -70,19 +70,17 @@ function AddEditForm({}: Props): ReactElement {
       >
         <HospitalStatus hospitalStatus={hospitalstatus()} updateHospitalStatus={updateHospitalStatus}/>
       </Form.Item>
-
-      <div className="tw-mb-5">
-        <label>
-          Resources
-        </label>
-        <Resources />
-      </div>
-
+      
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
       </Form.Item>
+
+      <div className="tw-mb-5">
+        <Resources />
+      </div>
+
     </Form>
   )
 }
