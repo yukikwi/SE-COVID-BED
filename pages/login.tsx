@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Logo from '../components/Logo'
 import LoginForm from '../components/LoginForm';
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
   return (
     <div className="tw-flex tw-flex-col tw-mx-auto tw-w-full md:tw-w-3/4 tw-min-h-screen tw-pt-5">
       <Logo />
@@ -21,4 +21,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Login
