@@ -54,7 +54,7 @@ const HospitalResourceIndex: NextPage = () => {
       key: 'action',
       render: (record:TResource) => (
         <div>
-          <a className="hover:tw-text-green-500" onClick={() => { dispatch(showAddOrEditModal('Add')) }}><EyeOutlined className="tw-font-base tw-mr-3" /></a>
+          <a className="hover:tw-text-green-500"><EyeOutlined className="tw-font-base tw-mr-3" /></a>
           <a className="hover:tw-text-yellow-500" onClick={() => { dispatch(showAddOrEditModal('Edit')) }}><EditOutlined className="tw-font-base tw-mr-3" /></a>
           <a className="hover:tw-text-red-500" onClick={() => { dispatch(showDeleteModal()) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
         </div>
@@ -99,7 +99,16 @@ const HospitalResourceIndex: NextPage = () => {
     <LayoutHospital
       title="Hospital List"
       button={
-        <Button className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto" type="primary" shape="round" icon={<PlusSquareOutlined />} size="large">add hospital</Button>
+        <Button
+          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+          type="primary"
+          shape="round"
+          icon={<PlusSquareOutlined />}
+          size="large"
+          onClick={() => { dispatch(showAddOrEditModal('Add')) }}
+        >
+          add hospital
+        </Button>
       }
     >
       <div>
