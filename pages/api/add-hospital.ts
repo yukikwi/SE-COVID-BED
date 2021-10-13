@@ -6,7 +6,7 @@ export default async function addHospital(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     try {
       const database = new Connection();
       const system = new System();

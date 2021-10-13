@@ -25,7 +25,10 @@ class System {
       hospitalPhoneNumber: `${hospitalPhoneNumber}`,
       hospitalConvince: `${hospitalConvince}`,
       hospitalAddress: `${hospitalAddress}`,
-      hospitalLocation: {lat: `${hospitalLocationLat}`, long: `${hospitalLocationLong}`},
+      hospitalLocation: {
+        lat: `${hospitalLocationLat}`, 
+        long: `${hospitalLocationLong}`
+      },
       hospitalStatus: `${hospitalStatus}`
     }
     
