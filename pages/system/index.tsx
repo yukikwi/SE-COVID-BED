@@ -24,30 +24,32 @@ type TUiHospital = {
 }
 
 const HospitalResourceIndex: NextPage = () => {
+  const [selectedHospital, setSelectedHospital] = useState("");
   // Dummy Hospital data
   const columns = [
     {
-      title: 'Hospital',
-      dataIndex: 'hospital',
-      key: 'hospital',
+      title: "Hospital",
+      dataIndex: "hospital",
+      key: "hospital",
       sorter: {
-        compare: (a:TUiHospital,b:TUiHospital) => a.hospital.localeCompare(b.hospital)
-      }
+        compare: (a: TUiHospital, b: TUiHospital) =>
+          a.hospital.localeCompare(b.hospital),
+      },
     },
     {
-      title: 'Convince',
-      dataIndex: 'convince',
-      key: 'convince',
+      title: "Convince",
+      dataIndex: "convince",
+      key: "convince",
     },
     {
-      title: 'Staff',
-      dataIndex: 'staff',
-      key: 'staff',
+      title: "Staff",
+      dataIndex: "staff",
+      key: "staff",
     },
     {
-      title: 'Avaliable beds',
-      dataIndex: 'avaliable',
-      key: 'avaliable',
+      title: "Avaliable beds",
+      dataIndex: "avaliable",
+      key: "avaliable",
     },
     {
       title: 'Status',
@@ -65,8 +67,8 @@ const HospitalResourceIndex: NextPage = () => {
           <a className="hover:tw-text-yellow-500" onClick={() => { dispatch(showAddOrEditModal('Edit')) }}><EditOutlined className="tw-font-base tw-mr-3" /></a>
           <a className="hover:tw-text-red-500" onClick={() => { dispatch(showDeleteModal(record._id)) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   // Fetch data from api
@@ -74,7 +76,7 @@ const HospitalResourceIndex: NextPage = () => {
   const getHospitalsData = async () => {
     let hospitalData:Array<TUiHospital> = []
     try{
-      let apiResonse = await axios.get('http://localhost:3000/api/hospital')
+      let apiResonse = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/hospital`)
       let rawHospitalData:Array<IHospital> = apiResonse.data
       for (let i = 0; i < rawHospitalData.length; i++){
         hospitalData.push({
@@ -103,7 +105,7 @@ const HospitalResourceIndex: NextPage = () => {
   },[])
 
   // Redux part
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <LayoutHospital
@@ -115,21 +117,23 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
-          onClick={() => { dispatch(showAddOrEditModal('Add')) }}
+          onClick={() => {
+            dispatch(showAddOrEditModal("Add"));
+          }}
         >
           add hospital
         </Button>
       }
     >
       <div>
-        <ModalDelete />
+        <ModalDelete hospital={selectedHospital} />
         <ModalAddEdit />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
         </div>
       </div>
     </LayoutHospital>
-  )
-}
+  );
+};
 
-export default HospitalResourceIndex
+export default HospitalResourceIndex;

@@ -7,11 +7,10 @@ import axios, { AxiosError } from 'axios';
 import { IHospital } from '../../class/data_struct/hospital';
 
 interface Props {
-
+  
 }
 
 function ModalDelete({}: Props): ReactElement {
-
   // redux part
   const dispatch = useDispatch();
   const showDeleteModal = useSelector(getDeleteModalState);
@@ -74,9 +73,9 @@ function ModalDelete({}: Props): ReactElement {
       okText="Confirm"
       centered
     >
-      <p>click "Confirm" if you’re sure that you want to remove this hospital, if not click cancel</p>
+      <p>{`click "Confirm" if you’re sure that you want to remove ${hospitalName}, if not click cancel`}</p>
     </Modal>
-  )
+  );
 }
 
-export default ModalDelete
+export default ModalDelete;
