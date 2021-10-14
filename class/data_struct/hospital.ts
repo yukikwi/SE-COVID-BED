@@ -7,7 +7,7 @@ export interface IHospital extends Document {
   hospitalConvince: string;
   hospitalAddress: string;
   hospitalLocation: object;
-  hospitalStatus: string;
+  isAvaliable: boolean;
   isDelete: boolean;
 }
 
@@ -17,6 +17,6 @@ export type THospital = {
   hospitalConvince?: string,
   hospitalAddress?: string,
   hospitalLocation?: object,
-  hospitalStatus?: string,
+  isAvaliable?: boolean,
   isDelete?: boolean;
 }
