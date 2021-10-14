@@ -1,18 +1,18 @@
-import React, { ReactElement } from 'react'
-import { Modal } from 'antd'
+import React, { ReactElement } from "react";
+import { Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
-import { hideDeleteModal } from '../../store/deleteModal/actions';
+import { hideDeleteModal } from "../../store/deleteModal/actions";
 
 interface Props {
-
+  hospital: string;
 }
 
-function ModalDelete({}: Props): ReactElement {
-
+function ModalDelete(props: Props): ReactElement {
   // redux part
   const dispatch = useDispatch();
   const showDeleteModal = useSelector(getDeleteModalState);
+  const { hospital } = props;
 
   return (
     <Modal
@@ -22,9 +22,9 @@ function ModalDelete({}: Props): ReactElement {
       okText="Confirm"
       centered
     >
-      <p>click "Confirm" if you’re sure that you want to remove this hospital, if not click cancel</p>
+      <p>{`click "Confirm" if you’re sure that you want to remove ${hospital}, if not click cancel`}</p>
     </Modal>
-  )
+  );
 }
 
-export default ModalDelete
+export default ModalDelete;
