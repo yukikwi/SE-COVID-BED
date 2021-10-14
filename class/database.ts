@@ -48,8 +48,8 @@ export default class Database {
     return await UserModel.findOne(condition);
   }
 
-  async getHospitals() {
-    return await HospitalModel.find({});
+  async getHospitals(condition = {}) {
+    return await HospitalModel.find(condition);
   }
 
   async getAHospital(id: any) {
