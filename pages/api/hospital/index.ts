@@ -12,8 +12,16 @@ export default async function handler(
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
-        const hospitalData = await database.getHospitals();
-        console.log("hospital::", hospitalData);
+        const hospitalData = await database.getHospitals({
+          $or:[
+            {
+              isDelete: { $exists: false }
+            },
+            {
+              isDelete: false
+            }
+          ]
+        });
 
         res.status(200).json(hospitalData);
       } else {
