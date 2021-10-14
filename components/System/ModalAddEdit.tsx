@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect, useState } from 'react'
-import { Modal, notification } from 'antd'
+import React, { ReactElement, useEffect, useState } from "react";
+import { Modal, notification } from "antd";
 import axios, { AxiosError } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getaddOrEditModalState } from "../../store/addOrEditModal/selectors";
-import { hideAddOrEditModal } from '../../store/addOrEditModal/actions';
-import AddEditForm from './ModalHospitalForm/AddEdit';
+import { hideAddOrEditModal } from "../../store/addOrEditModal/actions";
+import AddEditForm from "./ModalHospitalForm/AddEdit";
 import { IHospital } from "../../class/data_struct/hospital";
 
 export type TUiHospital = {
@@ -17,68 +17,71 @@ export type TUiHospital = {
   isClose: boolean;
 };
 
+const initValue = {
+  hospitalName: "",
+  hospitalPhoneNumber: "",
+  hospitalConvince: "",
+  hospitalAddress: "",
+  hospitalLocation: {},
+  isAvaliable: true,
+  isDelete: false,
+};
+
 interface Props {
   id: string;
   hospital: string;
 }
 
 function ModalAddEdit(props: Props): ReactElement {
-
-
   // redux part
   const dispatch = useDispatch();
-  const {show, addOrEdit} = useSelector(getaddOrEditModalState);
+  const { show, addOrEdit } = useSelector(getaddOrEditModalState);
   const { id, hospital } = props;
 
-  const [hospitalData, setHospitalData] = useState<TUiHospital>()
+  const [hospitalData, setHospitalData] = useState<IHospital>();
 
   useEffect(() => {
     initHospitalData();
-  }, [id]);
+  }, [id, addOrEdit]);
 
   const initHospitalData = async () => {
-    try{ 
-      let apiResonse = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
-      );
+    if (addOrEdit === "Edit") {
+      try {
+        let apiResonse = await axios.get(
+          `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
+        );
+        const rawHospitalData: IHospital = apiResonse.data;
 
-      console.log("apiResonse", apiResonse);
-      
-      const rawHospitalData: IHospital = apiResonse.data;
-
-      const tempHospital: TUiHospital = {
-        key: rawHospitalData._id,
-        hospital: rawHospitalData.hospitalName,
-        convince: rawHospitalData.hospitalConvince,
-        staff: "Dr.Dio",
-        amount: 32,
-        avaliable: 32,
-        isClose: rawHospitalData.isDelete,
+        setHospitalData(rawHospitalData);
+      } catch (err) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
       }
-      console.log("tempHospital", tempHospital);
-      setHospitalData(tempHospital);
-
-    } catch (err) {
-      notification.open({
-        message: "Error",
-        description:
-          "Cannot connect to api. Please contact admin for more information.",
-      });
+    } else {
+      setHospitalData(initValue as IHospital);
     }
-  }
+  };
+
+  const handleCancel = () => {
+    dispatch(hideAddOrEditModal());
+    setHospitalData(initValue as IHospital);
+  };
 
   return (
     <Modal
-      title={ `${addOrEdit} Hospital Information` }
+      title={`${addOrEdit} Hospital Information`}
       visible={show}
-      onCancel={() => dispatch(hideAddOrEditModal())}
+      onCancel={handleCancel}
       okText="Save"
-      width = { 1000 }
+      width={1000}
       centered
     >
-      <AddEditForm />
+      <AddEditForm hospitalData={hospitalData} mode={addOrEdit} />
     </Modal>
-  )
+  );
 }
 
-export default ModalAddEdit
+export default ModalAddEdit;
