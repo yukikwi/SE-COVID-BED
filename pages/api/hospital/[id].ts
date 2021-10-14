@@ -17,7 +17,7 @@ export default async function handler(
       const isDatabaseConnected = await database.connectDatabase();
 
       if (isDatabaseConnected === true) {
-        const hospitalData = await database.getAHospital(id);
+        const hospitalData = await database.getAHospital(id as string);
         console.log("hospital::", hospitalData);
 
         res.status(200).json(hospitalData);

@@ -17,19 +17,19 @@ class System {
     hospitalAddress: String,
     hospitalLocationLat: String,
     hospitalLocationLong: String,
-    hospitalStatus: String
+    isAvaliable: boolean
   ) {
     this.newHospitalData = {
       hospitalName: `${hospitalName}`,
       hospitalPhoneNumber: `${hospitalPhoneNumber}`,
       hospitalConvince: `${hospitalConvince}`,
-      hospitalAddress: `${hospitalAddress}`,
+      hospitalAddress: `${hospitalAddress}`, 
       hospitalLocation: {
         lat: `${hospitalLocationLat}`,
         long: `${hospitalLocationLong}`,
       },
-      hospitalStatus: `${hospitalStatus}`,
-      isDelete: false,
+      isAvaliable: isAvaliable,
+      isDelete: false
     };
 
     console.log(this.newHospitalData);
@@ -54,13 +54,31 @@ class System {
 
   async deleteHospital(id: string) {
     try {
-      this.database.deleteHospital(id);
-      return {
-        http: 200,
-        data: {
-          code: "Success to delete hospital",
-        },
-      };
+      let deleteStatus = await this.database.deleteHospital(id);
+      if(deleteStatus === 404){
+        return {
+          http: 404,
+          data: {
+            code: 'Hospital not found'
+          }
+        }
+      }
+      else if(deleteStatus === 500){
+        return {
+          http: 500,
+          data: {
+            code: "Invalid id"
+          }
+        }
+      }
+      else {
+        return {
+            http: 200,
+            data: {
+              code: "Success to delete hospital",
+            },
+        };
+      }
     } catch (error) {
       return {
         http: 500,

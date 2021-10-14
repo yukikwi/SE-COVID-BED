@@ -52,7 +52,7 @@ export default class Database {
     return await HospitalModel.find(condition);
   }
 
-  async getAHospital(id: any) {
+  async getAHospital(id: string) {
     return await HospitalModel.findById(id);
   }
 
@@ -62,7 +62,16 @@ export default class Database {
   }
 
   async deleteHospital(id: string) {
-    return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
+    try{
+      let getHospitalData = await this.getAHospital(id)
+      if(!getHospitalData)
+        return 404;
+      else
+        return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
+    }
+    catch(e){
+      return 500; 
+    }
   }
 
   async editHospital(id: string, newData: Object) {

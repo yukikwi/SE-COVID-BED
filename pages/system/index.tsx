@@ -18,9 +18,8 @@ import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 
-type TUiHospital = {
+export type TUiHospital = {
   key: string;
-  _id: string;
   hospital: string;
   convince: string;
   staff: string;
@@ -29,8 +28,16 @@ type TUiHospital = {
   isClose: boolean;
 };
 
+type selectHospitalType = {
+  key: string;
+  hospital: string;
+}
+
 const HospitalResourceIndex: NextPage = () => {
-  const [selectedHospital, setSelectedHospital] = useState("");
+  const [selectedHospital, setSelectedHospital] = useState<selectHospitalType>({
+    key: "",
+    hospital: ""
+  });
   // Dummy Hospital data
   const columns = [
     {
@@ -87,7 +94,10 @@ const HospitalResourceIndex: NextPage = () => {
           <a
             className="hover:tw-text-red-500"
             onClick={() => {
-              dispatch(showDeleteModal(record._id));
+              dispatch(showDeleteModal());
+              console.log("record", record);
+              
+              setSelectedHospital({key: record.key, hospital: record.hospital});
             }}
           >
             <DeleteOutlined className="tw-font-base tw-mr-3" />
@@ -100,14 +110,13 @@ const HospitalResourceIndex: NextPage = () => {
   // Fetch data from api
   const [data, setData] = useState<Array<TUiHospital>>();
   const getHospitalsData = async () => {
-    let hospitalData: Array<TUiHospital> = [];
     try {
       let apiResonse = await axios.get(
         `${process.env.NEXT_PUBLIC_APP_API}/hospital`
       );
       let rawHospitalData: Array<IHospital> = apiResonse.data;
 
-      const temp = rawHospitalData.map((hospital: IHospital) => ({
+      const hospitalData: TUiHospital[] = rawHospitalData.map((hospital: IHospital) => ({
         key: hospital._id,
         hospital: hospital.hospitalName,
         convince: hospital.hospitalConvince,
@@ -116,23 +125,23 @@ const HospitalResourceIndex: NextPage = () => {
         avaliable: 32,
         isClose: hospital.isAvaliable,
       }));
-      console.log("temp", temp);
-
-      for (let i = 0; i < rawHospitalData.length; i++) {
-        hospitalData.push({
-          key: i.toString(),
-          _id: rawHospitalData[i]._id,
-          hospital: rawHospitalData[i].hospitalName,
-          convince: rawHospitalData[i].hospitalConvince,
-          staff: "Dr.Dio",
-          amount: 32,
-          avaliable: 32,
-          isClose: rawHospitalData[i].isAvaliable,
-        });
-      }
+      console.log("temp", hospitalData);
+      
       setData(hospitalData);
-    } catch (error: any | AxiosError) {
-      console.log(error.response.status);
+
+      // for (let i = 0; i < rawHospitalData.length; i++) {
+      //   hospitalData.push({
+      //     key: i.toString(),
+      //     _id: rawHospitalData[i]._id,
+      //     hospital: rawHospitalData[i].hospitalName,
+      //     convince: rawHospitalData[i].hospitalConvince,
+      //     staff: "Dr.Dio",
+      //     amount: 32,
+      //     avaliable: 32,
+      //     isClose: rawHospitalData[i].isAvaliable,
+      //   });
+      // }
+    } catch (error) {
       notification.open({
         message: "Error",
         description:
@@ -168,8 +177,12 @@ const HospitalResourceIndex: NextPage = () => {
       }
     >
       <div>
-        <ModalDelete />
-        <ModalAddEdit />
+        <ModalDelete 
+        id={selectedHospital?.key as string}
+        hospital={selectedHospital?.hospital as string}
+        />
+        <ModalAddEdit id={selectedHospital?.key as string}
+        hospital={selectedHospital?.hospital as string}/>
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
         </div>

@@ -1,20 +1,21 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
-import { getDeleteModalState, getDeleteModalHospitalId } from "../../store/deleteModal/selectors";
+import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { hideDeleteModal } from '../../store/deleteModal/actions';
 import axios, { AxiosError } from 'axios';
 import { IHospital } from '../../class/data_struct/hospital';
 
 interface Props {
-  
+  id: string;
+  hospital: string;
 }
 
-function ModalDelete({}: Props): ReactElement {
+function ModalDelete(props: Props): ReactElement {
   // redux part
   const dispatch = useDispatch();
   const showDeleteModal = useSelector(getDeleteModalState);
-  const hospitalId = useSelector(getDeleteModalHospitalId);
+  const { id, hospital } = props;
 
   //
   const notifyError = () => {
@@ -27,8 +28,8 @@ function ModalDelete({}: Props): ReactElement {
   // Delete method
   const deleteHospital = async () => {
     try{
-      let apiResonse = await axios.post('http://localhost:3000/api/delete-hospital',{
-        id: hospitalId
+      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/delete-hospital`,{
+        id
       })
       console.log(apiResonse.data)
       dispatch(hideDeleteModal())
@@ -38,35 +39,9 @@ function ModalDelete({}: Props): ReactElement {
     }
   }
 
-  // Fetch data from api
-  const [hospitalName, setHospitalName] = useState('')
-
-  const getHospitalData = async () => {
-    try{
-      // check init or user action
-      console.log(hospitalId)
-      if(hospitalId !== 'unknow'){
-        let apiResonse = await axios.get('http://localhost:3000/api/hospital/'+hospitalId)
-        let hospitalData:IHospital = apiResonse.data
-        setHospitalName(hospitalData.hospitalName)
-      }
-      else{
-        setHospitalName('Loading...')
-      }
-    }
-    catch (error: any | AxiosError) {
-      notifyError()
-    }
-  }
-  
-  // load Data on init
-  useEffect(() => {
-    getHospitalData()
-  },[hospitalId])
-
   return (
     <Modal
-      title={`Delete Hospital (${hospitalName})`}
+      title={`Delete Hospital (${hospital})`}
       visible={showDeleteModal}
       onOk={() => deleteHospital()}
       onCancel={() => dispatch(hideDeleteModal())}
@@ -75,7 +50,7 @@ function ModalDelete({}: Props): ReactElement {
     >
       <p>
         click "Confirm" if you’re sure that you want to remove
-        <span className="tw-font-bold"> {hospitalName} </span>
+        <span className="tw-font-bold"> {hospital} </span>
         , if not click cancel
       </p>
     </Modal>

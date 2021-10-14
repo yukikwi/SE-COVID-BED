@@ -1,15 +1,15 @@
 import { deleteModalActionType, deleteModalActionInterface } from "./type";
 
-export function showDeleteModal(hospitalId:string): deleteModalActionInterface {
+export function showDeleteModal(): deleteModalActionInterface {
 	return {
 		type: deleteModalActionType.SHOW_DELETE_MODAL,
-		payload: hospitalId,
+		payload: true,
 	};
 }
 
 export function hideDeleteModal(): deleteModalActionInterface {
 	return {
 		type: deleteModalActionType.HIDE_DELETE_MODAL,
-		payload: 'unknow',
+		payload: false,
 	};
 }
