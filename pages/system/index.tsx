@@ -6,11 +6,12 @@ import ModalAddEdit from '../../components/System/ModalAddEdit'
 import { Table, Button, notification } from 'antd';
 import Status from '../../components/System/Status'
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
 import { IHospital } from '../../class/data_struct/hospital'
 import { useEffect, useState } from 'react'
+import { getDeleteModalState } from '../../store/deleteModal/selectors'
 
 type TUiHospital = {
   key: string,
@@ -100,12 +101,14 @@ const HospitalResourceIndex: NextPage = () => {
       });
     }
   }
-  useEffect(() => {
-    getHospitalsData()
-  },[])
 
   // Redux part
+  const deleteModalState = useSelector(getDeleteModalState);
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    getHospitalsData()
+  },[deleteModalState])
 
   return (
     <LayoutHospital
@@ -126,7 +129,7 @@ const HospitalResourceIndex: NextPage = () => {
       }
     >
       <div>
-        <ModalDelete hospital={selectedHospital} />
+        <ModalDelete />
         <ModalAddEdit />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
