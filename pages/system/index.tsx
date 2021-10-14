@@ -1,19 +1,23 @@
 import type { NextPage } from 'next'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import LayoutHospital from '../../components/Layout/Hospital'
 import ModalDelete from '../../components/System/ModalDelete'
 import ModalAddEdit from '../../components/System/ModalAddEdit'
-import { Table, Button } from 'antd';
+import { Table, Button, notification } from 'antd';
 import Status from '../../components/System/Status'
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import { useDispatch } from "react-redux";
 import { showDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
-import { THospital } from '../../class/data_struct/hospital'
+import { IHospital } from '../../class/data_struct/hospital'
 import { useEffect, useState } from 'react'
 
-type TResource = {
+type TUiHospital = {
+  key: string,
+  _id: string,
   hospital: string,
+  convince: string,
+  staff: string,
   avaliable: number,
   amount: number,
   isClose: boolean
@@ -27,7 +31,7 @@ const HospitalResourceIndex: NextPage = () => {
       dataIndex: 'hospital',
       key: 'hospital',
       sorter: {
-        compare: (a:TResource,b:TResource) => a.hospital.localeCompare(b.hospital)
+        compare: (a:TUiHospital,b:TUiHospital) => a.hospital.localeCompare(b.hospital)
       }
     },
     {
@@ -48,44 +52,54 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: 'Status',
       key: 'status',
-      render: (record:TResource) => (
+      render: (record:TUiHospital) => (
         <Status isClose={record.isClose} avaliable={record.avaliable} amount={record.amount} />
       )
     },
     {
       title: 'Action',
       key: 'action',
-      render: (record:TResource) => (
+      render: (record:TUiHospital) => (
         <div>
           <a className="hover:tw-text-green-500"><EyeOutlined className="tw-font-base tw-mr-3" /></a>
           <a className="hover:tw-text-yellow-500" onClick={() => { dispatch(showAddOrEditModal('Edit')) }}><EditOutlined className="tw-font-base tw-mr-3" /></a>
-          <a className="hover:tw-text-red-500" onClick={() => { dispatch(showDeleteModal()) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
+          <a className="hover:tw-text-red-500" onClick={() => { dispatch(showDeleteModal(record._id)) }}><DeleteOutlined className="tw-font-base tw-mr-3" /></a>
         </div>
       )
     }
   ];
 
   // Fetch data from api
-  const [data, setData] = useState([{}])
-  const getHospitalData = async () => {
-    let hospitalData = []
-    let apiResonse = await axios.get('http://localhost:3000/api/hospital')
-    let rawHospitalData:Array<THospital> = apiResonse.data
-    for (let i = 0; i < rawHospitalData.length; i++){
-      hospitalData.push({
-        key: i.toString(),
-        hospital: rawHospitalData[i].hospitalName,
-        convince: rawHospitalData[i].hospitalConvince,
-        staff: 'Dr.Dio',
-        amount: 32,
-        avaliable: 32,
-        isClose: rawHospitalData[i].isAvaliable
-      })
+  const [data, setData] = useState<Array<TUiHospital>>()
+  const getHospitalsData = async () => {
+    let hospitalData:Array<TUiHospital> = []
+    try{
+      let apiResonse = await axios.get('http://localhost:3000/api/hospital')
+      let rawHospitalData:Array<IHospital> = apiResonse.data
+      for (let i = 0; i < rawHospitalData.length; i++){
+        hospitalData.push({
+          key: i.toString(),
+          _id: rawHospitalData[i]._id,
+          hospital: rawHospitalData[i].hospitalName,
+          convince: rawHospitalData[i].hospitalConvince,
+          staff: 'Dr.Dio',
+          amount: 32,
+          avaliable: 32,
+          isClose: rawHospitalData[i].isAvaliable
+        })
+      }
+      setData(hospitalData)
     }
-    setData(hospitalData)
+    catch (error: any | AxiosError) {
+      console.log(error.response.status)
+      notification.open({
+        message: 'Error',
+        description: 'Cannot connect to api. Please contact admin for more information.'
+      });
+    }
   }
   useEffect(() => {
-    getHospitalData()
+    getHospitalsData()
   },[])
 
   // Redux part
