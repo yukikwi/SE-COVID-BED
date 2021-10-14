@@ -1,4 +1,5 @@
 export interface deleteModalState {
+  hospitalId: string,
   show: boolean;
 }
 
@@ -11,5 +12,5 @@ export type deleteModalAction = deleteModalActionType;
 
 export interface deleteModalActionInterface {
   type: deleteModalAction;
-  payload: boolean;
+  payload: string;
 }
