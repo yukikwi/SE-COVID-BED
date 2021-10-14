@@ -11,11 +11,11 @@ function Status(props: Props): ReactElement {
   const { avaliable, amount, isClose } = props
   let color = ''
   let tag = ''
-  if (isClose === true || avaliable === 0){
+  if (isClose === true){
     color = 'red'
     tag = 'Close'
   }
-  else if ((avaliable / amount) < 0.3){
+  else if (avaliable === 0){
     color = 'orange'
     tag = 'Unavaliable'
   }
