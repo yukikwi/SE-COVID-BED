@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import axios from 'axios'
 import LayoutHospital from '../../components/Layout/Hospital'
 import ModalDelete from '../../components/System/ModalDelete'
 import ModalAddEdit from '../../components/System/ModalAddEdit'
@@ -8,6 +9,8 @@ import { EyeOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@
 import { useDispatch } from "react-redux";
 import { showDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
+import { THospital } from '../../class/data_struct/hospital'
+import { useEffect, useState } from 'react'
 
 type TResource = {
   hospital: string,
@@ -62,35 +65,28 @@ const HospitalResourceIndex: NextPage = () => {
     }
   ];
 
-  const data = [
-    {
-      key: '1',
-      hospital: 'Capybara Hospital',
-      convince: 'Bangkok',
-      staff: 'Dr.Dio',
-      amount: 32,
-      avaliable: 32,
-      isClose: false
-    },
-    {
-      key: '2',
-      hospital: 'KIKK Hospital',
-      convince: 'MARS',
-      staff: 'Dr.SINOVAC',
-      amount: 1000,
-      avaliable: 22,
-      isClose: false
-    },
-    {
-      key: '3',
-      hospital: 'KIKK Hospital',
-      convince: 'MARS',
-      staff: 'Dr.SINOVAC',
-      amount: 1000,
-      avaliable: 22,
-      isClose: true
+  // Fetch data from api
+  const [data, setData] = useState([{}])
+  const getHospitalData = async () => {
+    let hospitalData = []
+    let apiResonse = await axios.get('http://localhost:3000/api/hospital')
+    let rawHospitalData:Array<THospital> = apiResonse.data
+    for (let i = 0; i < rawHospitalData.length; i++){
+      hospitalData.push({
+        key: i.toString(),
+        hospital: rawHospitalData[i].hospitalName,
+        convince: rawHospitalData[i].hospitalConvince,
+        staff: 'Dr.Dio',
+        amount: 32,
+        avaliable: 32,
+        isClose: rawHospitalData[i].isAvaliable
+      })
     }
-  ];
+    setData(hospitalData)
+  }
+  useEffect(() => {
+    getHospitalData()
+  },[])
 
   // Redux part
 	const dispatch = useDispatch();
