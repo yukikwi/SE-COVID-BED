@@ -17,12 +17,12 @@ const HospitalSchema: Schema = new Schema({
   hospitalLocation: {
     type: Object,
   },
-  hospitalStatus: {
-    type: String,
+  isAvailable: {
+    type: Boolean,
   },
   isDelete: {
     type: Boolean,
-  }
+  },
 });
 
 export const HospitalModel: Model<IHospital> =

@@ -62,19 +62,16 @@ export default class Database {
   }
 
   async deleteHospital(id: string) {
-    try{
-      let getHospitalData = await this.getAHospital(id)
-      if(!getHospitalData)
-        return 404;
-      else
-        return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
-    }
-    catch(e){
-      return 500; 
+    try {
+      let getHospitalData = await this.getAHospital(id);
+      if (!getHospitalData) return 404;
+      else return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
+    } catch (e) {
+      return 500;
     }
   }
 
   async editHospital(id: string, newData: Object) {
-    return await HospitalModel.findByIdAndUpdate(id, newData);
+    return await HospitalModel.findByIdAndUpdate(id, newData, { upsert: true });
   }
 }

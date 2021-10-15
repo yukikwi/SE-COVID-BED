@@ -1,24 +1,47 @@
-import React, { ReactElement } from 'react'
-import { Switch } from 'antd'
-import { SwitchChangeEventHandler } from 'antd/lib/switch'
+import React, { ReactElement } from "react";
+import { Switch } from "antd";
+import { SwitchChangeEventHandler } from "antd/lib/switch";
 
 interface Props {
-  hospitalStatus?: 'open'|'close'
-  updateHospitalStatus: SwitchChangeEventHandler
+  hospitalStatus?: boolean;
+  updateHospitalStatus: SwitchChangeEventHandler;
+  mode?: string;
 }
 
 HospitalStatus.defaultProps = {
-  hospitalStatus: 'open'
-}
+  hospitalStatus: true,
+};
 
 function HospitalStatus(props: Props): ReactElement {
-  const { hospitalStatus, updateHospitalStatus } = props
-  if(hospitalStatus === 'open'){
-    return <Switch onChange={ updateHospitalStatus } checkedChildren="Open" unCheckedChildren="Close" defaultChecked />
-  }
-  else{
-    return <Switch onChange={ updateHospitalStatus } checkedChildren="Open" unCheckedChildren="Close" />
+  const { hospitalStatus, updateHospitalStatus, mode } = props;
+  if (mode === "Add") {
+    return (
+      <Switch
+        onChange={updateHospitalStatus}
+        checkedChildren="Open"
+        unCheckedChildren="Close"
+        defaultChecked
+        disabled
+      />
+    );
+  } else if (hospitalStatus) {
+    return (
+      <Switch
+        onChange={updateHospitalStatus}
+        checkedChildren="Open"
+        unCheckedChildren="Close"
+        defaultChecked
+      />
+    );
+  } else {
+    return (
+      <Switch
+        onChange={updateHospitalStatus}
+        checkedChildren="Open"
+        unCheckedChildren="Close"
+      />
+    );
   }
 }
 
-export default HospitalStatus
+export default HospitalStatus;

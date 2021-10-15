@@ -17,15 +17,16 @@ import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
+import { getAddOrEditModalState } from "../../store/addOrEditModal/selectors";
 
 export type TUiHospital = {
   key: string;
   hospital: string;
   convince: string;
   staff: string;
-  avaliable: number;
+  available: number;
   amount: number;
-  isClose: boolean;
+  isAvailable: boolean;
 };
 
 type selectHospitalType = {
@@ -60,17 +61,17 @@ const HospitalResourceIndex: NextPage = () => {
       key: "staff",
     },
     {
-      title: "Avaliable beds",
-      dataIndex: "avaliable",
-      key: "avaliable",
+      title: "Available beds",
+      dataIndex: "available",
+      key: "available",
     },
     {
       title: "Status",
       key: "status",
       render: (record: TUiHospital) => (
         <Status
-          isClose={record.isClose}
-          avaliable={record.avaliable}
+          isAvailable={record.isAvailable}
+          available={record.available}
           amount={record.amount}
         />
       ),
@@ -128,8 +129,8 @@ const HospitalResourceIndex: NextPage = () => {
           convince: hospital.hospitalConvince,
           staff: "Dr. Dio",
           amount: 32,
-          avaliable: 32,
-          isClose: hospital.isAvaliable,
+          available: 32,
+          isAvailable: hospital.isAvailable,
         })
       );
       console.log("temp", hospitalData);
@@ -144,8 +145,8 @@ const HospitalResourceIndex: NextPage = () => {
       //     convince: rawHospitalData[i].hospitalConvince,
       //     staff: "Dr.Dio",
       //     amount: 32,
-      //     avaliable: 32,
-      //     isClose: rawHospitalData[i].isAvaliable,
+      //     available: 32,
+      //     isClose: rawHospitalData[i].isAvailable,
       //   });
       // }
     } catch (error) {
@@ -159,11 +160,13 @@ const HospitalResourceIndex: NextPage = () => {
 
   // Redux part
   const deleteModalState = useSelector(getDeleteModalState);
+  const addEditModalState = useSelector(getAddOrEditModalState);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     getHospitalsData();
-  }, [deleteModalState]);
+  }, [deleteModalState, addEditModalState]);
 
   return (
     <LayoutHospital

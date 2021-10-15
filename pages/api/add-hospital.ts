@@ -13,12 +13,24 @@ export default async function addHospital(
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
-        const { hospitalName, hospitalPhoneNumber, hospitalConvince,
-          hospitalAddress, hospitalLocationLat, hospitalLocationLong,
-          hospitalStatus } = req.body;
+        const {
+          hospitalName,
+          hospitalPhoneNumber,
+          hospitalConvince,
+          hospitalAddress,
+          hospitalLocationLat,
+          hospitalLocationLong,
+        } = req.body;
 
         // use method login from userlogin class
-        const addHospitalStatus = await system.addHospital(hospitalName, hospitalPhoneNumber, hospitalConvince, hospitalAddress, hospitalLocationLat, hospitalLocationLong, hospitalStatus);
+        const addHospitalStatus = await system.addHospital(
+          hospitalName,
+          hospitalPhoneNumber,
+          hospitalConvince,
+          hospitalAddress,
+          hospitalLocationLat,
+          hospitalLocationLong
+        );
         res.status(addHospitalStatus.http).json(addHospitalStatus.data);
       } else {
         // database connection fail

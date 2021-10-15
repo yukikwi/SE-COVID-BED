@@ -1,5 +1,5 @@
 import { RootState } from "../index";
 
-export function getaddOrEditModalState(state: RootState) {
-	return state.addOrEditModalReducer;
+export function getAddOrEditModalState(state: RootState) {
+  return state.addOrEditModalReducer;
 }
