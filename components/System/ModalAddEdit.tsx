@@ -38,30 +38,36 @@ function ModalAddEdit(props: Props): ReactElement {
   const { show, addOrEdit } = useSelector(getaddOrEditModalState);
   const { id, hospital } = props;
 
-  const [hospitalData, setHospitalData] = useState<IHospital>();
+  const [hospitalData, setHospitalData] = useState<IHospital>(
+    initValue as IHospital
+  );
 
   useEffect(() => {
     initHospitalData();
   }, [id, addOrEdit]);
 
   const initHospitalData = async () => {
-    if (addOrEdit === "Edit") {
-      try {
-        let apiResonse = await axios.get(
-          `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
-        );
-        const rawHospitalData: IHospital = apiResonse.data;
+    if (id !== "") {
+      if (addOrEdit === "Edit") {
+        try {
+          let apiResonse = await axios.get(
+            `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
+          );
+          const rawHospitalData: IHospital = apiResonse.data;
+          console.log("rawHospitalData", rawHospitalData);
 
-        setHospitalData(rawHospitalData);
-      } catch (err) {
-        notification.open({
-          message: "Error",
-          description:
-            "Cannot connect to api. Please contact admin for more information.",
-        });
+          setHospitalData(rawHospitalData);
+        } catch (err) {
+          notification.open({
+            message: "Error",
+            description:
+              "Cannot connect to api. Please contact admin for more information.",
+          });
+        }
+      } else {
+        console.log("rawHospitalData", initValue);
+        setHospitalData(initValue as IHospital);
       }
-    } else {
-      setHospitalData(initValue as IHospital);
     }
   };
 

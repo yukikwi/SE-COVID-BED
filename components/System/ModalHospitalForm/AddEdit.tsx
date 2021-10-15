@@ -23,13 +23,6 @@ function AddEditForm(props: Props): ReactElement {
 
   console.log("hospitalData", props.hospitalData);
 
-  // If fetch data from api
-  // hospitalData = {
-  //   hospitalName: "Capybara Hospital",
-  //   hospitalAddress: "111, baracity, Thailand",
-  //   hospitalStatus: "close",
-  // };
-
   // get Changed value
   const updateHospitalData = (changed: IHospitalData) => {
     formData = { ...formData, ...changed };
@@ -46,11 +39,14 @@ function AddEditForm(props: Props): ReactElement {
     return "open";
   };
 
+  console.log("mode", mode);
+  console.log("hospitalData?.hospitalName", hospitalData?.hospitalName);
+
   if (mode === "Edit" && hospitalData?.hospitalName === "") {
     console.log("loading");
 
     return <div></div>;
-  } else if (mode == "Add" && hospitalData?.hospitalName !== "") {
+  } else if (mode === "Add" && hospitalData?.hospitalName !== "") {
     console.log("loading2");
 
     return <div></div>;
