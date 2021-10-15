@@ -2,9 +2,11 @@ import { createStore, combineReducers } from "redux";
 
 import { deleteModalReducer } from "./deleteModal/reducers";
 import { addOrEditModalReducer } from "./addOrEditModal/reducers";
+import { userReducer } from "./user/reducers";
 
 const rootReducer = combineReducers({
 	deleteModalReducer,
+	userReducer,
 	addOrEditModalReducer
 });
 
