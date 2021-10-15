@@ -15,6 +15,29 @@ class User {
     return this.user;
   }
 
+  async loginFromToken(token: string){
+    //query userData by username
+    const userData = await this.database.getAUser({ token });
+    //compare password
+    if (userData && userData.password) {
+      this.user = userData;
+      return {
+        http: 200,
+        data: {
+          code: "Success",
+          userData,
+        },
+      };
+    } else {
+      return {
+        http: 401,
+        data: {
+          error: "fail to login",
+        },
+      };
+    }
+  }
+
   async login(username: string, password: string) {
     //query userData by username
     const userData = await this.database.getAUser({ username });
