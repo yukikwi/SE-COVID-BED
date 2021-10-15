@@ -31,12 +31,12 @@ export type TUiHospital = {
 type selectHospitalType = {
   key: string;
   hospital: string;
-}
+};
 
 const HospitalResourceIndex: NextPage = () => {
   const [selectedHospital, setSelectedHospital] = useState<selectHospitalType>({
     key: "",
-    hospital: ""
+    hospital: "",
   });
   // Dummy Hospital data
   const columns = [
@@ -87,6 +87,10 @@ const HospitalResourceIndex: NextPage = () => {
             className="hover:tw-text-yellow-500"
             onClick={() => {
               dispatch(showAddOrEditModal("Edit"));
+              setSelectedHospital({
+                key: record.key,
+                hospital: record.hospital,
+              });
             }}
           >
             <EditOutlined className="tw-font-base tw-mr-3" />
@@ -95,9 +99,10 @@ const HospitalResourceIndex: NextPage = () => {
             className="hover:tw-text-red-500"
             onClick={() => {
               dispatch(showDeleteModal());
-              console.log("record", record);
-              
-              setSelectedHospital({key: record.key, hospital: record.hospital});
+              setSelectedHospital({
+                key: record.key,
+                hospital: record.hospital,
+              });
             }}
           >
             <DeleteOutlined className="tw-font-base tw-mr-3" />
@@ -116,17 +121,19 @@ const HospitalResourceIndex: NextPage = () => {
       );
       let rawHospitalData: Array<IHospital> = apiResonse.data;
 
-      const hospitalData: TUiHospital[] = rawHospitalData.map((hospital: IHospital) => ({
-        key: hospital._id,
-        hospital: hospital.hospitalName,
-        convince: hospital.hospitalConvince,
-        staff: "Dr. Dio",
-        amount: 32,
-        avaliable: 32,
-        isClose: hospital.isAvaliable,
-      }));
+      const hospitalData: TUiHospital[] = rawHospitalData.map(
+        (hospital: IHospital) => ({
+          key: hospital._id,
+          hospital: hospital.hospitalName,
+          convince: hospital.hospitalConvince,
+          staff: "Dr. Dio",
+          amount: 32,
+          avaliable: 32,
+          isClose: hospital.isAvaliable,
+        })
+      );
       console.log("temp", hospitalData);
-      
+
       setData(hospitalData);
 
       // for (let i = 0; i < rawHospitalData.length; i++) {
@@ -177,12 +184,14 @@ const HospitalResourceIndex: NextPage = () => {
       }
     >
       <div>
-        <ModalDelete 
-        id={selectedHospital?.key as string}
-        hospital={selectedHospital?.hospital as string}
+        <ModalDelete
+          id={selectedHospital?.key as string}
+          hospital={selectedHospital?.hospital as string}
         />
-        <ModalAddEdit id={selectedHospital?.key as string}
-        hospital={selectedHospital?.hospital as string}/>
+        <ModalAddEdit
+          id={selectedHospital?.key as string}
+          hospital={selectedHospital?.hospital as string}
+        />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
         </div>
