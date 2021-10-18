@@ -1,4 +1,7 @@
-import React, { ReactChild, ReactElement } from 'react'
+import router from 'next/router';
+import React, { ReactChild, ReactElement, useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { getUserState } from '../../store/user/selectors';
 import HospitalNavbar from '../Navbar'
 
 interface Props {
@@ -13,6 +16,22 @@ LayoutSystem.defaultProps = {
 
 function LayoutSystem(props: Props): ReactElement {
   const {children, title, button} = props
+  
+  // check permission
+  const userData = useSelector(getUserState);
+  useEffect(() => {
+    if(userData.login === true){
+      // redirect...
+      if(userData.userinfo.role === 'hospital'){
+        router.replace("/hospital");
+      }
+    }
+    else{
+      // login before
+      router.replace("/login");
+    }
+  }, [userData])
+
   return (
     <div>
       <HospitalNavbar system/>

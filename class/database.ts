@@ -49,11 +49,11 @@ export default class Database {
   }
 
   async getHospitals(condition = {}) {
-    return await HospitalModel.find(condition);
+    return await HospitalModel.find(condition).populate('staff', {"password": 0, "token":0});
   }
 
   async getAHospital(id: string) {
-    return await HospitalModel.findById(id);
+    return await HospitalModel.findById(id).populate('staff', {"password": 0, "token":0});
   }
 
   async addHospital(newHospitalData: Object) {

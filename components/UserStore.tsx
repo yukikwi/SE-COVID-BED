@@ -12,12 +12,13 @@ function UserStore(props: Props) {
   const dispatch = useDispatch();
 
   const fetchUser = () => {
-    console.log(process.env.NEXT_PUBLIC_APP_API)
     axios.get(`${process.env.NEXT_PUBLIC_APP_API}/login`).then((response:any) => {
       if(response.data.userData){
         const userData = response.data.userData
         dispatch(setUser(userData))
       }
+    }).catch(function (error) {
+      // not login
     })
   }
 

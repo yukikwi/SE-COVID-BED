@@ -23,6 +23,10 @@ const HospitalSchema: Schema = new Schema({
   isDelete: {
     type: Boolean,
   },
+  staff: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
 });
 
 export const HospitalModel: Model<IHospital> =

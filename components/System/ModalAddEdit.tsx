@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { Modal, notification } from "antd";
+import { Button, Modal, notification } from "antd";
 import axios, { AxiosError } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOrEditModalState } from "../../store/addOrEditModal/selectors";
@@ -53,7 +53,11 @@ function ModalAddEdit(props: Props): ReactElement {
           let apiResonse = await axios.get(
             `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
           );
-          const rawHospitalData: IHospital = apiResonse.data;
+          let rawHospitalData: IHospital = apiResonse.data;
+          if(rawHospitalData.staff)
+            rawHospitalData.staff = rawHospitalData.staff._id
+          else
+            rawHospitalData.staff = ''
           console.log("rawHospitalData", rawHospitalData);
 
           setHospitalData(rawHospitalData);
@@ -83,7 +87,11 @@ function ModalAddEdit(props: Props): ReactElement {
       title={`${addOrEdit} Hospital Information`}
       visible={show}
       onCancel={handleCancel}
-      okText="Save"
+      footer={[
+        <Button key="back" onClick={handleCancel}>
+          Close
+        </Button>
+      ]}
       width={1000}
       centered
     >

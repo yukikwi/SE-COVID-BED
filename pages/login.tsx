@@ -13,7 +13,12 @@ const Login: NextPage = () => {
   useEffect(() => {
     if(userData.login === true){
       // redirect...
-      router.replace('/system')
+      if(userData.userinfo.role === 'system_admin'){
+        router.push("/system");
+      }
+      if(userData.userinfo.role === 'hospital'){
+        router.push("/hospital");
+      }
     }
   }, [userData])
 

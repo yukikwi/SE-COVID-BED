@@ -16,7 +16,8 @@ class System {
     hospitalConvince: String,
     hospitalAddress: String,
     hospitalLocationLat: String,
-    hospitalLocationLong: String
+    hospitalLocationLong: String,
+    staff: String
   ) {
     this.newHospitalData = {
       hospitalName: `${hospitalName}`,
@@ -29,6 +30,7 @@ class System {
       },
       isAvailable: true,
       isDelete: false,
+      staff: `${staff}`
     };
 
     console.log(this.newHospitalData);

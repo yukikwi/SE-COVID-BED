@@ -11,6 +11,9 @@ const UserSchema: Schema = new Schema({
   },
   token: {
     type: String
+  },
+  role: {
+    type: String
   }
 })
 
