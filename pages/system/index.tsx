@@ -39,6 +39,18 @@ const HospitalResourceIndex: NextPage = () => {
     key: "",
     hospital: "",
   });
+
+  
+  // Redux part
+  const deleteModalState = useSelector(getDeleteModalState);
+  const addEditModalState = useSelector(getAddOrEditModalState);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getHospitalsData();
+  }, [deleteModalState, addEditModalState]);
+
   // Dummy Hospital data
   const columns = [
     {
@@ -158,15 +170,6 @@ const HospitalResourceIndex: NextPage = () => {
     }
   };
 
-  // Redux part
-  const deleteModalState = useSelector(getDeleteModalState);
-  const addEditModalState = useSelector(getAddOrEditModalState);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    getHospitalsData();
-  }, [deleteModalState, addEditModalState]);
 
   return (
     <LayoutHospital
