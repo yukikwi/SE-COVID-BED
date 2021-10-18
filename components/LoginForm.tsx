@@ -4,6 +4,8 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import PositiveButton from "./PositiveButton";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { setUser } from "../store/user/actions";
+import { useDispatch } from 'react-redux';
 
 interface Props {}
 
@@ -12,6 +14,7 @@ function LoginForm({}: Props): ReactElement {
   const [form] = Form.useForm();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const dispatch = useDispatch();
 
   const handleOnChangeUsername = (e: any) => {
     console.log('Username: '+username)
@@ -33,7 +36,14 @@ function LoginForm({}: Props): ReactElement {
       )) as any;
       console.log("connected");
       if (res.status === 200) {
-        // router.push("/home");
+        const userData = res.data.userData
+        if(userData.role === 'system_admin'){
+          router.push("/system");
+        }
+        if(userData.role === 'hospital'){
+          router.push("/hospital");
+        }
+        dispatch(setUser(userData))
         message.success("success");
       }
     } catch (err: any) {
@@ -94,3 +104,4 @@ function LoginForm({}: Props): ReactElement {
 }
 
 export default LoginForm;
+
