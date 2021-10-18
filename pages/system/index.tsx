@@ -127,7 +127,7 @@ const HospitalResourceIndex: NextPage = () => {
           key: hospital._id,
           hospital: hospital.hospitalName,
           convince: hospital.hospitalConvince,
-          staff: "Dr. Dio",
+          staff: (hospital.staff && typeof(hospital.staff.username) === 'string')? hospital.staff.username: 'not specific',
           amount: 32,
           available: 32,
           isAvailable: hospital.isAvailable,
