@@ -1,8 +1,27 @@
 import type { NextPage } from 'next'
 import Logo from '../components/Logo'
 import LoginForm from '../components/LoginForm';
+import { useEffect } from 'react';
+import { getUserState } from '../store/user/selectors';
+import { useSelector } from 'react-redux';
+import router from 'next/router';
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
+
+  // check is already signin?
+  const userData = useSelector(getUserState);
+  useEffect(() => {
+    if(userData.login === true){
+      // redirect...
+      if(userData.userinfo.role === 'system_admin'){
+        router.push("/system");
+      }
+      if(userData.userinfo.role === 'hospital'){
+        router.push("/hospital");
+      }
+    }
+  }, [userData])
+
   return (
     <div className="tw-flex tw-flex-col tw-mx-auto tw-w-full md:tw-w-3/4 tw-min-h-screen tw-pt-5">
       <Logo />
@@ -21,4 +40,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Login

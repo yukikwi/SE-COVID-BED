@@ -1,19 +1,23 @@
 import React, { ReactElement, useState } from "react";
-import { Form, Input, Button, Alert, message } from "antd";
+import { Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import PositiveButton from "./PositiveButton";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { setUser } from "../store/user/actions";
+import { useDispatch } from 'react-redux';
 
 interface Props {}
 
 function LoginForm({}: Props): ReactElement {
   const router = useRouter();
-
+  const [form] = Form.useForm();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const dispatch = useDispatch();
 
   const handleOnChangeUsername = (e: any) => {
+    console.log('Username: '+username)
     setUsername(e.target.value);
   };
 
@@ -22,9 +26,6 @@ function LoginForm({}: Props): ReactElement {
   };
 
   const handleClickLogin = async () => {
-    console.log("username", username);
-    console.log("password", password);
-
     try {
       const res = (await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/login`,
@@ -35,12 +36,24 @@ function LoginForm({}: Props): ReactElement {
       )) as any;
       console.log("connected");
       if (res.status === 200) {
-        // router.push("/home");
+        const userData = res.data.userData
+        if(userData.role === 'system_admin'){
+          router.push("/system");
+        }
+        if(userData.role === 'hospital'){
+          router.push("/hospital");
+        }
+        dispatch(setUser(userData))
         message.success("success");
       }
     } catch (err: any) {
       console.log("error");
       if (err.response.status !== 400) {
+        setUsername('');
+        setPassword('');
+        form.setFieldsValue({
+          password: ''
+        })
         message.error(err.response.data.error);
       } else {
         message.error("Internal server error");
@@ -50,7 +63,7 @@ function LoginForm({}: Props): ReactElement {
 
   return (
     <div>
-      <Form name="basic" initialValues={{}} autoComplete="off">
+      <Form name="basic" form={form} initialValues={{}} autoComplete="off">
         <Form.Item
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
@@ -91,3 +104,4 @@ function LoginForm({}: Props): ReactElement {
 }
 
 export default LoginForm;
+
