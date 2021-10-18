@@ -53,7 +53,8 @@ function ModalAddEdit(props: Props): ReactElement {
           let apiResonse = await axios.get(
             `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
           );
-          const rawHospitalData: IHospital = apiResonse.data;
+          let rawHospitalData: IHospital = apiResonse.data;
+          rawHospitalData.staff = rawHospitalData.staff._id
           console.log("rawHospitalData", rawHospitalData);
 
           setHospitalData(rawHospitalData);

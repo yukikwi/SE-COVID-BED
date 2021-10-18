@@ -1,5 +1,5 @@
-import React, { ReactElement, useEffect } from "react";
-import { Form, Input, Button, notification } from "antd";
+import React, { ReactElement, useEffect, useState } from "react";
+import { Form, Input, Button, notification, Select } from "antd";
 import HospitalStatus from "./HospitalStatus";
 import Resources from "./Resources";
 import { IHospital } from "../../../class/data_struct/hospital";
@@ -19,6 +19,35 @@ interface IHospitalData {
 }
 
 function AddEditForm(props: Props): ReactElement {
+
+  const { Option } = Select;
+  const [dummyUser, setDummyUser] = useState<Array<any>>([])
+
+  // UI - user list
+  const setUserData = () => {
+    setDummyUser([
+      {
+        _id: '615d89bf861949c6324f57ae',
+        username: 'bara1'
+      },
+      {
+        _id: '4321',
+        username: 'bara2'
+      },
+      {
+        _id: '1111',
+        username: 'bara3'
+      },
+      {
+        _id: '616cff05819a0b290387a93f',
+        username: 'capybaraHospital'
+      }
+    ])
+  }
+  useEffect(() => {
+    setUserData()
+  }, [])
+
   // let hospitalData: IHospitalData = { hospitalStatus: "open" };
   const { hospitalData, mode } = props;
   const [form] = Form.useForm();
@@ -52,6 +81,7 @@ function AddEditForm(props: Props): ReactElement {
           hospitalConvince: formData.hospitalConvince,
           hospitalAddress: formData.hospitalAddress,
           hospitalStatus: formData.hospitalPhoneNumber,
+          staff: formData.staff
         }
       );
       notification.open({
@@ -151,12 +181,16 @@ function AddEditForm(props: Props): ReactElement {
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Staff"
-        name="staff"
-        rules={[{ required: true, message: "Please input Staff!" }]}
-      >
-        <Input />
+      <Form.Item name="staff" label="Staff" rules={[{ required: true }]}>
+        <Select
+          placeholder="Select a option and change input text above"
+        >
+          {
+            dummyUser.map((user) => {
+              return (<Option value={user._id}>{user.username}</Option>)
+            })
+          }
+        </Select>
       </Form.Item>
 
       <Form.Item label="Status">

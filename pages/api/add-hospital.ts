@@ -20,6 +20,7 @@ export default async function addHospital(
           hospitalAddress,
           hospitalLocationLat,
           hospitalLocationLong,
+          staff,
         } = req.body;
 
         // use method login from userlogin class
@@ -29,7 +30,8 @@ export default async function addHospital(
           hospitalConvince,
           hospitalAddress,
           hospitalLocationLat,
-          hospitalLocationLong
+          hospitalLocationLong,
+          staff
         );
         res.status(addHospitalStatus.http).json(addHospitalStatus.data);
       } else {
