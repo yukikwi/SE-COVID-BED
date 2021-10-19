@@ -29,7 +29,7 @@ const HospitalIndex: NextPage = () => {
 
   return (
     <LayoutHospital
-      title="Capybara Hospital : Resource list"
+      title="Capybara Hospital : Info"
       button={
         <Button
           className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
