@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
+import ApproveModal from "../../../components/Hospital/Approve"
 import { Table, Button } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
@@ -9,14 +10,27 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
 
 type TPatient = {
   key: string;
+  patientName: string;
   patientSeverity: 'Red' | 'Yellow' | 'Green'
   patientStatus: 'Request' | 'In progress' | 'Complete'
 };
 
 const HospitalResourceIndex: NextPage = () => {
+  // cast state and method
+  const [tableData, settableData] = useState<Array<any>>()
+  const [approvePatient, setApprovePatient] = useState<TPatient>()
+  const dispatch = useDispatch()
+  const showApproveModal = (patient:TPatient) => {
+    console.log('Display')
+    setApprovePatient(patient)
+    dispatch(storeShowApproveModal());
+  }
+
   // Dummy Hospital data
   const columns = [
     {
@@ -43,7 +57,7 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TPatient) => (
         <div>
-          <a className="hover:tw-text-green-500" href="#">
+          <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
             <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
           <a className="hover:tw-text-yellow-500" href="#">
@@ -52,6 +66,7 @@ const HospitalResourceIndex: NextPage = () => {
           <a className="hover:tw-text-blue-500" href="#">
             <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
+
         </div>
       ),
     },
@@ -59,18 +74,18 @@ const HospitalResourceIndex: NextPage = () => {
 
   const data = [
     {
+      key: '_id1234',
       patientName: 'Mr.Capybara',
       patientSeverity: 'Red',
       patientStatus: 'Request'
     },
     {
+      key: '_id5678',
       patientName: 'Mr.Reaw Wong',
       patientSeverity: 'Yellow',
       patientStatus: 'Request'
     }
   ];
-
-  const [tableData, settableData] = useState<Array<any>>()
 
   useEffect(() => {
     // For Api use this to set table data
@@ -120,7 +135,10 @@ const HospitalResourceIndex: NextPage = () => {
             Complete
           </Button>
         </div>
+
         <Table columns={columns} dataSource={tableData} />
+
+        <ApproveModal patient={approvePatient}/>
       </div>
     </LayoutHospital>
   );
