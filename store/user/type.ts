@@ -7,7 +7,8 @@ export interface userState {
 }
 
 export enum userActionType {
-  SET_USER_INFO = "SET_USER_INFO"
+  SET_USER_INFO = "SET_USER_INFO",
+  LOGOUT = "LOGOUT"
 }
 
 export type userAction = userActionType;
