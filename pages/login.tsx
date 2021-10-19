@@ -11,13 +11,16 @@ const Login: NextPage = () => {
   // check is already signin?
   const userData = useSelector(getUserState);
   useEffect(() => {
-    if(userData.login === true){
-      // redirect...
-      if(userData.userinfo.role === 'system_admin'){
-        router.push("/system");
-      }
-      if(userData.userinfo.role === 'hospital'){
-        router.push("/hospital");
+    // check api fetch
+    if(userData.loadStatus === true){
+      if(userData.login === true && userData.userinfo){
+        // redirect...
+        if(userData.userinfo.role === 'system_admin'){
+          router.push("/system");
+        }
+        if(userData.userinfo.role === 'hospital'){
+          router.push("/hospital");
+        }
       }
     }
   }, [userData])

@@ -22,7 +22,7 @@ function Navbar(props: Props): ReactElement {
   // NavItem depend on role
   const userData = useSelector(getUserState);
   const NavItem = () => {
-    if(userData.userinfo.role === 'hospital'){
+    if(userData.userinfo && userData.userinfo.role === 'hospital'){
       return (
         <React.Fragment>
           <Link href="/hospital/resource">

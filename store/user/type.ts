@@ -2,7 +2,8 @@ import { TUser } from "../../class/data_struct/user";
 
 export interface userState {
   userinfo: TUser,
-  login: boolean
+  login: boolean,
+  loadStatus: boolean
 }
 
 export enum userActionType {
