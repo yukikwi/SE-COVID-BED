@@ -94,7 +94,7 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TUiHospital) => (
         <div>
           <a className="hover:tw-text-green-500">
-            <EyeOutlined className="tw-font-base tw-mr-3" />
+            <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
           <a
             className="hover:tw-text-yellow-500"
@@ -106,7 +106,7 @@ const HospitalResourceIndex: NextPage = () => {
               });
             }}
           >
-            <EditOutlined className="tw-font-base tw-mr-3" />
+            <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
           <a
             className="hover:tw-text-red-500"
@@ -118,7 +118,7 @@ const HospitalResourceIndex: NextPage = () => {
               });
             }}
           >
-            <DeleteOutlined className="tw-font-base tw-mr-3" />
+            <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
         </div>
       ),
