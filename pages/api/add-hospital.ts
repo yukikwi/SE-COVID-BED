@@ -23,7 +23,6 @@ export default async function addHospital(
           staff,
         } = req.body;
 
-        // use method login from userlogin class
         const addHospitalStatus = await system.addHospital(
           hospitalName,
           hospitalPhoneNumber,
