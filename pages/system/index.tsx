@@ -13,11 +13,11 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { showDeleteModal } from "../../store/deleteModal/actions";
-import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
+import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
-import { getAddOrEditModalState } from "../../store/addOrEditModal/selectors";
+import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
 
 export type TUiHospital = {
   key: string;
