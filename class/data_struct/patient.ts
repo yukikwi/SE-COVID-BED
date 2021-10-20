@@ -1,4 +1,4 @@
-import { Document, Date } from "mongoose";
+import { Document } from "mongoose";
 
 // export interface
 export interface IPatient extends Document {
@@ -19,13 +19,15 @@ export type TPatient = {
 
 export interface ISeverity extends Document {
   patientSeverityLabel: string;
-  patientSevertiyDateTime: Date;
+  patientSeverityDateStart: string;
+  patientSeverityDateEnd: string;
   patient: any;
 }
 
 export type TSeverity = {
   patientSeverityLabel?: string;
-  patientSevertiyDateTime?: Date;
+  patientSeverityDateStart?: string;
+  patientSeverityDateEnd?: string;
   patient?: any;
 };
 

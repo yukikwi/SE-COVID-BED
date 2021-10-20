@@ -1,6 +1,7 @@
+import moment from "moment";
 import type { NextApiRequest, NextApiResponse } from "next";
-import Database from "../../class/database";
-import Patient from "../../class/patient";
+import Database from "../../../class/database";
+import Patient from "../../../class/patient";
 
 export default async function addPatient(
   req: NextApiRequest,
@@ -18,15 +19,20 @@ export default async function addPatient(
           patientHospital,
           patientAddress,
           patientPhoneNumber,
-          patientStatus
+          patientStatus,
+          patientSeverityLabel
         } = req.body;
+        
+        const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
 
         const addPatient = await patient.addPatient( 
           patientName,
           patientHospital,
           patientAddress,
           patientPhoneNumber,
-          patientStatus
+          patientStatus,
+          patientSeverityLabel,
+          dateNow
         );
         res.status(addPatient.http).json(addPatient.data);
       } else {

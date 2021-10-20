@@ -19,7 +19,9 @@ class Patient {
     patientHospital: string,
     patientAddress: string,
     patientPhoneNumber: string,
-    patientStatus: string
+    patientStatus: string,
+    patientSeverityLabel: string,
+    patientSeverityDateStart: string
   ) {
     const newPatientData = {
       patientName: `${patientName}`,
@@ -29,7 +31,14 @@ class Patient {
       patientStatus: `${patientStatus}`
     }
     if (newPatientData !== null) {
-      await this.database.addPatient(newPatientData);
+      const patientId = await this.database.addPatient(newPatientData);
+      const newPatientSeverityLog = {
+        patientSeverityLabel: `${patientSeverityLabel}`,
+        patientSeverityDateStart: `${patientSeverityDateStart}`,
+        patientSeverityDateEnd: "9999-12-31 00:00:00",
+        patient: `${patientId}`
+      }
+      await this.database.addSeverityLog(newPatientSeverityLog);
       return {
         http: 201,
         data: {

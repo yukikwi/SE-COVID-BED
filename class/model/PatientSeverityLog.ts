@@ -5,8 +5,11 @@ const PatientSeverityLogSchema: Schema = new Schema({
   patientSeverityLabel: {
     type: String,
   },
-  patientSevertiyDateTime: {
-    type: Date,
+  patientSeverityDateStart: {
+    type: String,
+  },
+  patientSeverityDateEnd: {
+    type: String,
   },
   patient: {
     type: Schema.Types.ObjectId,
@@ -15,4 +18,4 @@ const PatientSeverityLogSchema: Schema = new Schema({
 });
 
 export const PatientSeverityLogModel: Model<ISeverity> =
-  mongoose.models.Patient || model("PatientSeverityLog", PatientSeverityLogSchema, "PatientSeverityLog");
+  mongoose.models.PatientSeverityLog || model("PatientSeverityLog", PatientSeverityLogSchema, "PatientSeverityLog");

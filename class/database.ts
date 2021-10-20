@@ -12,7 +12,7 @@
 import mongoose from "mongoose";
 // load data_struct and model
 import { TUser } from "./data_struct/user";
-import { UserModel, HospitalModel, PatientModel } from "./model/index";
+import { UserModel, HospitalModel, PatientModel, PatientSeverityLogModel } from "./model/index";
 // load dotenv for load environment variable from .env file
 require("dotenv").config();
 
@@ -96,7 +96,19 @@ export default class Database {
   async addPatient(newPatientData: Object) {
     const newPatient = new PatientModel(newPatientData);
     try {
-      return await newPatient.save();
+      await newPatient.save();
+      return newPatient._id;
+    } catch (e) {
+      return 500;
+    }
+  }
+
+  async addSeverityLog(newPatientSeverityLog: Object) {
+    const newSeverity = new PatientSeverityLogModel(newPatientSeverityLog);
+    console.log("kuy =" + newSeverity);
+    console.log("kuy23 = " + newPatientSeverityLog);
+    try {
+      return newSeverity.save();
     } catch (e) {
       return 500;
     }
