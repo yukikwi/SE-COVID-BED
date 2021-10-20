@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Radio, Select } from 'antd'
+import { Button, Form, Input, Modal, Radio, Select } from 'antd'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getPatientModalState } from '../../store/addPatientModal/selectors';
@@ -6,14 +6,19 @@ import { hidePatientModal } from '../../store/addPatientModal/actions';
 import Status from './Status';
 
 interface Props {
-  patient: any
+  patient: any,
+  isView: boolean
+}
+
+ModalAddPatient.defaultProps = {
+  isView: false
 }
 
 function ModalAddPatient(props: Props): ReactElement {
   const show = useSelector(getPatientModalState);
   const [mode, setMode] = useState('Add')
   const [form] = Form.useForm()
-  const { patient } = props
+  const { isView, patient } = props
   const dispatch = useDispatch()
   
   const handleCancel = () => {
@@ -34,7 +39,10 @@ function ModalAddPatient(props: Props): ReactElement {
       form.resetFields()
     else if(typeof(patient) !== 'undefined'){
       form.setFieldsValue(patient)
-      setMode('Edit')
+      if(isView === true)
+        setMode('View')
+      else
+        setMode('Edit')
     }
     else
       setMode('Add')
@@ -48,6 +56,7 @@ function ModalAddPatient(props: Props): ReactElement {
       okText="Save"
       onCancel={handleCancel}
       width={1000}
+      footer={<></>}
     >
         <Form
         name="basic"
@@ -61,7 +70,7 @@ function ModalAddPatient(props: Props): ReactElement {
           name="patientName"
           rules={[{ required: true, message: 'Please input your patient name!' }]}
         >
-          <Input />
+          <Input disabled={isView}/>
         </Form.Item>
 
         <Form.Item
@@ -69,7 +78,7 @@ function ModalAddPatient(props: Props): ReactElement {
           name="patientAddress"
           rules={[{ required: true, message: 'Please input your patient address!' }]}
         >
-          <Input />
+          <Input disabled={isView}/>
         </Form.Item>
 
         <Form.Item
@@ -77,7 +86,7 @@ function ModalAddPatient(props: Props): ReactElement {
           name="patientPhoneNumber"
           rules={[{ required: true, message: 'Please input your patient phone number!' }]}
         >
-          <Input />
+          <Input disabled={isView}/>
         </Form.Item>
 
         <Form.Item
@@ -85,7 +94,7 @@ function ModalAddPatient(props: Props): ReactElement {
           name="patientSeverity"
           rules={[{ required: true, message: 'Please specific severity Level' }]}
         >
-          <Select>
+          <Select disabled={isView}>
             <Option value="Green">Green</Option>
             <Option value="Yellow">Yellow</Option>
             <Option value="Red">Red</Option>
@@ -97,7 +106,7 @@ function ModalAddPatient(props: Props): ReactElement {
           name="patientStatus"
           rules={[{ required: true, message: 'Please specific patient status' }]}
         >
-          <Radio.Group>
+          <Radio.Group disabled={isView}>
             <Radio value="Request">
               <Status type="patient" status="Request" />
             </Radio>

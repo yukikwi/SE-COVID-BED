@@ -29,6 +29,7 @@ const HospitalResourceIndex: NextPage = () => {
   const [tableData, settableData] = useState<Array<any>>()
   const [approvePatient, setApprovePatient] = useState<TPatient>()
   const [editPatient, setEditPatient] = useState<TPatient>()
+  const [isView, setIsView] = useState<boolean>()
   const dispatch = useDispatch()
 
   // Approve Modal handler
@@ -39,13 +40,9 @@ const HospitalResourceIndex: NextPage = () => {
   }
 
   // Add Modal handler
-  const showAddModal = () => {
-    setEditPatient(undefined)
-    dispatch(showPatientModal());
-  }
-
-  const showEditModal = (patient:TPatient) => {
+  const showAddEditModal = (patient:TPatient|undefined = undefined, isView:boolean = false) => {
     setEditPatient(patient)
+    setIsView(isView)
     dispatch(showPatientModal());
   }
 
@@ -82,13 +79,13 @@ const HospitalResourceIndex: NextPage = () => {
           </Tooltip>
           
           <Tooltip title="View">
-            <a className="hover:tw-text-yellow-500" href="#">
+            <a className="hover:tw-text-yellow-500" onClick={() => {showAddEditModal(record, true)}}>
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-blue-500" onClick={() => {showEditModal(record)}}>
+            <a className="hover:tw-text-blue-500" onClick={() => {showAddEditModal(record)}}>
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -133,7 +130,7 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
-          onClick={() => {showAddModal()}}
+          onClick={() => {showAddEditModal()}}
         >
           add patient
         </Button>
@@ -170,7 +167,7 @@ const HospitalResourceIndex: NextPage = () => {
 
         <Table columns={columns} dataSource={tableData} />
 
-        <ModalAddEditPatient patient={editPatient} />
+        <ModalAddEditPatient patient={editPatient} isView={isView} />
         <ApproveModal patient={approvePatient}/>
       </div>
     </LayoutHospital>
