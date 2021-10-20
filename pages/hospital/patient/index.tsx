@@ -13,11 +13,13 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
 import { showPatientModal } from "../../../store/addPatientModal/actions";
-import ModalAddPatient from "../../../components/Hospital/ModalAddEditPatient";
+import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatient";
 
 type TPatient = {
   key: string;
   patientName: string;
+  patientAddress: string;
+  patientPhoneNumber: string;
   patientSeverity: 'Red' | 'Yellow' | 'Green'
   patientStatus: 'Request' | 'In progress' | 'Complete'
 };
@@ -26,6 +28,7 @@ const HospitalResourceIndex: NextPage = () => {
   // cast state and method
   const [tableData, settableData] = useState<Array<any>>()
   const [approvePatient, setApprovePatient] = useState<TPatient>()
+  const [editPatient, setEditPatient] = useState<TPatient>()
   const dispatch = useDispatch()
 
   // Approve Modal handler
@@ -37,6 +40,12 @@ const HospitalResourceIndex: NextPage = () => {
 
   // Add Modal handler
   const showAddModal = () => {
+    setEditPatient(undefined)
+    dispatch(showPatientModal());
+  }
+
+  const showEditModal = (patient:TPatient) => {
+    setEditPatient(patient)
     dispatch(showPatientModal());
   }
 
@@ -79,7 +88,7 @@ const HospitalResourceIndex: NextPage = () => {
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-blue-500" href="#">
+            <a className="hover:tw-text-blue-500" onClick={() => {showEditModal(record)}}>
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -89,16 +98,21 @@ const HospitalResourceIndex: NextPage = () => {
     },
   ];
 
+  // Dummy data
   const data = [
     {
       key: '_id1234',
       patientName: 'Mr.Capybara',
+      patientAddress: 'baraland',
+      patientPhoneNumber: '123-456-7890',
       patientSeverity: 'Red',
       patientStatus: 'Request'
     },
     {
       key: '_id5678',
       patientName: 'Mr.Reaw Wong',
+      patientAddress: 'baraland2',
+      patientPhoneNumber: '098-765-4321',
       patientSeverity: 'Yellow',
       patientStatus: 'Request'
     }
@@ -156,7 +170,7 @@ const HospitalResourceIndex: NextPage = () => {
 
         <Table columns={columns} dataSource={tableData} />
 
-        <ModalAddPatient />
+        <ModalAddEditPatient patient={editPatient} />
         <ApproveModal patient={approvePatient}/>
       </div>
     </LayoutHospital>

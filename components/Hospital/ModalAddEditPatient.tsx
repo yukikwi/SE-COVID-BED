@@ -6,12 +6,14 @@ import { hidePatientModal } from '../../store/addPatientModal/actions';
 import Status from './Status';
 
 interface Props {
-  
+  patient: any
 }
 
-function ModalAddPatient({}: Props): ReactElement {
+function ModalAddPatient(props: Props): ReactElement {
   const show = useSelector(getPatientModalState);
+  const [mode, setMode] = useState('Add')
   const [form] = Form.useForm()
+  const { patient } = props
   const dispatch = useDispatch()
   
   const handleCancel = () => {
@@ -30,11 +32,17 @@ function ModalAddPatient({}: Props): ReactElement {
   useEffect(() => {
     if(show === false)
       form.resetFields()
+    else if(typeof(patient) !== 'undefined'){
+      form.setFieldsValue(patient)
+      setMode('Edit')
+    }
+    else
+      setMode('Add')
   }, [show])
 
   return (
     <Modal
-      title="Add Patient Information"
+      title={ `${mode} Patient Information` }
       visible={show}
       onOk={handleApprove}
       okText="Save"
