@@ -1,6 +1,11 @@
+import axios from 'axios';
+import Link from 'next/link';
+import router from 'next/router';
 import React, { ReactComponentElement, ReactElement, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { getUserState } from '../store/user/selectors';
+import { useDispatch } from 'react-redux';
+import { storelogout } from '../store/user/actions';
 
 interface Props {
   system?: boolean
@@ -13,7 +18,7 @@ Navbar.defaultProps = {
 function Navbar(props: Props): ReactElement {
   const { system } = props
   const [menuShow, setmenuShow] = useState<Boolean>(false);
-
+  const dispatch = useDispatch()
   const toggleMenu = () => {
     setmenuShow(!menuShow)
   }
@@ -21,11 +26,15 @@ function Navbar(props: Props): ReactElement {
   // NavItem depend on role
   const userData = useSelector(getUserState);
   const NavItem = () => {
-    if(userData.userinfo.role === 'hospital'){
+    if(userData.userinfo && userData.userinfo.role === 'hospital'){
       return (
         <React.Fragment>
-          <a href="#" className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Resource</a>
-          <a href="#" className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Patient</a>
+          <Link href="/hospital/resource">
+            <a className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Resource</a>
+          </Link>
+          <Link href="/hospital/patient">
+            <a className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Patient</a>
+          </Link>
         </React.Fragment>
       )
     }
@@ -36,6 +45,11 @@ function Navbar(props: Props): ReactElement {
     }
   }
 
+  // logout
+  const logout = async () =>{
+    await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/logout`)
+    dispatch(storelogout())
+  }
   const HospitalMenu = () => {
     return (
       <React.Fragment>
@@ -44,7 +58,7 @@ function Navbar(props: Props): ReactElement {
         </div>
         <div className={`sm:tw-flex tw-items-center tw-text-lg tw-justify-end tw-transition-all tw-ease-out tw-duration-500 ${menuShow? 'tw-flex tw-flex-col tw-col-span-2 tw-mt-3':'tw-hidden'}`}>
           <NavItem />
-          <a href="#" className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-red-500 hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3 tw-text-red-500 tw-flex tw-items-center">
+          <a onClick={ () => { logout() }} className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-red-500 hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3 tw-text-red-500 tw-flex tw-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="tw-h-6 tw-w-6 tw-inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>

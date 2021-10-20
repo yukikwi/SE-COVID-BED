@@ -20,15 +20,18 @@ function LayoutSystem(props: Props): ReactElement {
   // check permission
   const userData = useSelector(getUserState);
   useEffect(() => {
-    if(userData.login === true){
-      // redirect...
-      if(userData.userinfo.role === 'hospital'){
-        router.replace("/hospital");
+    // check api fetch
+    if(userData.loadStatus === true){
+      if(userData.login === true && userData.userinfo){
+        // redirect...
+        if(userData.userinfo.role === 'hospital'){
+          router.replace("/hospital");
+        }
       }
-    }
-    else{
-      // login before
-      router.replace("/login");
+      else{
+        // login before
+        router.replace("/login");
+      }
     }
   }, [userData])
 

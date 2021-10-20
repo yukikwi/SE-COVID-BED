@@ -20,15 +20,18 @@ function LayoutHospital(props: Props): ReactElement {
   // check permission
   const userData = useSelector(getUserState);
   useEffect(() => {
-    if(userData.login === true){
-      // redirect...
-      if(userData.userinfo.role === 'system_admin'){
-        router.replace("/system");
+    // check api fetch
+    if(userData.loadStatus === true){
+      if(userData.login === true && userData.userinfo){
+        // redirect...
+        if(userData.userinfo.role === 'system_admin'){
+          router.replace("/system");
+        }
       }
-    }
-    else{
-      // login before
-      router.replace("/login");
+      else{
+        // login before
+        router.replace("/login");
+      }
     }
   }, [userData])
 
