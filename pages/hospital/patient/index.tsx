@@ -12,6 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
+import { showPatientModal } from "../../../store/addPatientModal/actions";
+import ModalAddPatient from "../../../components/Hospital/ModalAddEditPatient";
 
 type TPatient = {
   key: string;
@@ -25,10 +27,17 @@ const HospitalResourceIndex: NextPage = () => {
   const [tableData, settableData] = useState<Array<any>>()
   const [approvePatient, setApprovePatient] = useState<TPatient>()
   const dispatch = useDispatch()
+
+  // Approve Modal handler
   const showApproveModal = (patient:TPatient) => {
     console.log('Display')
     setApprovePatient(patient)
     dispatch(storeShowApproveModal());
+  }
+
+  // Add Modal handler
+  const showAddModal = () => {
+    dispatch(showPatientModal());
   }
 
   // Dummy Hospital data
@@ -117,13 +126,14 @@ const HospitalResourceIndex: NextPage = () => {
       title="Capybara Hospital : Patient list"
       button={
         <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
+          onClick={() => {showAddModal()}}
         >
-          add resource
+          add patient
         </Button>
       }
     >
@@ -158,6 +168,7 @@ const HospitalResourceIndex: NextPage = () => {
 
         <Table columns={columns} dataSource={tableData} />
 
+        <ModalAddPatient />
         <ApproveModal patient={approvePatient}/>
       </div>
     </LayoutHospital>
