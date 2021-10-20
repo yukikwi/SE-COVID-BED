@@ -123,6 +123,7 @@ class Patient {
         data: {
           code: "Success to add patient",
           patientData: newPatientData,
+          patientSeverityLog: newPatientSeverityLog
         },
       };
     } else {
@@ -130,6 +131,25 @@ class Patient {
         http: 400,
         data: {
           error: "Fail to add patient",
+        },
+      };
+    }
+  }
+
+  async approvePatient(id: string) {
+    try {
+      await this.database.approvePatient(id);
+      return {
+        http: 200,
+        data: {
+          code: "Success to approve patient"
+        },
+      };
+    } catch (e) {
+      return {
+        http: 400,
+        data: {
+          error: "Fail to approve patient"
         },
       };
     }

@@ -125,4 +125,8 @@ export default class Database {
       patientSeverityDateEnd: "9999-12-31 00:00:00",
     });
   }
+
+  async approvePatient(id: string) {
+    return await PatientModel.findByIdAndUpdate(id, {patientStatus: "In progress"}, { upsert: true });
+  }
 }
