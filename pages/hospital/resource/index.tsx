@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import { Table, Button, Popover } from "antd";
+import { Table, Button, Tooltip } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
   EyeOutlined,
@@ -46,35 +46,23 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TResource) => (
         <div>
-          <Popover
-            content={(
-              <span className="tw-font-bold">View</span>
-            )}
-          >
+          <Tooltip title="View">
             <a className="hover:tw-text-green-500" href="#">
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
 
-          <Popover
-            content={(
-              <span className="tw-font-bold">Edit</span>
-            )}
-          >
+          <Tooltip title="Edit">
             <a className="hover:tw-text-yellow-500" href="#">
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
 
-          <Popover
-            content={(
-              <span className="tw-font-bold">Remove</span>
-            )}
-          >
+          <Tooltip title="Remove">
             <a className="hover:tw-text-red-500" href="#">
               <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
         </div>
       ),
     },

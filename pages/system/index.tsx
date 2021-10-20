@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import LayoutHospital from "../../components/Layout/Hospital";
 import ModalDelete from "../../components/System/ModalDelete";
 import ModalAddEdit from "../../components/System/ModalAddEdit";
-import { Table, Button, notification, Popover } from "antd";
+import { Table, Button, notification, Tooltip } from "antd";
 import Status from "../../components/System/Status";
 import {
   EyeOutlined,
@@ -93,21 +93,13 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TUiHospital) => (
         <div>
-          <Popover
-            content={(
-              <span className="tw-font-bold">View</span>
-            )}
-          >
+          <Tooltip title="View">
             <a className="hover:tw-text-green-500">
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
 
-          <Popover
-            content={(
-              <span className="tw-font-bold">Edit</span>
-            )}
-          >
+          <Tooltip title="Edit">
           <a
             className="hover:tw-text-yellow-500"
             onClick={() => {
@@ -120,13 +112,9 @@ const HospitalResourceIndex: NextPage = () => {
           >
             <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
-          </Popover>
+          </Tooltip>
 
-          <Popover
-            content={(
-              <span className="tw-font-bold">Remove</span>
-            )}
-          >
+          <Tooltip title="Remove">
             <a
               className="hover:tw-text-red-500"
               onClick={() => {
@@ -139,7 +127,7 @@ const HospitalResourceIndex: NextPage = () => {
             >
               <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
         </div>
       ),
     },

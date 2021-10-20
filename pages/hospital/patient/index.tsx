@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
 import ApproveModal from "../../../components/Hospital/Approve"
-import { Table, Button, Popover } from "antd";
+import { Table, Button, Tooltip } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
   EyeOutlined,
@@ -66,35 +66,23 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TPatient) => (
         <div>
-          <Popover
-            content={(
-              <span className="tw-font-bold">Approve</span>
-            )}
-          >
+          <Tooltip title="Approve">
             <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
               <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
           
-          <Popover
-            content={(
-              <span className="tw-font-bold">View</span>
-            )}
-          >
+          <Tooltip title="View">
             <a className="hover:tw-text-yellow-500" href="#">
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
 
-          <Popover
-            content={(
-              <span className="tw-font-bold">Edit</span>
-            )}
-          >
+          <Tooltip title="Edit">
             <a className="hover:tw-text-blue-500" href="#">
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
-          </Popover>
+          </Tooltip>
 
         </div>
       ),
