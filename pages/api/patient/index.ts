@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import Connection from "../../../class/database";
+import Patient from "../../../class/patient";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,10 +10,11 @@ export default async function handler(
   if (req.method === "GET") {
     try {
       const database = new Connection();
+      const patient = new Patient();
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
-        const patientData = await database.getPatients();
+        const patientData = await patient.getPatients();
 
         res.status(200).json(patientData);
       } else {

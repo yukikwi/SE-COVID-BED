@@ -12,7 +12,12 @@
 import mongoose from "mongoose";
 // load data_struct and model
 import { TUser } from "./data_struct/user";
-import { UserModel, HospitalModel, PatientModel, PatientSeverityLogModel } from "./model/index";
+import {
+  UserModel,
+  HospitalModel,
+  PatientModel,
+  PatientSeverityLogModel,
+} from "./model/index";
 // load dotenv for load environment variable from .env file
 require("dotenv").config();
 
@@ -112,5 +117,12 @@ export default class Database {
     } catch (e) {
       return 500;
     }
+  }
+
+  async getActiveSeverity(patientId: string) {
+    return await PatientSeverityLogModel.findOne({
+      patient: patientId,
+      patientSeverityDateEnd: "9999-12-31 00:00:00",
+    });
   }
 }

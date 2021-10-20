@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import Connection from "../../../class/database";
+import Patient from "../../../class/patient";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,13 +12,15 @@ export default async function handler(
       const { id } = req.query;
 
       const database = new Connection();
+      const patient = new Patient();
 
       const isDatabaseConnected = await database.connectDatabase();
 
       if (isDatabaseConnected === true) {
-        const patientData = await database.getAPatient(id as string);
+        // const patientData = await database.getAPatient(id as string);
+        const patientData = await patient.getAPatient(id as string);
 
-        res.status(200).json(patientData);
+        res.status(200).json(patientData.data);
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
