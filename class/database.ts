@@ -49,11 +49,17 @@ export default class Database {
   }
 
   async getHospitals(condition = {}) {
-    return await HospitalModel.find(condition).populate('staff', {"password": 0, "token":0});
+    return await HospitalModel.find(condition).populate("staff", {
+      password: 0,
+      token: 0,
+    });
   }
 
   async getAHospital(id: string) {
-    return await HospitalModel.findById(id).populate('staff', {"password": 0, "token":0});
+    return await HospitalModel.findById(id).populate("staff", {
+      password: 0,
+      token: 0,
+    });
   }
 
   async addHospital(newHospitalData: Object) {
@@ -77,6 +83,14 @@ export default class Database {
 
   async editHospital(id: string, newData: Object) {
     return await HospitalModel.findByIdAndUpdate(id, newData, { upsert: true });
+  }
+
+  async getPatients() {
+    return await PatientModel.find();
+  }
+
+  async getAPatient(id: string) {
+    return await PatientModel.findById(id);
   }
 
   async addPatient(newPatientData: Object) {
