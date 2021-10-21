@@ -91,8 +91,8 @@ export default class Database {
     return await HospitalModel.findByIdAndUpdate(id, newData, { upsert: true });
   }
 
-  async getPatients() {
-    return await PatientModel.find();
+  async getPatients(hospitalId: string) {
+    return await PatientModel.find({ patientHospital: hospitalId });
   }
 
   async getAPatient(id: string) {

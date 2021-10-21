@@ -7,14 +7,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     try {
       const database = new Connection();
       const patient = new Patient();
+      const { hospitalId } = req.body;
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
-        const patientData = await patient.getPatients();
+        const patientData = await patient.getPatients(hospitalId as string);
 
         res.status(200).json(patientData);
       } else {

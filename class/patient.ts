@@ -49,10 +49,14 @@ class Patient {
     }
   }
 
-  async getPatients() {
+  async getPatients(hospitalId: string) {
     let patientData: any = [];
     try {
-      const rawPatientData: any = await this.database.getPatients();
+      console.log("hospitalId", hospitalId);
+
+      const rawPatientData: any = await this.database.getPatients(hospitalId);
+      console.log("rawPatientData", rawPatientData);
+
       await Promise.all(
         rawPatientData.map(async (patient: IPatient) => {
           const rawServerity = await this.database.getActiveSeverity(
