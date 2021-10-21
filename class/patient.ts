@@ -1,6 +1,6 @@
 import { TimePicker } from "antd";
 import Database from "./database";
-import { IPatient } from "./data_struct/patient";
+import { IPatient, ISeverity } from "./data_struct/patient";
 
 class Patient {
   private database: Database;
@@ -123,7 +123,7 @@ class Patient {
         data: {
           code: "Success to add patient",
           patientData: newPatientData,
-          patientSeverityLog: newPatientSeverityLog
+          patientSeverityLog: newPatientSeverityLog,
         },
       };
     } else {
@@ -142,14 +142,55 @@ class Patient {
       return {
         http: 200,
         data: {
-          code: "Success to approve patient"
+          code: "Success to approve patient",
         },
       };
     } catch (e) {
       return {
         http: 400,
         data: {
-          error: "Fail to approve patient"
+          error: "Fail to approve patient",
+        },
+      };
+    }
+  }
+
+  async editPatient(id: string, newData: object) {
+    try {
+      await this.database.editPatient(id, newData);
+      return {
+        http: 200,
+        data: {
+          code: "Success to edit Patient",
+        },
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to edit Patient",
+        },
+      };
+    }
+  }
+
+  async editActiveSeverity(newPatientSeverityLog: ISeverity) {
+    try {
+      const temp = await this.database.editActiveSeverity(
+        newPatientSeverityLog
+      );
+
+      return {
+        http: 200,
+        data: {
+          code: "Success to edit severity log",
+        },
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to edit severity log",
         },
       };
     }

@@ -10,6 +10,7 @@
 
 // load mongoose dependency
 import mongoose from "mongoose";
+import { ISeverity } from "./data_struct/patient";
 // load data_struct and model
 import { TUser } from "./data_struct/user";
 import {
@@ -126,7 +127,31 @@ export default class Database {
     });
   }
 
+  async editActiveSeverity(newPatientSeverityLog: ISeverity) {
+    await PatientSeverityLogModel.findOneAndUpdate(
+      {
+        patient: newPatientSeverityLog.patient,
+        patientSeverityDateEnd: "9999-12-31 00:00:00",
+      },
+      { patientSeverityDateEnd: newPatientSeverityLog.patientSeverityDateStart }
+    );
+    const newSeverity = new PatientSeverityLogModel(newPatientSeverityLog);
+    try {
+      return newSeverity.save();
+    } catch (e) {
+      return 500;
+    }
+  }
+
   async approvePatient(id: string) {
-    return await PatientModel.findByIdAndUpdate(id, {patientStatus: "In progress"}, { upsert: true });
+    return await PatientModel.findByIdAndUpdate(
+      id,
+      { patientStatus: "In progress" },
+      { upsert: true }
+    );
+  }
+
+  async editPatient(id: string, newData: Object) {
+    return await PatientModel.findByIdAndUpdate(id, newData, { upsert: true });
   }
 }
