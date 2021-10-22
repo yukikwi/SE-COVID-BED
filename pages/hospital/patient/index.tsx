@@ -60,7 +60,7 @@ const HospitalResourceIndex: NextPage = () => {
     dispatch(showPatientModal());
   };
 
-  // Dummy Hospital data
+  // Column component
   const columns = [
     {
       title: "Name",
@@ -86,17 +86,9 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TPatient) => (
         <div>
-          <Tooltip title="Approve">
-            <a
-              className="hover:tw-text-green-500"
-              onClick={() => {
-                showApproveModal(record);
-              }}
-            >
-              <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-
+          { Approve(record) }
+          
+          
           <Tooltip title="View">
             <a
               className="hover:tw-text-yellow-500"
@@ -122,6 +114,18 @@ const HospitalResourceIndex: NextPage = () => {
       ),
     },
   ];
+
+  const Approve = (record:TPatient) => {
+    if(record.patientStatus === 'Request'){
+      return (
+        <Tooltip title="Approve">
+          <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
+            <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+          </a>
+        </Tooltip>
+      )
+    }
+  }
 
   // function to connect API
   const fetchApiPatient = async (
