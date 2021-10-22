@@ -23,6 +23,8 @@ function ModalAddPatient(props: Props): ReactElement {
   const { isView, patient } = props;
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
+  const [isDataChange, setIsDataChange] = useState(false);
+  const [isSeverityChange, setIsSeverityChange] = useState(false);
 
   const handleCancel = () => {
     dispatch(hidePatientModal());
@@ -33,6 +35,8 @@ function ModalAddPatient(props: Props): ReactElement {
 
   // UI handle
   useEffect(() => {
+    setIsDataChange(false);
+    setIsSeverityChange(false);
     if (show === false) form.resetFields();
     else if (typeof patient !== "undefined") {
       console.log("patient", patient);
@@ -42,6 +46,14 @@ function ModalAddPatient(props: Props): ReactElement {
       else setMode("Edit");
     } else setMode("Add");
   }, [show]);
+
+  const handleSeverityChange = (event: any) => {
+    setIsSeverityChange(true);
+  };
+
+  const handleDataChange = (event: any) => {
+    setIsDataChange(true);
+  }
 
   const handleApprove = async (formData: any) => {
     // Api for approve here
@@ -79,21 +91,48 @@ function ModalAddPatient(props: Props): ReactElement {
       }
     } else if (mode === "Edit") {
       try {
+        console.log(formData);
+        let newData = {};
+        let newPatientSeverityLog = {};
+        if(isDataChange && !isSeverityChange) {
+          console.log("isDataChange");
+          newData = {
+            patientName: formData.patientName,
+            patientAddress: formData.patientAddress,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus
+          };
+          newPatientSeverityLog = {};
+        } else if (!isDataChange && isSeverityChange) {
+          console.log("isSeverityChange");
+          newData = {};
+          newPatientSeverityLog = {
+            patientSeverityLabel: formData.patientSeverity,
+            patient: patient._id
+          };
+        } else {
+          console.log("change both");
+          newData = {
+            patientName: formData.patientName,
+            patientAddress: formData.patientAddress,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus
+          };
+          newPatientSeverityLog = {
+            patientSeverityLabel: formData.patientSeverity,
+            patient: patient._id
+          };
+        }
+
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/patient/edit-patient`,
           {
             id: patient._id,
-            newData: {
-              patientName: formData.patientName,
-              patientAddress: formData.patientAddress,
-              patientPhoneNumber: formData.patientPhoneNumber,
-              patientStatus: formData.patientStatus
-            },
-            newPatientSeverityLog: {
-              patientSeverityLabel: formData.patientSeverity,
-              patient: patient._id
-            }
+            newData,
+            newPatientSeverityLog,
           });
+          console.log(newData);
+          console.log(newPatientSeverityLog);
           notification.open({
             message: "Success",
             description:
@@ -135,7 +174,7 @@ function ModalAddPatient(props: Props): ReactElement {
             { required: true, message: "Please input your patient name!" },
           ]}
         >
-          <Input disabled={isView} />
+          <Input disabled={isView} onChange={handleDataChange} />
         </Form.Item>
 
         <Form.Item
@@ -145,7 +184,7 @@ function ModalAddPatient(props: Props): ReactElement {
             { required: true, message: "Please input your patient address!" },
           ]}
         >
-          <Input disabled={isView} />
+          <Input disabled={isView} onChange={handleDataChange} />
         </Form.Item>
 
         <Form.Item
@@ -158,7 +197,7 @@ function ModalAddPatient(props: Props): ReactElement {
             },
           ]}
         >
-          <Input disabled={isView} />
+          <Input disabled={isView} onChange={handleDataChange} />
         </Form.Item>
 
         <Form.Item
@@ -168,7 +207,7 @@ function ModalAddPatient(props: Props): ReactElement {
             { required: true, message: "Please specific severity Level" },
           ]}
         >
-          <Select disabled={isView}>
+          <Select disabled={isView} onChange={handleSeverityChange}>
             <Option value="Green">Green</Option>
             <Option value="Yellow">Yellow</Option>
             <Option value="Red">Red</Option>
@@ -182,7 +221,7 @@ function ModalAddPatient(props: Props): ReactElement {
             { required: true, message: "Please specific patient status" },
           ]}
         >
-          <Radio.Group disabled={isView}>
+          <Radio.Group disabled={isView} onChange={handleDataChange}>
             <Radio value="Request">
               <Status type="patient" status="Request" />
             </Radio>
