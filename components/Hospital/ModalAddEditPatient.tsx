@@ -1,9 +1,11 @@
-import { Button, Form, Input, Modal, Radio, Select } from 'antd'
+import { Button, Form, Input, Modal, notification, Radio, Select } from 'antd'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getPatientModalState } from '../../store/addPatientModal/selectors';
 import { hidePatientModal } from '../../store/addPatientModal/actions';
 import Status from './Status';
+import axios from 'axios';
+import { getUserState } from '../../store/user/selectors';
 
 interface Props {
   patient: any,
@@ -20,6 +22,7 @@ function ModalAddPatient(props: Props): ReactElement {
   const [form] = Form.useForm()
   const { isView, patient } = props
   const dispatch = useDispatch()
+  const userData = useSelector(getUserState);
   
   const handleCancel = () => {
     dispatch(hidePatientModal())
@@ -43,9 +46,39 @@ function ModalAddPatient(props: Props): ReactElement {
       setMode('Add')
   }, [show])
 
-  const handleApprove = () => {
-    form.submit()
+  const handleApprove = async (formData:any) => {
     // Api for approve here
+    const hospitalId = userData.userinfo.hospitalId
+    if(mode === 'Add'){
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
+          {
+            patientName: formData.patientName,
+            patientHospital: hospitalId,
+            patientAddress: formData.patientAddress,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus,
+            patientSeverityLabel: formData.patientSeverityLabel
+          }
+        );
+        
+        // Notification
+        notification.open({
+          message: "Success",
+          description: "Add patient information successful",
+        });
+
+        // Close this modal
+        handleCancel()
+      } catch (error) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
+    }
   }
 
   return (
@@ -91,7 +124,7 @@ function ModalAddPatient(props: Props): ReactElement {
 
         <Form.Item
           label="Severity Level"
-          name="patientSeverity"
+          name="patientSeverityLabel"
           rules={[{ required: true, message: 'Please specific severity Level' }]}
         >
           <Select disabled={isView}>
