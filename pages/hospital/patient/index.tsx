@@ -17,6 +17,7 @@ import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatien
 import { IPatient } from "../../../class/data_struct/patient";
 import axios from "axios";
 import { getUserState } from "../../../store/user/selectors";
+import { getPatientModalState } from "../../../store/addPatientModal/selectors";
 import { getApproveModalState } from "../../../store/approveModal/selectors";
 
 type TPatient = {
@@ -34,8 +35,13 @@ const HospitalResourceIndex: NextPage = () => {
   const [approvePatient, setApprovePatient] = useState<TPatient>();
   const [editPatient, setEditPatient] = useState<TPatient>();
   const [isView, setIsView] = useState<boolean>();
+  const [selectTab, setSelectTab] = useState<
+    "Request" | "In progress" | "Complete"
+  >("Request");
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
+  const addEditPatientModalState = useSelector(getPatientModalState);
+  const approveModalState = useSelector(getApproveModalState);
 
   // Approve Modal handler
   const showApproveModal = (patient: TPatient) => {
@@ -117,28 +123,10 @@ const HospitalResourceIndex: NextPage = () => {
     },
   ];
 
-  // Dummy data
-  const data = [
-    {
-      key: "_id1234",
-      patientName: "Mr.Capybara",
-      patientAddress: "baraland",
-      patientPhoneNumber: "123-456-7890",
-      patientSeverity: "Red",
-      patientStatus: "Request",
-    },
-    {
-      key: "_id5678",
-      patientName: "Mr.Reaw Wong",
-      patientAddress: "baraland2",
-      patientPhoneNumber: "098-765-4321",
-      patientSeverity: "Yellow",
-      patientStatus: "Request",
-    },
-  ];
-
   // function to connect API
-  const fetchApiPatient = async () => {
+  const fetchApiPatient = async (
+    selectTab: "Request" | "In progress" | "Complete"
+  ) => {
     // For Api use this to set table data
     const hospitalId = userData.userinfo.hospitalId;
     try {
@@ -149,7 +137,11 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawPatientData: Array<IPatient> = apiResonse.data.data;
+      let rawPatientData: Array<IPatient> = apiResonse.data.data.filter(
+        (item: TPatient) => {
+          return item.patientStatus === selectTab;
+        }
+      );
 
       settableData(rawPatientData);
     } catch (error) {
@@ -162,8 +154,8 @@ const HospitalResourceIndex: NextPage = () => {
   };
 
   useEffect(() => {
-    fetchApiPatient();
-  }, []);
+    fetchApiPatient(selectTab);
+  }, [addEditPatientModalState, approveModalState, selectTab]);
 
   return (
     <LayoutHospital
@@ -190,7 +182,10 @@ const HospitalResourceIndex: NextPage = () => {
             type="primary"
             shape="round"
             size="large"
-            disabled
+            onClick={() => {
+              setSelectTab("Request");
+            }}
+            disabled={selectTab === "Request"}
           >
             Request
           </Button>
@@ -199,14 +194,22 @@ const HospitalResourceIndex: NextPage = () => {
             type="primary"
             shape="round"
             size="large"
+            onClick={() => {
+              setSelectTab("In progress");
+            }}
+            disabled={selectTab === "In progress"}
           >
-            In progess
+            In progress
           </Button>
           <Button
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto"
             type="primary"
             shape="round"
             size="large"
+            onClick={() => {
+              setSelectTab("Complete");
+            }}
+            disabled={selectTab === "Complete"}
           >
             Complete
           </Button>
