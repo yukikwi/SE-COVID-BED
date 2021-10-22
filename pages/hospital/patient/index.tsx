@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
 import ApproveModal from "../../../components/Hospital/Approve"
-import { Table, Button, Tooltip } from "antd";
+import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
   EyeOutlined,
@@ -10,10 +10,13 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
 import { showPatientModal } from "../../../store/addPatientModal/actions";
 import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatient";
+import { IPatient } from "../../../class/data_struct/patient";
+import axios from "axios";
+import { getUserState } from "../../../store/user/selectors";
 
 type TPatient = {
   key: string;
@@ -31,6 +34,7 @@ const HospitalResourceIndex: NextPage = () => {
   const [editPatient, setEditPatient] = useState<TPatient>()
   const [isView, setIsView] = useState<boolean>()
   const dispatch = useDispatch()
+  const userData = useSelector(getUserState);
 
   // Approve Modal handler
   const showApproveModal = (patient:TPatient) => {
@@ -115,9 +119,32 @@ const HospitalResourceIndex: NextPage = () => {
     }
   ];
 
-  useEffect(() => {
+  // function to connect API
+  const fetchApiPatient = async () => {
     // For Api use this to set table data
-    settableData(data)
+    const hospitalId = userData.userinfo.hospitalId
+    try {
+      let apiResonse:any = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/patient`,
+        {
+          hospitalId
+        }
+      )
+
+      let rawPatientData: Array<IPatient> = apiResonse.data.data;
+
+      settableData(rawPatientData);
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchApiPatient()
   }, [])
 
   return (
