@@ -1,55 +1,54 @@
-import { Button, Form, Input, Modal, notification, Radio, Select } from 'antd'
-import React, { ReactElement, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { getPatientModalState } from '../../store/addPatientModal/selectors';
-import { hidePatientModal } from '../../store/addPatientModal/actions';
-import Status from './Status';
-import axios from 'axios';
-import { getUserState } from '../../store/user/selectors';
+import { Button, Form, Input, Modal, notification, Radio, Select } from "antd";
+import React, { ReactElement, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getPatientModalState } from "../../store/addPatientModal/selectors";
+import { hidePatientModal } from "../../store/addPatientModal/actions";
+import Status from "./Status";
+import axios from "axios";
+import { getUserState } from "../../store/user/selectors";
 
 interface Props {
-  patient: any,
-  isView: boolean
+  patient: any;
+  isView: boolean;
 }
 
 ModalAddPatient.defaultProps = {
-  isView: false
-}
+  isView: false,
+};
 
 function ModalAddPatient(props: Props): ReactElement {
   const show = useSelector(getPatientModalState);
-  const [mode, setMode] = useState('Add')
-  const [form] = Form.useForm()
-  const { isView, patient } = props
-  const dispatch = useDispatch()
+  const [mode, setMode] = useState("Add");
+  const [form] = Form.useForm();
+  const { isView, patient } = props;
+  const dispatch = useDispatch();
   const userData = useSelector(getUserState);
-  
+
   const handleCancel = () => {
-    dispatch(hidePatientModal())
-  }
+    dispatch(hidePatientModal());
+  };
 
   // Antd component
   const { Option } = Select;
 
   // UI handle
   useEffect(() => {
-    if(show === false)
-      form.resetFields()
-    else if(typeof(patient) !== 'undefined'){
-      form.setFieldsValue(patient)
-      if(isView === true)
-        setMode('View')
-      else
-        setMode('Edit')
-    }
-    else
-      setMode('Add')
-  }, [show])
+    if (show === false) form.resetFields();
+    else if (typeof patient !== "undefined") {
+      console.log("patient", patient);
 
-  const handleApprove = async (formData:any) => {
+      form.setFieldsValue(patient);
+      if (isView === true) setMode("View");
+      else setMode("Edit");
+    } else setMode("Add");
+  }, [show]);
+
+  const handleApprove = async (formData: any) => {
     // Api for approve here
-    const hospitalId = userData.userinfo.hospitalId
-    if(mode === 'Add'){
+    console.log("mode", mode);
+
+    const hospitalId = userData.userinfo.hospitalId;
+    if (mode === "Add") {
       try {
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
@@ -59,10 +58,10 @@ function ModalAddPatient(props: Props): ReactElement {
             patientAddress: formData.patientAddress,
             patientPhoneNumber: formData.patientPhoneNumber,
             patientStatus: formData.patientStatus,
-            patientSeverityLabel: formData.patientSeverityLabel
+            patientSeverityLabel: formData.patientSeverityLabel,
           }
         );
-        
+
         // Notification
         notification.open({
           message: "Success",
@@ -70,7 +69,7 @@ function ModalAddPatient(props: Props): ReactElement {
         });
 
         // Close this modal
-        handleCancel()
+        handleCancel();
       } catch (error) {
         notification.open({
           message: "Error",
@@ -78,19 +77,23 @@ function ModalAddPatient(props: Props): ReactElement {
             "Cannot connect to api. Please contact admin for more information.",
         });
       }
+    } else if (mode === "Edit") {
+      //TODO: Warn do this
     }
-  }
+  };
 
   return (
     <Modal
-      title={ `${mode} Patient Information` }
+      title={`${mode} Patient Information`}
       visible={show}
-      onOk={() => { form.submit() }}
+      onOk={() => {
+        form.submit();
+      }}
       okText="Save"
       onCancel={handleCancel}
       width={1000}
     >
-        <Form
+      <Form
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -101,31 +104,42 @@ function ModalAddPatient(props: Props): ReactElement {
         <Form.Item
           label="Patient name"
           name="patientName"
-          rules={[{ required: true, message: 'Please input your patient name!' }]}
+          rules={[
+            { required: true, message: "Please input your patient name!" },
+          ]}
         >
-          <Input disabled={isView}/>
+          <Input disabled={isView} />
         </Form.Item>
 
         <Form.Item
           label="Address"
           name="patientAddress"
-          rules={[{ required: true, message: 'Please input your patient address!' }]}
+          rules={[
+            { required: true, message: "Please input your patient address!" },
+          ]}
         >
-          <Input disabled={isView}/>
+          <Input disabled={isView} />
         </Form.Item>
 
         <Form.Item
           label="Phone Number"
           name="patientPhoneNumber"
-          rules={[{ required: true, message: 'Please input your patient phone number!' }]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your patient phone number!",
+            },
+          ]}
         >
-          <Input disabled={isView}/>
+          <Input disabled={isView} />
         </Form.Item>
 
         <Form.Item
           label="Severity Level"
-          name="patientSeverityLabel"
-          rules={[{ required: true, message: 'Please specific severity Level' }]}
+          name="patientSeverity"
+          rules={[
+            { required: true, message: "Please specific severity Level" },
+          ]}
         >
           <Select disabled={isView}>
             <Option value="Green">Green</Option>
@@ -137,7 +151,9 @@ function ModalAddPatient(props: Props): ReactElement {
         <Form.Item
           label="Status"
           name="patientStatus"
-          rules={[{ required: true, message: 'Please specific patient status' }]}
+          rules={[
+            { required: true, message: "Please specific patient status" },
+          ]}
         >
           <Radio.Group disabled={isView}>
             <Radio value="Request">
@@ -153,7 +169,7 @@ function ModalAddPatient(props: Props): ReactElement {
         </Form.Item>
       </Form>
     </Modal>
-  )
+  );
 }
 
-export default ModalAddPatient
+export default ModalAddPatient;
