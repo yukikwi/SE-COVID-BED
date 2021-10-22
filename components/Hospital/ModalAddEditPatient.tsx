@@ -25,11 +25,6 @@ function ModalAddPatient(props: Props): ReactElement {
     dispatch(hidePatientModal())
   }
 
-  const handleApprove = () => {
-    form.submit()
-    // Api for approve here
-  }
-
   // Antd component
   const { Option } = Select;
 
@@ -48,11 +43,16 @@ function ModalAddPatient(props: Props): ReactElement {
       setMode('Add')
   }, [show])
 
+  const handleApprove = () => {
+    form.submit()
+    // Api for approve here
+  }
+
   return (
     <Modal
       title={ `${mode} Patient Information` }
       visible={show}
-      onOk={handleApprove}
+      onOk={() => { form.submit() }}
       okText="Save"
       onCancel={handleCancel}
       width={1000}
@@ -62,6 +62,7 @@ function ModalAddPatient(props: Props): ReactElement {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         autoComplete="off"
+        onFinish={handleApprove}
         form={form}
       >
         <Form.Item
