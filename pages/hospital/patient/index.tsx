@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import ApproveModal from "../../../components/Hospital/Approve"
+import ApproveModal from "../../../components/Hospital/Approve";
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
@@ -25,8 +25,8 @@ type TPatient = {
   patientName: string;
   patientAddress: string;
   patientPhoneNumber: string;
-  patientSeverity: 'Red' | 'Yellow' | 'Green'
-  patientStatus: 'Request' | 'In progress' | 'Complete'
+  patientSeverity: "Red" | "Yellow" | "Green";
+  patientStatus: "Request" | "In progress" | "Complete";
 };
 
 const HospitalResourceIndex: NextPage = () => {
@@ -42,18 +42,21 @@ const HospitalResourceIndex: NextPage = () => {
   const approveModalState = useSelector(getApproveModalState);
 
   // Approve Modal handler
-  const showApproveModal = (patient:TPatient) => {
-    console.log('Display')
-    setApprovePatient(patient)
+  const showApproveModal = (patient: TPatient) => {
+    console.log("Display");
+    setApprovePatient(patient);
     dispatch(storeShowApproveModal());
-  }
+  };
 
   // Add Modal handler
-  const showAddEditModal = (patient:TPatient|undefined = undefined, isView:boolean = false) => {
-    setEditPatient(patient)
-    setIsView(isView)
+  const showAddEditModal = (
+    patient: TPatient | undefined = undefined,
+    isView: boolean = false
+  ) => {
+    setEditPatient(patient);
+    setIsView(isView);
     dispatch(showPatientModal());
-  }
+  };
 
   // Column component
   const columns = [
@@ -85,17 +88,26 @@ const HospitalResourceIndex: NextPage = () => {
           
           
           <Tooltip title="View">
-            <a className="hover:tw-text-yellow-500" onClick={() => {showAddEditModal(record, true)}}>
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                showAddEditModal(record, true);
+              }}
+            >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-blue-500" onClick={() => {showAddEditModal(record)}}>
+            <a
+              className="hover:tw-text-blue-500"
+              onClick={() => {
+                showAddEditModal(record);
+              }}
+            >
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
-
         </div>
       ),
     },
@@ -116,14 +128,14 @@ const HospitalResourceIndex: NextPage = () => {
   // function to connect API
   const fetchApiPatient = async (selectTab:'Request' | 'In progress' | 'Complete') => {
     // For Api use this to set table data
-    const hospitalId = userData.userinfo.hospitalId
+    const hospitalId = userData.userinfo.hospitalId;
     try {
-      let apiResonse:any = await axios.post(
+      let apiResonse: any = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient`,
         {
-          hospitalId
+          hospitalId,
         }
-      )
+      );
 
       let rawPatientData: Array<IPatient> = apiResonse.data.data.filter((item:TPatient) => { return item.patientStatus === selectTab});
 
@@ -135,7 +147,7 @@ const HospitalResourceIndex: NextPage = () => {
           "Cannot connect to api. Please contact admin for more information.",
       });
     }
-  }
+  };
 
   useEffect(() => {
     fetchApiPatient(selectTab)
@@ -151,7 +163,9 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
-          onClick={() => {showAddEditModal()}}
+          onClick={() => {
+            showAddEditModal();
+          }}
         >
           add patient
         </Button>
@@ -194,7 +208,7 @@ const HospitalResourceIndex: NextPage = () => {
         <Table columns={columns} dataSource={tableData} />
 
         <ModalAddEditPatient patient={editPatient} isView={isView} />
-        <ApproveModal patient={approvePatient}/>
+        <ApproveModal patient={approvePatient} />
       </div>
     </LayoutHospital>
   );
