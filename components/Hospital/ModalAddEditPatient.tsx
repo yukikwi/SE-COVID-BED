@@ -78,7 +78,34 @@ function ModalAddPatient(props: Props): ReactElement {
         });
       }
     } else if (mode === "Edit") {
-      //TODO: Warn do this
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/patient/edit-patient`,
+          {
+            id: patient._id,
+            newData: {
+              patientName: formData.patientName,
+              patientAddress: formData.patientAddress,
+              patientPhoneNumber: formData.patientPhoneNumber,
+              patientStatus: formData.patientStatus
+            },
+            newPatientSeverityLog: {
+              patientSeverityLabel: formData.patientSeverity,
+              patient: patient._id
+            }
+          });
+          notification.open({
+            message: "Success",
+            description:
+              "Edit patient information successful.",
+          });
+      } catch (error) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
     }
   };
 
