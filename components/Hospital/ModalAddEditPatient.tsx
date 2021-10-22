@@ -56,7 +56,6 @@ function ModalAddPatient(props: Props): ReactElement {
       okText="Save"
       onCancel={handleCancel}
       width={1000}
-      footer={<></>}
     >
         <Form
         name="basic"
