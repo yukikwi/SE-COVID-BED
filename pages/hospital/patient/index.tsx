@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import ApproveModal from "../../../components/Hospital/Approve"
+import ApproveModal from "../../../components/Hospital/Approve";
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
@@ -17,38 +17,42 @@ import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatien
 import { IPatient } from "../../../class/data_struct/patient";
 import axios from "axios";
 import { getUserState } from "../../../store/user/selectors";
+import { getApproveModalState } from "../../../store/approveModal/selectors";
 
 type TPatient = {
   key: string;
   patientName: string;
   patientAddress: string;
   patientPhoneNumber: string;
-  patientSeverity: 'Red' | 'Yellow' | 'Green'
-  patientStatus: 'Request' | 'In progress' | 'Complete'
+  patientSeverity: "Red" | "Yellow" | "Green";
+  patientStatus: "Request" | "In progress" | "Complete";
 };
 
 const HospitalResourceIndex: NextPage = () => {
   // cast state and method
-  const [tableData, settableData] = useState<Array<any>>()
-  const [approvePatient, setApprovePatient] = useState<TPatient>()
-  const [editPatient, setEditPatient] = useState<TPatient>()
-  const [isView, setIsView] = useState<boolean>()
-  const dispatch = useDispatch()
+  const [tableData, settableData] = useState<Array<any>>();
+  const [approvePatient, setApprovePatient] = useState<TPatient>();
+  const [editPatient, setEditPatient] = useState<TPatient>();
+  const [isView, setIsView] = useState<boolean>();
+  const dispatch = useDispatch();
   const userData = useSelector(getUserState);
 
   // Approve Modal handler
-  const showApproveModal = (patient:TPatient) => {
-    console.log('Display')
-    setApprovePatient(patient)
+  const showApproveModal = (patient: TPatient) => {
+    console.log("Display");
+    setApprovePatient(patient);
     dispatch(storeShowApproveModal());
-  }
+  };
 
   // Add Modal handler
-  const showAddEditModal = (patient:TPatient|undefined = undefined, isView:boolean = false) => {
-    setEditPatient(patient)
-    setIsView(isView)
+  const showAddEditModal = (
+    patient: TPatient | undefined = undefined,
+    isView: boolean = false
+  ) => {
+    setEditPatient(patient);
+    setIsView(isView);
     dispatch(showPatientModal());
-  }
+  };
 
   // Dummy Hospital data
   const columns = [
@@ -77,23 +81,37 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TPatient) => (
         <div>
           <Tooltip title="Approve">
-            <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
+            <a
+              className="hover:tw-text-green-500"
+              onClick={() => {
+                showApproveModal(record);
+              }}
+            >
               <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
-          
+
           <Tooltip title="View">
-            <a className="hover:tw-text-yellow-500" onClick={() => {showAddEditModal(record, true)}}>
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                showAddEditModal(record, true);
+              }}
+            >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-blue-500" onClick={() => {showAddEditModal(record)}}>
+            <a
+              className="hover:tw-text-blue-500"
+              onClick={() => {
+                showAddEditModal(record);
+              }}
+            >
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
-
         </div>
       ),
     },
@@ -102,34 +120,34 @@ const HospitalResourceIndex: NextPage = () => {
   // Dummy data
   const data = [
     {
-      key: '_id1234',
-      patientName: 'Mr.Capybara',
-      patientAddress: 'baraland',
-      patientPhoneNumber: '123-456-7890',
-      patientSeverity: 'Red',
-      patientStatus: 'Request'
+      key: "_id1234",
+      patientName: "Mr.Capybara",
+      patientAddress: "baraland",
+      patientPhoneNumber: "123-456-7890",
+      patientSeverity: "Red",
+      patientStatus: "Request",
     },
     {
-      key: '_id5678',
-      patientName: 'Mr.Reaw Wong',
-      patientAddress: 'baraland2',
-      patientPhoneNumber: '098-765-4321',
-      patientSeverity: 'Yellow',
-      patientStatus: 'Request'
-    }
+      key: "_id5678",
+      patientName: "Mr.Reaw Wong",
+      patientAddress: "baraland2",
+      patientPhoneNumber: "098-765-4321",
+      patientSeverity: "Yellow",
+      patientStatus: "Request",
+    },
   ];
 
   // function to connect API
   const fetchApiPatient = async () => {
     // For Api use this to set table data
-    const hospitalId = userData.userinfo.hospitalId
+    const hospitalId = userData.userinfo.hospitalId;
     try {
-      let apiResonse:any = await axios.post(
+      let apiResonse: any = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient`,
         {
-          hospitalId
+          hospitalId,
         }
-      )
+      );
 
       let rawPatientData: Array<IPatient> = apiResonse.data.data;
 
@@ -141,11 +159,11 @@ const HospitalResourceIndex: NextPage = () => {
           "Cannot connect to api. Please contact admin for more information.",
       });
     }
-  }
+  };
 
   useEffect(() => {
-    fetchApiPatient()
-  }, [])
+    fetchApiPatient();
+  }, []);
 
   return (
     <LayoutHospital
@@ -157,7 +175,9 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
-          onClick={() => {showAddEditModal()}}
+          onClick={() => {
+            showAddEditModal();
+          }}
         >
           add patient
         </Button>
@@ -195,7 +215,7 @@ const HospitalResourceIndex: NextPage = () => {
         <Table columns={columns} dataSource={tableData} />
 
         <ModalAddEditPatient patient={editPatient} isView={isView} />
-        <ApproveModal patient={approvePatient}/>
+        <ApproveModal patient={approvePatient} />
       </div>
     </LayoutHospital>
   );
