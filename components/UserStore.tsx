@@ -15,15 +15,18 @@ function UserStore(props: Props) {
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
 
-  const fetchUser = () => {
-    axios.get(`${process.env.NEXT_PUBLIC_APP_API}/login`).then((response:any) => {
+  const fetchUser = async () => {
+    try{
+      const response:any = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/login`)
       if(response.data.userData){
         const userData = response.data.userData
         dispatch(setUser(userData))
       }
-    }).catch(function (error) {
-      // not login
-    })
+    }
+    catch(e){
+      // not login or cannot contact api
+      dispatch(setUser({}))
+    }
   }
 
   useEffect(() => {
