@@ -1,41 +1,70 @@
-import { Modal } from 'antd'
-import React, { ReactElement } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { hideApproveModal } from '../../store/approveModal/actions';
-import { getApproveModalState } from '../../store/approveModal/selectors';
+import { Modal, notification } from "antd";
+import axios from "axios";
+import React, { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { hideApproveModal } from "../../store/approveModal/actions";
+import { getApproveModalState } from "../../store/approveModal/selectors";
 
 interface Props {
-  patient: any
+  patient: any;
 }
 
 Approve.defaultProps = {
-  patient: {}
-}
+  patient: {},
+};
 
 function Approve(props: Props): ReactElement {
-  const {patient} = props
-  const show = useSelector(getApproveModalState);
-  const dispatch = useDispatch()
-  
-  const handleCancel = () => {
-    dispatch(hideApproveModal())
-  }
+  const { patient } = props;
+  const showApproveModal = useSelector(getApproveModalState);
+  const dispatch = useDispatch();
 
-  const handleApprove = () => {
+  const handleCancel = () => {
+    dispatch(hideApproveModal());
+  };
+
+  const handleApprove = async () => {
     // Api for approve here
-  }
+    console.log("patient", patient);
+    // For Api use this to set table data
+    const id = patient._id;
+    try {
+      let apiResonse: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/patient/approve-patient`,
+        {
+          id,
+        }
+      );
+
+      console.log("apiResonse", apiResonse);
+      notification.open({
+        message: "Success",
+        description: "Connect to api successful.",
+      });
+      dispatch(hideApproveModal());
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  };
 
   return (
     <Modal
       title="Approve patient"
-      visible={show}
+      visible={showApproveModal}
       onOk={handleApprove}
       okText="Confirm"
       onCancel={handleCancel}
     >
-      <p>click “Confirm” if you’re sure that you want to approve patient named <span className="tw-font-bold">{patient.patientName}</span>, if not click cancel.</p>
+      <p>
+        click “Confirm” if you’re sure that you want to approve patient named{" "}
+        <span className="tw-font-bold">{patient.patientName}</span>, if not
+        click cancel.
+      </p>
     </Modal>
-  )
+  );
 }
 
-export default Approve
+export default Approve;
