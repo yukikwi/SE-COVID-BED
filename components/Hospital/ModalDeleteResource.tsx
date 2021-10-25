@@ -6,14 +6,14 @@ import { hideHospitalDeleteModal } from '../../store/deleteModal/actions';
 
 interface Props {
   id: string;
-  hospital: string;
+  resourceName: string;
 }
 
 function ModalDelete(props: Props): ReactElement {
   // redux part
   const dispatch = useDispatch();
-  const showHospitalDeleteModal = useSelector(getDeleteResourceModalState);
-  const { id, hospital } = props;
+  const showResourceDeleteModal = useSelector(getDeleteResourceModalState);
+  const { id, resourceName } = props;
 
   //
   const notifyError = () => {
@@ -24,31 +24,22 @@ function ModalDelete(props: Props): ReactElement {
   }
 
   // Delete method
-  const deleteHospital = async () => {
-    try{
-      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/delete-hospital`,{
-        id
-      })
-      console.log(apiResonse.data)
-      dispatch(hideHospitalDeleteModal())
-    }
-    catch(error: any | AxiosError){
-      notifyError()
-    }
+  const deleteResource = async () => {
+    // api here
   }
 
   return (
     <Modal
-      title={`Delete Hospital (${hospital})`}
-      visible={showHospitalDeleteModal}
-      onOk={() => deleteHospital()}
+      title={`Delete Resource (${resourceName})`}
+      visible={showResourceDeleteModal}
+      onOk={() => deleteResource()}
       onCancel={() => dispatch(hideHospitalDeleteModal())}
       okText="Confirm"
       centered
     >
       <p>
         click "Confirm" if you’re sure that you want to remove
-        <span className="tw-font-bold"> {hospital} </span>
+        <span className="tw-font-bold"> {resourceName} </span>
         , if not click cancel
       </p>
     </Modal>
