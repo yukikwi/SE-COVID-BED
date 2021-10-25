@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import ApproveModal from "../../../components/Hospital/Approve";
+import ApproveModal from "../../../components/Hospital/ModalApprove"
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
