@@ -1,10 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
-import { getDeleteModalState } from "../../store/deleteModal/selectors";
+import { getDeleteResourceModalState } from "../../store/deleteModal/selectors";
 import { hideHospitalDeleteModal } from '../../store/deleteModal/actions';
-import axios, { AxiosError } from 'axios';
-import { IHospital } from '../../class/data_struct/hospital';
 
 interface Props {
   id: string;
@@ -14,7 +12,7 @@ interface Props {
 function ModalDelete(props: Props): ReactElement {
   // redux part
   const dispatch = useDispatch();
-  const showHospitalDeleteModal = useSelector(getDeleteModalState);
+  const showHospitalDeleteModal = useSelector(getDeleteResourceModalState);
   const { id, hospital } = props;
 
   //

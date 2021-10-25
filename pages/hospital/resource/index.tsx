@@ -59,7 +59,7 @@ const HospitalResourceIndex: NextPage = () => {
           </Tooltip>
 
           <Tooltip title="Remove">
-            <a className="hover:tw-text-red-500" href="#">
+            <a className="hover:tw-text-red-500" onClick={() => {showDeleteResourceModal(record)}}>
               <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -68,6 +68,7 @@ const HospitalResourceIndex: NextPage = () => {
     },
   ];
 
+  // Dummy data
   const data = [
     {
       key: "1",
@@ -88,7 +89,7 @@ const HospitalResourceIndex: NextPage = () => {
       title="Capybara Hospital : Resource list"
       button={
         <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
           icon={<PlusSquareOutlined />}

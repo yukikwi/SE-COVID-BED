@@ -12,7 +12,7 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { showDeleteModal } from "../../store/deleteModal/actions";
+import { showHospitalDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
@@ -118,7 +118,7 @@ const HospitalResourceIndex: NextPage = () => {
             <a
               className="hover:tw-text-red-500"
               onClick={() => {
-                dispatch(showDeleteModal());
+                dispatch(showHospitalDeleteModal());
                 setSelectedHospital({
                   key: record.key,
                   hospital: record.hospital,
