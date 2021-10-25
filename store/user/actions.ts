@@ -7,3 +7,10 @@ export function setUser(userInfo:TUser): userActionInterface {
 		payload: userInfo,
 	};
 }
+
+export function storelogout(): userActionInterface {
+	return {
+		type: userActionType.LOGOUT,
+		payload: {},
+	};
+}

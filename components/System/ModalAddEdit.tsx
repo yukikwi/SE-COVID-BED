@@ -2,8 +2,8 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { Button, Modal, notification } from "antd";
 import axios, { AxiosError } from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { getAddOrEditModalState } from "../../store/addOrEditModal/selectors";
-import { hideAddOrEditModal } from "../../store/addOrEditModal/actions";
+import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
+import { hideAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import AddEditForm from "./ModalHospitalForm/AddEdit";
 import { IHospital } from "../../class/data_struct/hospital";
 

@@ -17,9 +17,15 @@ class User {
 
   async loginFromToken(token: string){
     //query userData by username
-    const userData = await this.database.getAUser({ token });
+    let userData = await this.database.getAUser({ token });
     //compare password
     if (userData && userData.password) {
+      if(userData.role === "hospital"){
+        const hospital = await this.database.getAHospitalByUser(userData._id)
+        if(hospital){
+          userData.hospitalId = hospital._id;
+        }
+      }
       this.user = userData;
       return {
         http: 200,
@@ -45,6 +51,12 @@ class User {
     if (userData && userData.password) {
       const isUser = await compare(password, userData.password);
       if (isUser) {
+        if(userData.role === "hospital"){
+          const hospital = await this.database.getAHospitalByUser(userData._id)
+          if(hospital){
+            userData.hospitalId = hospital._id;
+          }
+        }
         this.user = userData;
         return {
           http: 200,

@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import LayoutHospital from "../../components/Layout/Hospital";
 import ModalDelete from "../../components/System/ModalDelete";
 import ModalAddEdit from "../../components/System/ModalAddEdit";
-import { Table, Button, notification } from "antd";
+import { Table, Button, notification, Tooltip } from "antd";
 import Status from "../../components/System/Status";
 import {
   EyeOutlined,
@@ -13,11 +13,11 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { showDeleteModal } from "../../store/deleteModal/actions";
-import { showAddOrEditModal } from "../../store/addOrEditModal/actions";
+import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
-import { getAddOrEditModalState } from "../../store/addOrEditModal/selectors";
+import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
 
 export type TUiHospital = {
   key: string;
@@ -93,9 +93,13 @@ const HospitalResourceIndex: NextPage = () => {
       key: "action",
       render: (record: TUiHospital) => (
         <div>
-          <a className="hover:tw-text-green-500">
-            <EyeOutlined className="tw-font-base tw-mr-3" />
-          </a>
+          <Tooltip title="View">
+            <a className="hover:tw-text-green-500">
+              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+
+          <Tooltip title="Edit">
           <a
             className="hover:tw-text-yellow-500"
             onClick={() => {
@@ -106,20 +110,24 @@ const HospitalResourceIndex: NextPage = () => {
               });
             }}
           >
-            <EditOutlined className="tw-font-base tw-mr-3" />
+            <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
           </a>
-          <a
-            className="hover:tw-text-red-500"
-            onClick={() => {
-              dispatch(showDeleteModal());
-              setSelectedHospital({
-                key: record.key,
-                hospital: record.hospital,
-              });
-            }}
-          >
-            <DeleteOutlined className="tw-font-base tw-mr-3" />
-          </a>
+          </Tooltip>
+
+          <Tooltip title="Remove">
+            <a
+              className="hover:tw-text-red-500"
+              onClick={() => {
+                dispatch(showDeleteModal());
+                setSelectedHospital({
+                  key: record.key,
+                  hospital: record.hospital,
+                });
+              }}
+            >
+              <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
         </div>
       ),
     },
