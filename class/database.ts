@@ -9,7 +9,7 @@
  */
 
 // load mongoose dependency
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { ISeverity } from "./data_struct/patient";
 // load data_struct and model
 import { TUser } from "./data_struct/user";
@@ -51,7 +51,7 @@ export default class Database {
   }
 
   async getAUser(condition: TUser) {
-    return await UserModel.findOne(condition);
+    return await UserModel.findOne(condition).lean();
   }
 
   async getHospitals(condition = {}) {
@@ -153,5 +153,9 @@ export default class Database {
 
   async editPatient(id: string, newData: Object) {
     return await PatientModel.findByIdAndUpdate(id, newData, { upsert: true });
+  }
+
+  async getAHospitalByUser(userId: ObjectId) {
+    return await HospitalModel.findOne({staff: userId}, {_id: 1});
   }
 }
