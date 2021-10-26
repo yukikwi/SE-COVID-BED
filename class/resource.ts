@@ -69,6 +69,27 @@ class Resource {
       };
     }
   }
+
+  async getAResource(id: string) {
+    try {
+      console.log("id", id);
+      const rawResource = await this.database.getAResource(id);
+
+      console.log("rawResource", rawResource);
+
+      return {
+        http: 200,
+        data: rawResource,
+      };
+    } catch (error) {
+      return {
+        http: 400,
+        data: {
+          error: "Fail to query resource",
+        },
+      };
+    }
+  }
 }
 
 export default Resource;
