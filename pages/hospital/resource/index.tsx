@@ -3,6 +3,7 @@ import LayoutHospital from "../../../components/Layout/Hospital";
 import { Table, Button, Tooltip } from "antd";
 import Status from "../../../components/Hospital/Status";
 import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions"
+import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions"
 import {
   EyeOutlined,
   EditOutlined,
@@ -12,26 +13,36 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
+import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
 
 type TResource = {
   key: string;
   resourceName: string;
-  resourceAmount?: number;
-  resourceAvailable?: number;
+  resourceCode?: string;
+  maximum?: number;
+  available?: number;
+  remark?: string
 };
 
 const HospitalResourceIndex: NextPage = () => {
   // state part
-  const [resource, setResource] = useState<TResource>({
+  const [resource, setResource] = useState<TResource | undefined>({
     key: '0',
     resourceName: 'Loading...'
   })
+  const [isView, setIsView] = useState<boolean>();
   const dispatch = useDispatch();
 
   // delete modal handler
   const showDeleteResourceModal = (resource:TResource) => {
     setResource(resource);
     dispatch(storeShowResourceDeleteModal());
+  }
+
+  const showAddEditResourceModal = (resource:TResource | undefined = undefined, isView: boolean = false) => {
+    setResource(resource);
+    setIsView(isView);
+    dispatch(storeShowResourceModal());
   }
 
   // Dummy Hospital data
@@ -43,19 +54,19 @@ const HospitalResourceIndex: NextPage = () => {
     },
     {
       title: "Maximum",
-      dataIndex: "resourceAmount",
-      key: "resourceAmount",
+      dataIndex: "maximum",
+      key: "maximum",
     },
     {
       title: "Available",
-      dataIndex: "resourceAvailable",
-      key: "resourceAvailable",
+      dataIndex: "available",
+      key: "available",
     },
     {
       title: "Status",
       key: "status",
       render: (record: TResource) => (
-        <Status available={record.resourceAvailable} amount={record.resourceAmount} />
+        <Status available={record.available} amount={record.maximum} />
       ),
     },
     {
@@ -64,13 +75,13 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TResource) => (
         <div>
           <Tooltip title="View">
-            <a className="hover:tw-text-green-500" href="#">
+            <a className="hover:tw-text-green-500" onClick={() => {showAddEditResourceModal(record, true)}}>
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-yellow-500" href="#">
+            <a className="hover:tw-text-yellow-500" onClick={() => {showAddEditResourceModal(record)}}>
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -90,14 +101,17 @@ const HospitalResourceIndex: NextPage = () => {
     {
       key: "1",
       resourceName: "bed",
-      resourceAmount: 32,
-      resourceAvailable: 32,
+      resourceCode: "BARA-0001",
+      maximum: 32,
+      available: 32,
+      remark: 'BaraBed'
     },
     {
       key: "2",
       resourceName: "Respirator",
-      resourceAmount: 32,
-      resourceAvailable: 32,
+      resourceCode: "BARA-0002",
+      maximum: 32,
+      available: 32,
     },
   ];
 
@@ -111,6 +125,7 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
+          onClick={() => {showAddEditResourceModal()}}
         >
           add resource
         </Button>
@@ -119,7 +134,8 @@ const HospitalResourceIndex: NextPage = () => {
       <div className="tw-overflow-x-scroll">
         <Table columns={columns} dataSource={data} />
         
-        <ModalDelete id={resource.key} resourceName={resource.resourceName} />
+        <ModalDelete id={resource? resource.key:''} resourceName={resource? resource.resourceName : ''} />
+        <ModalAddResource isView={isView} resource={resource} />
       </div>
     </LayoutHospital>
   );
