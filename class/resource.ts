@@ -90,6 +90,44 @@ class Resource {
       };
     }
   }
+
+  async deleteResource(id: string) {
+    try {
+      let deleteResource = await this.database.deleteResource(id);
+      return {
+        http: 200,
+        data: {
+          code: "Success to delete Resource",
+        },
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to delete Resource",
+        },
+      };
+    }
+  }
+
+  async editResource(id: string, newData: any) {
+    try {
+      let editResource = await this.database.editResource(id, newData);
+      return {
+        http: 200,
+        data: {
+          code: "Success to edit Resource",
+        },
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to edit Resource",
+        },
+      };
+    }
+  }
 }
 
 export default Resource;

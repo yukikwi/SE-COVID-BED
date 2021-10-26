@@ -177,4 +177,12 @@ export default class Database {
   async getAResource(id: string) {
     return await ResourceSchemaModel.findById(id);
   }
+
+  async deleteResource(id: string) {
+    return await ResourceSchemaModel.findByIdAndDelete(id);
+  }
+
+  async editResource(id: string, newData: any) {
+    return await ResourceSchemaModel.findByIdAndUpdate(id, newData);
+  }
 }
