@@ -169,4 +169,8 @@ export default class Database {
       return 500;
     }
   }
+
+  async getResource(resourceHospital: any) {
+    return await ResourceSchemaModel.find({ resourceHospital });
+  }
 }

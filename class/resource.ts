@@ -48,6 +48,27 @@ class Resource {
       };
     }
   }
+
+  async getResource(hospitalId: string) {
+    try {
+      console.log("hospitalId", hospitalId);
+      const rawResource = await this.database.getResource(hospitalId);
+
+      console.log("rawResource", rawResource);
+
+      return {
+        http: 200,
+        data: rawResource,
+      };
+    } catch (error) {
+      return {
+        http: 400,
+        data: {
+          error: "Fail to query resource",
+        },
+      };
+    }
+  }
 }
 
 export default Resource;
