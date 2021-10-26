@@ -15,14 +15,6 @@ function ModalDelete(props: Props): ReactElement {
   const showResourceDeleteModal = useSelector(getDeleteResourceModalState);
   const { id, resourceName } = props;
 
-  //
-  const notifyError = () => {
-    notification.open({
-      message: 'Error',
-      description: 'Cannot connect to api. Please contact admin for more information.'
-    });
-  }
-
   // Delete method
   const deleteResource = async () => {
     // api here
