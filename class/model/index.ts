@@ -4,3 +4,4 @@ export { UserModel } from "./User";
 export { HospitalModel } from "./Hospital";
 export { PatientModel } from "./Patient";
 export { PatientSeverityLogModel } from "./PatientSeverityLog";
+export { ResourceSchemaModel } from "./Resource";

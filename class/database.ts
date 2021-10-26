@@ -18,6 +18,7 @@ import {
   HospitalModel,
   PatientModel,
   PatientSeverityLogModel,
+  ResourceSchemaModel
 } from "./model/index";
 // load dotenv for load environment variable from .env file
 require("dotenv").config();
@@ -157,5 +158,15 @@ export default class Database {
 
   async getAHospitalByUser(userId: ObjectId) {
     return await HospitalModel.findOne({staff: userId}, {_id: 1});
+  }
+
+  //Manage Resource
+  async addResource(newResource: Object) {
+    const result = new ResourceSchemaModel(newResource);
+    try {
+      return result.save();
+    } catch (e) {
+      return 500;
+    }
   }
 }
