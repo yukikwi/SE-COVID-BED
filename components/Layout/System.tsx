@@ -1,6 +1,6 @@
 import router from 'next/router';
 import React, { ReactChild, ReactElement, useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserState } from '../../store/user/selectors';
 import HospitalNavbar from '../Navbar'
 
@@ -16,7 +16,8 @@ LayoutSystem.defaultProps = {
 
 function LayoutSystem(props: Props): ReactElement {
   const {children, title, button} = props
-  
+  const dispatch = useDispatch();
+
   // check permission
   const userData = useSelector(getUserState);
   useEffect(() => {
@@ -34,6 +35,7 @@ function LayoutSystem(props: Props): ReactElement {
       }
     }
   }, [userData])
+  
 
   return (
     <div>

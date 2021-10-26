@@ -14,3 +14,10 @@ export function storelogout(): userActionInterface {
 		payload: {},
 	};
 }
+
+export function setHospitalId(hospitalId:string | undefined): userActionInterface {
+	return {
+		type: userActionType.SET_HOSPITAL_ID,
+		payload: hospitalId,
+	};
+}
