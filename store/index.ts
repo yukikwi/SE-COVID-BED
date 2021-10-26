@@ -5,13 +5,15 @@ import { addOrEditModalReducer } from "./addOrEditHospitalModal/reducers";
 import { userReducer } from "./user/reducers";
 import { approveModalReducer } from "./approveModal/reducers";
 import { patientModalReducer } from "./addPatientModal/reducers";
+import { resourceModalReducer } from "./addResourceModal/reducers";
 
 const rootReducer = combineReducers({
 	deleteModalReducer,
 	userReducer,
 	addOrEditModalReducer,
 	approveModalReducer,
-	patientModalReducer
+	patientModalReducer,
+	resourceModalReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
