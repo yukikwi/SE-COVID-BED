@@ -10,7 +10,9 @@ import {
 } from "antd";
 import axios from "axios";
 import React, { ReactElement, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { IResource } from "../../../class/data_struct/resource";
+import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
 
 interface Props {
   hospitalId: string;
@@ -29,6 +31,7 @@ interface Record {
 
 function Resources({ hospitalId }: Props): ReactElement {
   // Init state
+  const { show } = useSelector(getAddOrEditModalState);
   const [editingKey, setEditingKey] = useState("");
   const [removeOnCancelKey, setRemoveOnCancelKey] = useState(false);
   const [data, setData] = useState<Array<any>>([]);
@@ -115,7 +118,8 @@ function Resources({ hospitalId }: Props): ReactElement {
 
   useEffect(() => {
     fetchApiResource();
-  }, [hospitalId]);
+    form.resetFields();
+  }, [hospitalId, show]);
 
   // check is row in edit state
   const isEditing = (record: Record) => record.key === editingKey;

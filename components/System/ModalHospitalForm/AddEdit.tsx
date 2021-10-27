@@ -122,6 +122,7 @@ function AddEditForm(props: Props): ReactElement {
   };
 
   useEffect(() => {
+    setAddHospital({ _id: null });
     form.resetFields();
   }, [hospitalData, show]);
 
