@@ -3,6 +3,7 @@ import { Modal, notification } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
 import { getDeleteResourceModalState } from "../../store/deleteModal/selectors";
 import { hideHospitalDeleteModal } from '../../store/deleteModal/actions';
+import axios, { AxiosError } from 'axios';
 
 interface Props {
   id: string;
@@ -17,7 +18,24 @@ function ModalDelete(props: Props): ReactElement {
 
   // Delete method
   const deleteResource = async () => {
-    // api here
+    try{
+      console.log(id);
+      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/resource/delete-resource`,{
+        id
+      })
+      console.log(apiResonse);
+      notification.open({
+        message: "Success",
+        description: "Delete resource successful.",
+      });
+      dispatch(hideHospitalDeleteModal())
+    }
+    catch(error: any | AxiosError){
+      notification.open({
+        message: 'Error',
+        description: 'Cannot connect to api. Please contact admin for more information.'
+      });
+    }
   }
 
   return (
