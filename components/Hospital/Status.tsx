@@ -50,13 +50,13 @@ function Status(props: Props): ReactElement {
     if(type === 'resource'){
       if (available / amount < 0.3) {
         color = "orange";
-        tag = "Lowstock";
+        tag = "Low stock";
       } else if (available === 0) {
         color = "red";
-        tag = "Outofstock";
+        tag = "Out of stock";
       } else {
         color = "green";
-        tag = "Instock";
+        tag = "In stock";
       }
     }
     return (
