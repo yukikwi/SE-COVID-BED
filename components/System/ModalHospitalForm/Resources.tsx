@@ -3,13 +3,18 @@ import {
   Form,
   Input,
   InputNumber,
+  notification,
   Popconfirm,
   Table,
   Typography,
 } from "antd";
-import React, { ReactElement, useState } from "react";
+import axios from "axios";
+import React, { ReactElement, useEffect, useState } from "react";
+import { IResource } from "../../../class/data_struct/resource";
 
-interface Props {}
+interface Props {
+  hospitalId: string
+}
 
 interface Record {
   key: string;
@@ -19,30 +24,39 @@ interface Record {
   remark: string;
 }
 
-function Resources({}: Props): ReactElement {
-  // Dummy data
-  const originData = [
-    {
-      key: "1",
-      resource: "John",
-      maximum: 42,
-      available: 42,
-      remark: "10 Downing Street",
-    },
-    {
-      key: "2",
-      resource: "John",
-      maximum: 42,
-      available: 42,
-      remark: "10 Downing Street",
-    },
-  ];
-
+function Resources({ hospitalId }: Props): ReactElement {
   // Init state
   const [editingKey, setEditingKey] = useState("");
   const [removeOnCancelKey, setRemoveOnCancelKey] = useState(false);
-  const [data, setData] = useState(originData);
+  const [data, setData] = useState<Array<any>>([]);
   const [form] = Form.useForm();
+  
+  // function to connect API
+  const fetchApiResource = async () => {
+    try {
+      let apiResonse: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/resource`,
+        {
+          hospitalId,
+        }
+      );
+
+      let rawResourceData: Array<IResource> = apiResonse.data
+      console.log('bara')
+      console.log(rawResourceData)
+      setData(rawResourceData);
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchApiResource();
+  }, [hospitalId]);
 
   // check is row in edit state
   const isEditing = (record: Record) => record.key === editingKey;
@@ -74,12 +88,13 @@ function Resources({}: Props): ReactElement {
     }
   };
 
+
   // Original columns
   const columns = [
     {
       title: "Resource",
-      dataIndex: "resource",
-      key: "resource",
+      dataIndex: "resourceName",
+      key: "resourceName",
       editable: true,
     },
     {

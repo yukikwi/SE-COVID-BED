@@ -119,9 +119,6 @@ function AddEditForm(props: Props): ReactElement {
     }
   };
 
-  console.log("mode", mode);
-  console.log("hospitalData?.hospitalName", hospitalData?.hospitalName);
-
   useEffect(() => {
     console.log("set form");
     form.resetFields();
@@ -209,7 +206,7 @@ function AddEditForm(props: Props): ReactElement {
       </Form.Item>
 
       <div className="tw-mb-5">
-        <Resources />
+        <Resources hospitalId={hospitalData._id} />
       </div>
     </Form>
   );
