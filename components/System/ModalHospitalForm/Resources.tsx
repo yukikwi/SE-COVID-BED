@@ -42,8 +42,6 @@ function Resources({ hospitalId }: Props): ReactElement {
       );
 
       let rawResourceData: Array<IResource> = apiResonse.data
-      console.log('bara')
-      console.log(rawResourceData)
       setData(rawResourceData);
     } catch (error) {
       notification.open({
