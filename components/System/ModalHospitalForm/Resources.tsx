@@ -278,6 +278,7 @@ function Resources({ hospitalId }: Props): ReactElement {
     )
       newDataKey = (parseInt(data[data.length - 1]?.key) + 1).toString();
     let newRowData: Record = {
+      _id: "",
       key: newDataKey,
       resource: "",
       maximum: 0,
