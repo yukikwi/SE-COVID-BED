@@ -41,11 +41,11 @@ const HospitalResourceIndex: NextPage = () => {
     key: "",
     hospital: "",
   });
-  
+
   // Redux part
   const deleteModalState = useSelector(getDeleteModalState);
   const addEditModalState = useSelector(getAddOrEditModalState);
-  const router  = useRouter();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,11 +74,6 @@ const HospitalResourceIndex: NextPage = () => {
       key: "staff",
     },
     {
-      title: "Available beds",
-      dataIndex: "available",
-      key: "available",
-    },
-    {
       title: "Status",
       key: "status",
       render: (record: TUiHospital) => (
@@ -99,7 +94,7 @@ const HospitalResourceIndex: NextPage = () => {
               className="hover:tw-text-green-500"
               onClick={() => {
                 dispatch(setHospitalId(record.key));
-                router.push('/hospital')
+                router.push("/hospital");
               }}
             >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
@@ -107,18 +102,18 @@ const HospitalResourceIndex: NextPage = () => {
           </Tooltip>
 
           <Tooltip title="Edit">
-          <a
-            className="hover:tw-text-yellow-500"
-            onClick={() => {
-              dispatch(showAddOrEditModal("Edit"));
-              setSelectedHospital({
-                key: record.key,
-                hospital: record.hospital,
-              });
-            }}
-          >
-            <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-          </a>
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                dispatch(showAddOrEditModal("Edit"));
+                setSelectedHospital({
+                  key: record.key,
+                  hospital: record.hospital,
+                });
+              }}
+            >
+              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
           </Tooltip>
 
           <Tooltip title="Remove">
@@ -154,7 +149,10 @@ const HospitalResourceIndex: NextPage = () => {
           key: hospital._id,
           hospital: hospital.hospitalName,
           convince: hospital.hospitalConvince,
-          staff: (hospital.staff && typeof(hospital.staff.username) === 'string')? hospital.staff.username: 'not specific',
+          staff:
+            hospital.staff && typeof hospital.staff.username === "string"
+              ? hospital.staff.username
+              : "not specific",
           amount: 32,
           available: 32,
           isAvailable: hospital.isAvailable,
@@ -184,7 +182,6 @@ const HospitalResourceIndex: NextPage = () => {
       });
     }
   };
-
 
   return (
     <LayoutHospital

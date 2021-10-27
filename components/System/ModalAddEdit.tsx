@@ -54,10 +54,9 @@ function ModalAddEdit(props: Props): ReactElement {
             `${process.env.NEXT_PUBLIC_APP_API}/hospital/${id}`
           );
           let rawHospitalData: IHospital = apiResonse.data;
-          if(rawHospitalData.staff)
-            rawHospitalData.staff = rawHospitalData.staff._id
-          else
-            rawHospitalData.staff = ''
+          if (rawHospitalData.staff)
+            rawHospitalData.staff = rawHospitalData.staff._id;
+          else rawHospitalData.staff = "";
           console.log("rawHospitalData", rawHospitalData);
 
           setHospitalData(rawHospitalData);
@@ -90,12 +89,12 @@ function ModalAddEdit(props: Props): ReactElement {
       footer={[
         <Button key="back" onClick={handleCancel}>
           Close
-        </Button>
+        </Button>,
       ]}
       width={1000}
       centered
     >
-      <AddEditForm hospitalData={hospitalData} mode={addOrEdit} />
+      <AddEditForm hospitalData={hospitalData} mode={addOrEdit} isShow={show} />
     </Modal>
   );
 }

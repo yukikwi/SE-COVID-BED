@@ -14,6 +14,7 @@ import { IResource } from "../../../class/data_struct/resource";
 
 interface Props {
   hospitalId: string;
+  isShow: boolean;
 }
 
 interface Record {
@@ -23,6 +24,7 @@ interface Record {
   maximum: number;
   available: number;
   remark: string;
+  add?: boolean;
 }
 
 function Resources({ hospitalId }: Props): ReactElement {
@@ -68,12 +70,46 @@ function Resources({ hospitalId }: Props): ReactElement {
         message: "Success",
         description: "Edit resource information successful",
       });
+      return true;
     } catch (error) {
       notification.open({
         message: "Error",
         description:
           "Cannot connect to api. Please contact admin for more information.",
       });
+      return false;
+    }
+  };
+
+  const addApi = async (formData: Record) => {
+    try {
+      if (hospitalId) {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/resource/add-resource`,
+          {
+            ...formData,
+            resourceHospital: hospitalId,
+          }
+        );
+        notification.open({
+          message: "Success",
+          description: "Add resource information successful",
+        });
+        return true;
+      } else {
+        notification.open({
+          message: "Error",
+          description: "Please complete add hospital form first!!",
+        });
+        return false;
+      }
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+      return false;
     }
   };
 
@@ -205,20 +241,16 @@ function Resources({ hospitalId }: Props): ReactElement {
       const newData = [...data];
       // is row already exist
       const index = newData.findIndex((item) => key === item.key);
-      // if found replace old one
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        // save datastate
-        setData(newData);
-        editApi(item._id, row);
-        setEditingKey("");
-      } else {
-        // save as new row
-        newData.push(row);
+      const item = newData[index];
+      newData.splice(index, 1, {
+        ...item,
+        ...row,
+      });
+      // save datastate
+      let isSuccess;
+      if (item.add) isSuccess = await addApi(row);
+      else isSuccess = await editApi(item._id, row);
+      if (isSuccess) {
         setData(newData);
         setEditingKey("");
       }
@@ -288,6 +320,7 @@ function Resources({ hospitalId }: Props): ReactElement {
       maximum: 0,
       available: 0,
       remark: "",
+      add: true,
     };
     let newData = [...data, { ...newRowData }];
     setData(newData);
@@ -305,6 +338,7 @@ function Resources({ hospitalId }: Props): ReactElement {
             onClick={() => {
               addNewResource();
             }}
+            disabled={hospitalId ? false : true}
           >
             Add new resources
           </Button>
