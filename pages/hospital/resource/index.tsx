@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import { Table, Button, Tooltip } from "antd";
+import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions"
 import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions"
@@ -10,10 +10,13 @@ import {
   DeleteOutlined,
   PlusSquareOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
 import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
+import { getUserState } from "../../../store/user/selectors";
+import { IResource } from "../../../class/data_struct/resource";
+import axios from "axios";
 
 type TResource = {
   key: string;
@@ -31,7 +34,9 @@ const HospitalResourceIndex: NextPage = () => {
     resourceName: 'Loading...'
   })
   const [isView, setIsView] = useState<boolean>();
+  const [tableData, setTableData] = useState<Array<IResource>>()
   const dispatch = useDispatch();
+  const userData = useSelector(getUserState);
 
   // delete modal handler
   const showDeleteResourceModal = (resource:TResource) => {
@@ -96,24 +101,34 @@ const HospitalResourceIndex: NextPage = () => {
     },
   ];
 
-  // Dummy data (api here)
-  const data = [
-    {
-      key: "1",
-      resourceName: "bed",
-      resourceCode: "BARA-0001",
-      maximum: 32,
-      available: 32,
-      remark: 'BaraBed'
-    },
-    {
-      key: "2",
-      resourceName: "Respirator",
-      resourceCode: "BARA-0002",
-      maximum: 32,
-      available: 32,
-    },
-  ];
+  // function to connect API
+  const fetchApiResource = async () => {
+    // For Api use this to set table data
+    const hospitalId = userData.userinfo.hospitalId;
+    try {
+      let apiResonse: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/resource`,
+        {
+          hospitalId,
+        }
+      );
+
+      let rawPatientData: Array<IResource> = apiResonse.data
+      console.log(rawPatientData)
+
+      setTableData(rawPatientData);
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchApiResource();
+  }, []);
 
   return (
     <LayoutHospital
@@ -132,7 +147,7 @@ const HospitalResourceIndex: NextPage = () => {
       }
     >
       <div className="tw-overflow-x-scroll">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={tableData} />
         
         <ModalDelete id={resource? resource.key:''} resourceName={resource? resource.resourceName : ''} />
         <ModalAddResource isView={isView} resource={resource} />
