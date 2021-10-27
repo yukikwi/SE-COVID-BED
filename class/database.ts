@@ -72,7 +72,8 @@ export default class Database {
   async addHospital(newHospitalData: Object) {
     const newHospital = new HospitalModel(newHospitalData);
     try {
-      return await newHospital.save();
+      await newHospital.save();
+      return newHospital;
     } catch (e) {
       return 500;
     }

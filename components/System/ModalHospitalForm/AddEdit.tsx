@@ -9,6 +9,7 @@ import axios from "axios";
 interface Props {
   hospitalData: IHospital;
   mode?: "Add" | "Edit" | undefined;
+  isShow: boolean;
 }
 
 interface IHospitalData {
@@ -19,37 +20,37 @@ interface IHospitalData {
 }
 
 function AddEditForm(props: Props): ReactElement {
-
   const { Option } = Select;
-  const [dummyUser, setDummyUser] = useState<Array<any>>([])
+  const [dummyUser, setDummyUser] = useState<Array<any>>([]);
+  const [addHospital, setAddHospital] = useState<any>({ _id: null });
 
   // UI - user list
   const setUserData = () => {
     setDummyUser([
       {
-        _id: '615d89bf861949c6324f57ae',
-        username: 'bara1'
+        _id: "615d89bf861949c6324f57ae",
+        username: "bara1",
       },
       {
-        _id: '4321',
-        username: 'bara2'
+        _id: "4321",
+        username: "bara2",
       },
       {
-        _id: '1111',
-        username: 'bara3'
+        _id: "1111",
+        username: "bara3",
       },
       {
-        _id: '616cff05819a0b290387a93f',
-        username: 'capybaraHospital'
-      }
-    ])
-  }
+        _id: "616cff05819a0b290387a93f",
+        username: "capybaraHospital",
+      },
+    ]);
+  };
   useEffect(() => {
-    setUserData()
-  }, [])
+    setUserData();
+  }, []);
 
   // let hospitalData: IHospitalData = { hospitalStatus: "open" };
-  const { hospitalData, mode } = props;
+  const { hospitalData, mode, isShow } = props;
   const [form] = Form.useForm();
   let formData: IHospital | any = {};
 
@@ -73,7 +74,7 @@ function AddEditForm(props: Props): ReactElement {
 
   const handleAdd = async () => {
     try {
-      const res = await axios.post(
+      const res = (await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/add-hospital`,
         {
           hospitalName: formData.hospitalName,
@@ -81,13 +82,16 @@ function AddEditForm(props: Props): ReactElement {
           hospitalConvince: formData.hospitalConvince,
           hospitalAddress: formData.hospitalAddress,
           hospitalStatus: formData.hospitalPhoneNumber,
-          staff: formData.staff
+          staff: formData.staff,
         }
-      );
+      )) as any;
       notification.open({
         message: "Success",
         description: "Add hospital information successful",
       });
+      console.log("res", res.data);
+
+      setAddHospital(res.data.hospitalData);
     } catch (error) {
       notification.open({
         message: "Error",
@@ -122,7 +126,7 @@ function AddEditForm(props: Props): ReactElement {
   useEffect(() => {
     console.log("set form");
     form.resetFields();
-  }, [hospitalData]);
+  }, [hospitalData, isShow]);
 
   if (mode === "Edit" && hospitalData?.hospitalName === "") {
     console.log("loading");
@@ -179,14 +183,10 @@ function AddEditForm(props: Props): ReactElement {
       </Form.Item>
 
       <Form.Item name="staff" label="Staff" rules={[{ required: true }]}>
-        <Select
-          placeholder="Select a option and change input text above"
-        >
-          {
-            dummyUser.map((user) => {
-              return (<Option value={user._id}>{user.username}</Option>)
-            })
-          }
+        <Select placeholder="Select a option and change input text above">
+          {dummyUser.map((user) => {
+            return <Option value={user._id}>{user.username}</Option>;
+          })}
         </Select>
       </Form.Item>
 
@@ -200,13 +200,20 @@ function AddEditForm(props: Props): ReactElement {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
+        <Button
+          type="primary"
+          htmlType="submit"
+          disabled={mode === "Add" && addHospital._id ? true : false}
+        >
           Submit
         </Button>
       </Form.Item>
 
       <div className="tw-mb-5">
-        <Resources hospitalId={hospitalData._id} />
+        <Resources
+          hospitalId={mode === "Edit" ? hospitalData._id : addHospital._id}
+          isShow
+        />
       </div>
     </Form>
   );
