@@ -1,10 +1,13 @@
 export interface deleteModalState {
-  show: boolean;
+  showHospitalDeleteModal: boolean;
+  showResourceModal: boolean;
 }
 
 export enum deleteModalActionType {
-  SHOW_DELETE_MODAL = "SHOW_DELETE_MODAL",
-  HIDE_DELETE_MODAL = "HIDE_DELETE_MODAL"
+  SHOW_SYS_HOSPITAL_DELETE_MODAL = "SHOW_SYS_HOSPITAL_DELETE_MODAL",
+  HIDE_SYS_HOSPITAL_DELETE_MODAL = "HIDE_SYS_HOSPITAL_DELETE_MODAL",
+  SHOW_HOS_RESOURCE_DELETE_MODAL = "SHOW_HOS_RESOURCE_DELETE_MODAL",
+  HIDE_HOS_RESOURCE_DELETE_MODAL = "HIDE_HOS_RESOURCE_DELETE_MODAL"
 }
 
 export type deleteModalAction = deleteModalActionType;

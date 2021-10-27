@@ -12,12 +12,14 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { showDeleteModal } from "../../store/deleteModal/actions";
+import { showHospitalDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
+import { setHospitalId } from "../../store/user/actions";
+import { useRouter } from "next/router";
 
 export type TUiHospital = {
   key: string;
@@ -39,12 +41,11 @@ const HospitalResourceIndex: NextPage = () => {
     key: "",
     hospital: "",
   });
-
   
   // Redux part
   const deleteModalState = useSelector(getDeleteModalState);
   const addEditModalState = useSelector(getAddOrEditModalState);
-
+  const router  = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -94,7 +95,13 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TUiHospital) => (
         <div>
           <Tooltip title="View">
-            <a className="hover:tw-text-green-500">
+            <a
+              className="hover:tw-text-green-500"
+              onClick={() => {
+                dispatch(setHospitalId(record.key));
+                router.push('/hospital')
+              }}
+            >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -118,7 +125,7 @@ const HospitalResourceIndex: NextPage = () => {
             <a
               className="hover:tw-text-red-500"
               onClick={() => {
-                dispatch(showDeleteModal());
+                dispatch(showHospitalDeleteModal());
                 setSelectedHospital({
                   key: record.key,
                   hospital: record.hospital,

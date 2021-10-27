@@ -1,0 +1,130 @@
+import { Button, Form, Input, InputNumber, Modal, notification, Radio, Select } from "antd";
+import React, { ReactElement, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getResourceModalState } from "../../store/addResourceModal/selectors";
+import { hideResourceModal } from "../../store/addResourceModal/actions";
+
+interface Props {
+  resource: any;
+  isView: boolean;
+}
+
+ModalAddResource.defaultProps = {
+  isView: false,
+};
+
+function ModalAddResource(props: Props): ReactElement {
+  const show = useSelector(getResourceModalState);
+  const [mode, setMode] = useState("Add");
+  const [form] = Form.useForm();
+  const { isView, resource } = props;
+  const dispatch = useDispatch();
+
+  const handleCancel = () => {
+    dispatch(hideResourceModal());
+  };
+
+  // UI handle
+  useEffect(() => {
+    if (show === false) form.resetFields();
+    else if (typeof resource !== "undefined") {
+      console.log("patient", resource);
+
+      form.setFieldsValue(resource);
+      if (isView === true) setMode("View");
+      else setMode("Edit");
+    } else setMode("Add");
+  }, [show]);
+
+  const handleApprove = async (formData: any) => {
+    // Api for approve here
+  };
+
+  return (
+    <Modal
+      title={`${mode} Resource Information`}
+      visible={show}
+      onOk={() => {
+        form.submit();
+      }}
+      onCancel={handleCancel}
+      width={1000}
+      footer={
+        mode === 'View'? 
+        <Button key="back" onClick={handleCancel}>
+          Close
+        </Button>
+        :
+        [
+          <Button key="back" onClick={handleCancel}>
+            Close
+          </Button>,
+          <Button key="submit" type="primary" onClick={() => {form.submit()}}>
+            Save
+          </Button>
+        ]
+      }
+    >
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        autoComplete="off"
+        onFinish={handleApprove}
+        form={form}
+      >
+        <Form.Item
+          label="Resource name"
+          name="resourceName"
+          rules={[
+            { required: true, message: "Please input your resource name!" },
+          ]}
+        >
+          <Input disabled={isView} />
+        </Form.Item>
+
+        <Form.Item
+          label="Resource code"
+          name="resourceCode"
+          rules={[
+            { required: true, message: "Please input your resource code!" },
+          ]}
+        >
+          <Input disabled={isView} />
+        </Form.Item>
+
+        <Form.Item
+          label="Maximum"
+          name="maximum"
+          rules={[
+            { required: true, message: "Please input your resource maximum!" },
+          ]}
+        >
+          <InputNumber disabled={isView} />
+        </Form.Item>
+
+        <Form.Item
+          label="Available"
+          name="available"
+          rules={[
+            { required: true, message: "Please input your resource available!" },
+          ]}
+        >
+          <InputNumber disabled={isView} />
+        </Form.Item>
+
+        <Form.Item
+          label="Remark"
+          name="remark"
+          rules={[
+            { required: true, message: "Please input your resource remark!" },
+          ]}
+        >
+          <Input disabled={isView} />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+}
+
+export default ModalAddResource;

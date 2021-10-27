@@ -152,12 +152,23 @@ function ModalAddPatient(props: Props): ReactElement {
     <Modal
       title={`${mode} Patient Information`}
       visible={show}
-      onOk={() => {
-        form.submit();
-      }}
-      okText="Save"
       onCancel={handleCancel}
       width={1000}
+      footer={
+        mode === 'View'? 
+        <Button key="back" onClick={handleCancel}>
+          Close
+        </Button>
+        :
+        [
+          <Button key="back" onClick={handleCancel}>
+            Close
+          </Button>,
+          <Button key="submit" type="primary" onClick={() => {form.submit()}}>
+            Save
+          </Button>
+        ]
+      }
     >
       <Form
         name="basic"
