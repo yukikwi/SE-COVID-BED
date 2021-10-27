@@ -17,6 +17,7 @@ interface Props {
 }
 
 interface Record {
+  _id: string;
   key: string;
   resource: string;
   maximum: number;
@@ -51,6 +52,31 @@ function Resources({ hospitalId }: Props): ReactElement {
       });
     }
   };
+
+  // declare edit method
+  const editApi = async (resourceId:string, formData:Record) => {
+    //call edit api
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
+        {
+          id: resourceId,
+          newData: formData
+        }
+      );
+      notification.open({
+        message: "Success",
+        description: "Edit resource information successful",
+      });
+
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  }
 
   useEffect(() => {
     fetchApiResource();
@@ -184,6 +210,7 @@ function Resources({ hospitalId }: Props): ReactElement {
         });
         // save datastate
         setData(newData);
+        editApi(item._id, row)
         setEditingKey("");
       } else {
         // save as new row
