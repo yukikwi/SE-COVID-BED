@@ -5,6 +5,8 @@ import Resources from "./Resources";
 import { IHospital } from "../../../class/data_struct/hospital";
 import { initValue } from "../ModalAddEdit";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
 
 interface Props {
   hospitalData: IHospital;
@@ -50,8 +52,9 @@ function AddEditForm(props: Props): ReactElement {
   }, []);
 
   // let hospitalData: IHospitalData = { hospitalStatus: "open" };
-  const { hospitalData, mode, isShow } = props;
+  const { hospitalData, mode } = props;
   const [form] = Form.useForm();
+  const { show } = useSelector(getAddOrEditModalState);
   let formData: IHospital | any = {};
 
   console.log("hospitalData", hospitalData.isAvailable);
@@ -65,11 +68,6 @@ function AddEditForm(props: Props): ReactElement {
   // update status toggle value on change
   const updateHospitalStatus = (status: boolean) => {
     updateHospitalData({ isAvailable: status });
-  };
-  // status getter
-  const hospitalstatus = () => {
-    // return hospitalData.hospitalStatus;
-    return "open";
   };
 
   const handleAdd = async () => {
@@ -124,9 +122,8 @@ function AddEditForm(props: Props): ReactElement {
   };
 
   useEffect(() => {
-    console.log("set form");
     form.resetFields();
-  }, [hospitalData, isShow]);
+  }, [hospitalData, show]);
 
   if (mode === "Edit" && hospitalData?.hospitalName === "") {
     console.log("loading");
