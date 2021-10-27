@@ -176,7 +176,7 @@ const HospitalResourceIndex: NextPage = () => {
         <Table columns={columns} dataSource={tableData} />
 
         <ModalDelete
-          id={resource ? resource.key : ""}
+          id={resource ? resource._id : ""}
           resourceName={resource ? resource.resourceName : ""}
         />
         <ModalAddResource isView={isView} resource={resource} />
