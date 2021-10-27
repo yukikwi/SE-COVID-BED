@@ -1,8 +1,19 @@
-import { Button, Form, Input, InputNumber, Modal, notification, Radio, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  notification,
+  Radio,
+  Select,
+} from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getResourceModalState } from "../../store/addResourceModal/selectors";
 import { hideResourceModal } from "../../store/addResourceModal/actions";
+import axios from "axios";
+import { getUserState } from "../../store/user/selectors";
 
 interface Props {
   resource: any;
@@ -17,6 +28,7 @@ function ModalAddResource(props: Props): ReactElement {
   const show = useSelector(getResourceModalState);
   const [mode, setMode] = useState("Add");
   const [form] = Form.useForm();
+  const userData = useSelector(getUserState);
   const { isView, resource } = props;
   const dispatch = useDispatch();
 
@@ -37,7 +49,41 @@ function ModalAddResource(props: Props): ReactElement {
   }, [show]);
 
   const handleApprove = async (formData: any) => {
-    // Api for approve here
+    // Api for call here
+
+    if (mode === "Add") {
+      try {
+        const hospitalId = userData.userinfo.hospitalId;
+
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/resource/add-resource`,
+          {
+            resourceName: formData.resourceName,
+            resourceCode: formData.resourceCode,
+            maximum: formData.maximum,
+            available: formData.available,
+            remark: formData.remark,
+            status: formData.status,
+            resourceHospital: hospitalId,
+          }
+        );
+        notification.open({
+          message: "Success",
+          description: "Add resource information successful",
+        });
+
+        // Close this modal
+        handleCancel();
+      } catch (error) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
+    } else {
+      //call edit api
+    }
   };
 
   return (
@@ -50,19 +96,26 @@ function ModalAddResource(props: Props): ReactElement {
       onCancel={handleCancel}
       width={1000}
       footer={
-        mode === 'View'? 
-        <Button key="back" onClick={handleCancel}>
-          Close
-        </Button>
-        :
-        [
+        mode === "View" ? (
           <Button key="back" onClick={handleCancel}>
             Close
-          </Button>,
-          <Button key="submit" type="primary" onClick={() => {form.submit()}}>
-            Save
           </Button>
-        ]
+        ) : (
+          [
+            <Button key="back" onClick={handleCancel}>
+              Close
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => {
+                form.submit();
+              }}
+            >
+              Save
+            </Button>,
+          ]
+        )
       }
     >
       <Form
@@ -107,7 +160,10 @@ function ModalAddResource(props: Props): ReactElement {
           label="Available"
           name="available"
           rules={[
-            { required: true, message: "Please input your resource available!" },
+            {
+              required: true,
+              message: "Please input your resource available!",
+            },
           ]}
         >
           <InputNumber disabled={isView} />
