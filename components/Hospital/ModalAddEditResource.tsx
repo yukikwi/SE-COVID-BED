@@ -83,6 +83,28 @@ function ModalAddResource(props: Props): ReactElement {
       }
     } else {
       //call edit api
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
+          {
+            id: resource._id,
+            newData: formData
+          }
+        );
+        notification.open({
+          message: "Success",
+          description: "Edit resource information successful",
+        });
+
+        // Close this modal
+        handleCancel();
+      } catch (error) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
     }
   };
 
