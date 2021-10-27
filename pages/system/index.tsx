@@ -191,7 +191,7 @@ const HospitalResourceIndex: NextPage = () => {
       title="Hospital List"
       button={
         <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
           icon={<PlusSquareOutlined />}
