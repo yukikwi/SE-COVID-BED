@@ -2,8 +2,10 @@ import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
-import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions"
-import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions"
+import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions";
+import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions";
+import { getResourceModalState } from "../../../store/addResourceModal/selectors";
+import { getDeleteResourceModalState } from "../../../store/deleteModal/selectors";
 import {
   EyeOutlined,
   EditOutlined,
@@ -24,31 +26,36 @@ type TResource = {
   resourceCode?: string;
   maximum?: number;
   available?: number;
-  remark?: string
+  remark?: string;
 };
 
 const HospitalResourceIndex: NextPage = () => {
   // state part
   const [resource, setResource] = useState<TResource | undefined>({
-    key: '0',
-    resourceName: 'Loading...'
-  })
+    key: "0",
+    resourceName: "Loading...",
+  });
   const [isView, setIsView] = useState<boolean>();
-  const [tableData, setTableData] = useState<Array<IResource>>()
+  const [tableData, setTableData] = useState<Array<IResource>>();
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
+  const deleteResourceModalState = useSelector(getDeleteResourceModalState);
+  const addEditResourceModalState = useSelector(getResourceModalState);
 
   // delete modal handler
-  const showDeleteResourceModal = (resource:TResource) => {
+  const showDeleteResourceModal = (resource: TResource) => {
     setResource(resource);
     dispatch(storeShowResourceDeleteModal());
-  }
+  };
 
-  const showAddEditResourceModal = (resource:TResource | undefined = undefined, isView: boolean = false) => {
+  const showAddEditResourceModal = (
+    resource: TResource | undefined = undefined,
+    isView: boolean = false
+  ) => {
     setResource(resource);
     setIsView(isView);
     dispatch(storeShowResourceModal());
-  }
+  };
 
   // Dummy Hospital data
   const columns = [
@@ -80,19 +87,34 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TResource) => (
         <div>
           <Tooltip title="View">
-            <a className="hover:tw-text-green-500" onClick={() => {showAddEditResourceModal(record, true)}}>
+            <a
+              className="hover:tw-text-green-500"
+              onClick={() => {
+                showAddEditResourceModal(record, true);
+              }}
+            >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <a className="hover:tw-text-yellow-500" onClick={() => {showAddEditResourceModal(record)}}>
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                showAddEditResourceModal(record);
+              }}
+            >
               <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Remove">
-            <a className="hover:tw-text-red-500" onClick={() => {showDeleteResourceModal(record)}}>
+            <a
+              className="hover:tw-text-red-500"
+              onClick={() => {
+                showDeleteResourceModal(record);
+              }}
+            >
               <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
@@ -113,8 +135,8 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawPatientData: Array<IResource> = apiResonse.data
-      console.log(rawPatientData)
+      let rawPatientData: Array<IResource> = apiResonse.data;
+      console.log(rawPatientData);
 
       setTableData(rawPatientData);
     } catch (error) {
@@ -128,7 +150,7 @@ const HospitalResourceIndex: NextPage = () => {
 
   useEffect(() => {
     fetchApiResource();
-  }, []);
+  }, [addEditResourceModalState, deleteResourceModalState]);
 
   return (
     <LayoutHospital
@@ -140,7 +162,9 @@ const HospitalResourceIndex: NextPage = () => {
           shape="round"
           icon={<PlusSquareOutlined />}
           size="large"
-          onClick={() => {showAddEditResourceModal()}}
+          onClick={() => {
+            showAddEditResourceModal();
+          }}
         >
           add resource
         </Button>
@@ -148,8 +172,11 @@ const HospitalResourceIndex: NextPage = () => {
     >
       <div className="tw-overflow-x-scroll">
         <Table columns={columns} dataSource={tableData} />
-        
-        <ModalDelete id={resource? resource.key:''} resourceName={resource? resource.resourceName : ''} />
+
+        <ModalDelete
+          id={resource ? resource.key : ""}
+          resourceName={resource ? resource.resourceName : ""}
+        />
         <ModalAddResource isView={isView} resource={resource} />
       </div>
     </LayoutHospital>
