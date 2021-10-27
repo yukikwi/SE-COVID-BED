@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
 import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
 import { getUserState } from "../../../store/user/selectors";
-import { IResource } from "../../../class/data_struct/resource";
 import axios from "axios";
 
 type TResource = {
@@ -140,7 +139,6 @@ const HospitalResourceIndex: NextPage = () => {
       let rawResourceData: Array<TResource> = apiResonse.data.map(
         (x: TResource, i: Number) => ({ ...x, key: i })
       );
-  
       setTableData(rawResourceData);
     } catch (error) {
       notification.open({
