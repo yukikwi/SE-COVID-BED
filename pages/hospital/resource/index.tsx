@@ -21,6 +21,7 @@ import { IResource } from "../../../class/data_struct/resource";
 import axios from "axios";
 
 type TResource = {
+  _id: string;
   key: string;
   resourceName: string;
   resourceCode?: string;
@@ -32,11 +33,12 @@ type TResource = {
 const HospitalResourceIndex: NextPage = () => {
   // state part
   const [resource, setResource] = useState<TResource | undefined>({
-    key: "0",
-    resourceName: "Loading...",
-  });
+    _id: '',
+    key: '0',
+    resourceName: 'Loading...'
+  })
   const [isView, setIsView] = useState<boolean>();
-  const [tableData, setTableData] = useState<Array<IResource>>();
+  const [tableData, setTableData] = useState<Array<TResource>>()
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
   const deleteResourceModalState = useSelector(getDeleteResourceModalState);
@@ -135,10 +137,11 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawPatientData: Array<IResource> = apiResonse.data;
-      console.log(rawPatientData);
-
-      setTableData(rawPatientData);
+      let rawResourceData: Array<TResource> = apiResonse.data.map(
+        (x: TResource, i: Number) => ({ ...x, key: i })
+      );
+  
+      setTableData(rawResourceData);
     } catch (error) {
       notification.open({
         message: "Error",
