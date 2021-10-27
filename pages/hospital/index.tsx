@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../components/Layout/Hospital";
-import { List, Switch, Button } from "antd";
-import { PlusSquareOutlined } from "@ant-design/icons";
+import { List, Switch } from "antd";
 
 const HospitalIndex: NextPage = () => {
   const data = [
