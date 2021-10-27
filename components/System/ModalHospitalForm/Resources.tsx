@@ -13,7 +13,7 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { IResource } from "../../../class/data_struct/resource";
 
 interface Props {
-  hospitalId: string
+  hospitalId: string;
 }
 
 interface Record {
@@ -31,7 +31,7 @@ function Resources({ hospitalId }: Props): ReactElement {
   const [removeOnCancelKey, setRemoveOnCancelKey] = useState(false);
   const [data, setData] = useState<Array<any>>([]);
   const [form] = Form.useForm();
-  
+
   // function to connect API
   const fetchApiResource = async () => {
     try {
@@ -42,7 +42,7 @@ function Resources({ hospitalId }: Props): ReactElement {
         }
       );
 
-      let rawResourceData: Array<IResource> = apiResonse.data
+      let rawResourceData: Array<IResource> = apiResonse.data;
       setData(rawResourceData);
     } catch (error) {
       notification.open({
@@ -54,21 +54,20 @@ function Resources({ hospitalId }: Props): ReactElement {
   };
 
   // declare edit method
-  const editApi = async (resourceId:string, formData:Record) => {
+  const editApi = async (resourceId: string, formData: Record) => {
     //call edit api
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
         {
           id: resourceId,
-          newData: formData
+          newData: formData,
         }
       );
       notification.open({
         message: "Success",
         description: "Edit resource information successful",
       });
-
     } catch (error) {
       notification.open({
         message: "Error",
@@ -76,7 +75,7 @@ function Resources({ hospitalId }: Props): ReactElement {
           "Cannot connect to api. Please contact admin for more information.",
       });
     }
-  }
+  };
 
   useEffect(() => {
     fetchApiResource();
@@ -112,13 +111,18 @@ function Resources({ hospitalId }: Props): ReactElement {
     }
   };
 
-
   // Original columns
   const columns = [
     {
       title: "Resource",
       dataIndex: "resourceName",
       key: "resourceName",
+      editable: true,
+    },
+    {
+      title: "Resource Code",
+      dataIndex: "resourceCode",
+      key: "resourceCode",
       editable: true,
     },
     {
@@ -210,7 +214,7 @@ function Resources({ hospitalId }: Props): ReactElement {
         });
         // save datastate
         setData(newData);
-        editApi(item._id, row)
+        editApi(item._id, row);
         setEditingKey("");
       } else {
         // save as new row
