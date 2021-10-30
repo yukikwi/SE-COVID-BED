@@ -30,17 +30,17 @@ class System {
       },
       isAvailable: true,
       isDelete: false,
-      staff: `${staff}`
+      staff: `${staff}`,
     };
 
     console.log(this.newHospitalData);
     if (this.newHospitalData) {
-      this.database.addHospital(this.newHospitalData);
+      const result = await this.database.addHospital(this.newHospitalData);
       return {
         http: 201,
         data: {
           code: "Success to add hospital",
-          hospitalData: this.newHospitalData,
+          hospitalData: result,
         },
       };
     } else {
