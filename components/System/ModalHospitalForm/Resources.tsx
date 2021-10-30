@@ -3,46 +3,123 @@ import {
   Form,
   Input,
   InputNumber,
+  notification,
   Popconfirm,
   Table,
   Typography,
 } from "antd";
-import React, { ReactElement, useState } from "react";
+import axios from "axios";
+import React, { ReactElement, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { IResource } from "../../../class/data_struct/resource";
+import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
 
-interface Props {}
+interface Props {
+  hospitalId: string;
+  isShow: boolean;
+}
 
 interface Record {
+  _id: string;
   key: string;
   resource: string;
   maximum: number;
   available: number;
   remark: string;
+  add?: boolean;
 }
 
-function Resources({}: Props): ReactElement {
-  // Dummy data
-  const originData = [
-    {
-      key: "1",
-      resource: "John",
-      maximum: 42,
-      available: 42,
-      remark: "10 Downing Street",
-    },
-    {
-      key: "2",
-      resource: "John",
-      maximum: 42,
-      available: 42,
-      remark: "10 Downing Street",
-    },
-  ];
-
+function Resources({ hospitalId }: Props): ReactElement {
   // Init state
+  const { show } = useSelector(getAddOrEditModalState);
   const [editingKey, setEditingKey] = useState("");
   const [removeOnCancelKey, setRemoveOnCancelKey] = useState(false);
-  const [data, setData] = useState(originData);
+  const [data, setData] = useState<Array<any>>([]);
   const [form] = Form.useForm();
+
+  // function to connect API
+  const fetchApiResource = async () => {
+    try {
+      let apiResonse: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/resource`,
+        {
+          hospitalId,
+        }
+      );
+
+      let rawResourceData: Array<IResource> = apiResonse.data;
+      setData(rawResourceData);
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
+  };
+
+  // declare edit method
+  const editApi = async (resourceId: string, formData: Record) => {
+    //call edit api
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
+        {
+          id: resourceId,
+          newData: formData,
+        }
+      );
+      notification.open({
+        message: "Success",
+        description: "Edit resource information successful",
+      });
+      return true;
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+      return false;
+    }
+  };
+
+  const addApi = async (formData: Record) => {
+    try {
+      if (hospitalId) {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/resource/add-resource`,
+          {
+            ...formData,
+            resourceHospital: hospitalId,
+          }
+        );
+        notification.open({
+          message: "Success",
+          description: "Add resource information successful",
+        });
+        return true;
+      } else {
+        notification.open({
+          message: "Error",
+          description: "Please complete add hospital form first!!",
+        });
+        return false;
+      }
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    fetchApiResource();
+    form.resetFields();
+  }, [hospitalId, show]);
 
   // check is row in edit state
   const isEditing = (record: Record) => record.key === editingKey;
@@ -78,8 +155,14 @@ function Resources({}: Props): ReactElement {
   const columns = [
     {
       title: "Resource",
-      dataIndex: "resource",
-      key: "resource",
+      dataIndex: "resourceName",
+      key: "resourceName",
+      editable: true,
+    },
+    {
+      title: "Resource Code",
+      dataIndex: "resourceCode",
+      key: "resourceCode",
       editable: true,
     },
     {
@@ -162,19 +245,16 @@ function Resources({}: Props): ReactElement {
       const newData = [...data];
       // is row already exist
       const index = newData.findIndex((item) => key === item.key);
-      // if found replace old one
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        // save datastate
-        setData(newData);
-        setEditingKey("");
-      } else {
-        // save as new row
-        newData.push(row);
+      const item = newData[index];
+      newData.splice(index, 1, {
+        ...item,
+        ...row,
+      });
+      // save datastate
+      let isSuccess;
+      if (item.add) isSuccess = await addApi(row);
+      else isSuccess = await editApi(item._id, row);
+      if (isSuccess) {
         setData(newData);
         setEditingKey("");
       }
@@ -238,11 +318,13 @@ function Resources({}: Props): ReactElement {
     )
       newDataKey = (parseInt(data[data.length - 1]?.key) + 1).toString();
     let newRowData: Record = {
+      _id: "",
       key: newDataKey,
       resource: "",
       maximum: 0,
       available: 0,
       remark: "",
+      add: true,
     };
     let newData = [...data, { ...newRowData }];
     setData(newData);
@@ -260,6 +342,7 @@ function Resources({}: Props): ReactElement {
             onClick={() => {
               addNewResource();
             }}
+            disabled={hospitalId ? false : true}
           >
             Add new resources
           </Button>

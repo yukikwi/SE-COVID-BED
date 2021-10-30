@@ -18,6 +18,7 @@ import {
   HospitalModel,
   PatientModel,
   PatientSeverityLogModel,
+  ResourceSchemaModel,
 } from "./model/index";
 // load dotenv for load environment variable from .env file
 require("dotenv").config();
@@ -71,7 +72,8 @@ export default class Database {
   async addHospital(newHospitalData: Object) {
     const newHospital = new HospitalModel(newHospitalData);
     try {
-      return await newHospital.save();
+      await newHospital.save();
+      return newHospital;
     } catch (e) {
       return 500;
     }
@@ -156,6 +158,32 @@ export default class Database {
   }
 
   async getAHospitalByUser(userId: ObjectId) {
-    return await HospitalModel.findOne({staff: userId}, {_id: 1});
+    return await HospitalModel.findOne({ staff: userId }, { _id: 1 });
+  }
+
+  //Manage Resource
+  async addResource(newResource: Object) {
+    const result = new ResourceSchemaModel(newResource);
+    try {
+      return result.save();
+    } catch (e) {
+      return 500;
+    }
+  }
+
+  async getResource(resourceHospital: any) {
+    return await ResourceSchemaModel.find({ resourceHospital });
+  }
+
+  async getAResource(id: string) {
+    return await ResourceSchemaModel.findById(id);
+  }
+
+  async deleteResource(id: string) {
+    return await ResourceSchemaModel.findByIdAndDelete(id);
+  }
+
+  async editResource(id: string, newData: any) {
+    return await ResourceSchemaModel.findByIdAndUpdate(id, newData);
   }
 }

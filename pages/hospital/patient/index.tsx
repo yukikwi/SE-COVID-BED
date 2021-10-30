@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import ApproveModal from "../../../components/Hospital/Approve";
+import ApproveModal from "../../../components/Hospital/ModalApprove"
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
@@ -31,7 +31,7 @@ type TPatient = {
 
 const HospitalResourceIndex: NextPage = () => {
   // cast state and method
-  const [tableData, settableData] = useState<Array<any>>();
+  const [tableData, setTableData] = useState<Array<any>>();
   const [approvePatient, setApprovePatient] = useState<TPatient>();
   const [editPatient, setEditPatient] = useState<TPatient>();
   const [isView, setIsView] = useState<boolean>();
@@ -147,7 +147,7 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      settableData(rawPatientData);
+      setTableData(rawPatientData);
     } catch (error) {
       notification.open({
         message: "Error",

@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../components/Layout/Hospital";
-import { List, Switch, Button } from "antd";
-import { PlusSquareOutlined } from "@ant-design/icons";
+import { List, Switch } from "antd";
 
 const HospitalIndex: NextPage = () => {
   const data = [
@@ -30,17 +29,7 @@ const HospitalIndex: NextPage = () => {
   return (
     <LayoutHospital
       title="Capybara Hospital : Info"
-      button={
-        <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
-          type="primary"
-          shape="round"
-          icon={<PlusSquareOutlined />}
-          size="large"
-        >
-          add resource
-        </Button>
-      }
+      button={<></>}
     >
       <List
         bordered

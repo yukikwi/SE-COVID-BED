@@ -25,7 +25,8 @@ function LayoutHospital(props: Props): ReactElement {
       if(userData.login === true && userData.userinfo){
         // redirect...
         if(userData.userinfo.role === 'system_admin'){
-          router.replace("/system");
+          if(!userData.userinfo.hospitalId)
+            router.replace("/system");
         }
       }
       else{

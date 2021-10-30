@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
-import { hideDeleteModal } from '../../store/deleteModal/actions';
+import { hideHospitalDeleteModal } from '../../store/deleteModal/actions';
 import axios, { AxiosError } from 'axios';
 import { IHospital } from '../../class/data_struct/hospital';
 
@@ -14,7 +14,7 @@ interface Props {
 function ModalDelete(props: Props): ReactElement {
   // redux part
   const dispatch = useDispatch();
-  const showDeleteModal = useSelector(getDeleteModalState);
+  const showHospitalDeleteModal = useSelector(getDeleteModalState);
   const { id, hospital } = props;
 
   //
@@ -32,7 +32,7 @@ function ModalDelete(props: Props): ReactElement {
         id
       })
       console.log(apiResonse.data)
-      dispatch(hideDeleteModal())
+      dispatch(hideHospitalDeleteModal())
     }
     catch(error: any | AxiosError){
       notifyError()
@@ -42,9 +42,9 @@ function ModalDelete(props: Props): ReactElement {
   return (
     <Modal
       title={`Delete Hospital (${hospital})`}
-      visible={showDeleteModal}
+      visible={showHospitalDeleteModal}
       onOk={() => deleteHospital()}
-      onCancel={() => dispatch(hideDeleteModal())}
+      onCancel={() => dispatch(hideHospitalDeleteModal())}
       okText="Confirm"
       centered
     >

@@ -12,12 +12,14 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { showDeleteModal } from "../../store/deleteModal/actions";
+import { showHospitalDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
+import { setHospitalId } from "../../store/user/actions";
+import { useRouter } from "next/router";
 
 export type TUiHospital = {
   key: string;
@@ -40,11 +42,10 @@ const HospitalResourceIndex: NextPage = () => {
     hospital: "",
   });
 
-  
   // Redux part
   const deleteModalState = useSelector(getDeleteModalState);
   const addEditModalState = useSelector(getAddOrEditModalState);
-
+  const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -73,11 +74,6 @@ const HospitalResourceIndex: NextPage = () => {
       key: "staff",
     },
     {
-      title: "Available beds",
-      dataIndex: "available",
-      key: "available",
-    },
-    {
       title: "Status",
       key: "status",
       render: (record: TUiHospital) => (
@@ -94,31 +90,37 @@ const HospitalResourceIndex: NextPage = () => {
       render: (record: TUiHospital) => (
         <div>
           <Tooltip title="View">
-            <a className="hover:tw-text-green-500">
+            <a
+              className="hover:tw-text-green-500"
+              onClick={() => {
+                dispatch(setHospitalId(record.key));
+                router.push("/hospital");
+              }}
+            >
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
 
           <Tooltip title="Edit">
-          <a
-            className="hover:tw-text-yellow-500"
-            onClick={() => {
-              dispatch(showAddOrEditModal("Edit"));
-              setSelectedHospital({
-                key: record.key,
-                hospital: record.hospital,
-              });
-            }}
-          >
-            <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-          </a>
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                dispatch(showAddOrEditModal("Edit"));
+                setSelectedHospital({
+                  key: record.key,
+                  hospital: record.hospital,
+                });
+              }}
+            >
+              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
           </Tooltip>
 
           <Tooltip title="Remove">
             <a
               className="hover:tw-text-red-500"
               onClick={() => {
-                dispatch(showDeleteModal());
+                dispatch(showHospitalDeleteModal());
                 setSelectedHospital({
                   key: record.key,
                   hospital: record.hospital,
@@ -147,7 +149,10 @@ const HospitalResourceIndex: NextPage = () => {
           key: hospital._id,
           hospital: hospital.hospitalName,
           convince: hospital.hospitalConvince,
-          staff: (hospital.staff && typeof(hospital.staff.username) === 'string')? hospital.staff.username: 'not specific',
+          staff:
+            hospital.staff && typeof hospital.staff.username === "string"
+              ? hospital.staff.username
+              : "not specific",
           amount: 32,
           available: 32,
           isAvailable: hospital.isAvailable,
@@ -178,13 +183,12 @@ const HospitalResourceIndex: NextPage = () => {
     }
   };
 
-
   return (
     <LayoutHospital
       title="Hospital List"
       button={
         <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
           icon={<PlusSquareOutlined />}
