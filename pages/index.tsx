@@ -2,12 +2,16 @@ import type { NextPage } from "next";
 import Logo from "../components/Logo";
 import PositiveButton from "../components/PositiveButton";
 import { useRouter } from "next/router";
+import ModalTicket from "../components/Patient/ModalTicket";
+import { showTicketModal } from "../store/ticketModal/actions";
+import { useDispatch } from "react-redux";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleClickPatient = () => {
-    router.push("/");
+    dispatch(showTicketModal())
   };
 
   const handleClickGoToLogin = () => {
@@ -29,6 +33,8 @@ const Home: NextPage = () => {
           text="Staff"
         />
       </div>
+
+      <ModalTicket />
     </div>
   );
 };
