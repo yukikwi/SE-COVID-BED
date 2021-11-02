@@ -51,7 +51,8 @@ function Map(prop: Props): ReactElement {
   }, [infoWindow, preLat, preLong])
 
   return (
-    <div style={{ height: '500px', width: '100%' }}>
+    <div className="tw-aspect-w-4 tw-aspect-h-3 md:tw-aspect-w-16 md:tw-aspect-h-9 tw-border tw-border-gray-300 tw-rounded-lg">
+      <div>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: 'AIzaSyCtGM1qte3AYvQTdTLVjz-stYpe0xDX1p0',
@@ -70,6 +71,7 @@ function Map(prop: Props): ReactElement {
           />
         </GoogleMapReact>
       </div>
+    </div>
   )
 }
 
