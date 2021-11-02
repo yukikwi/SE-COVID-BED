@@ -1,8 +1,8 @@
 import { mapState, mapActionType, mapActionInterface } from "./type";
 
 const initialState: mapState = {
-  lat: 0,
-  long: 0
+  lat: 13.736717,
+  long: 100.523186
 };
 
 export function mapReducer(state = initialState, action: mapActionInterface): mapState {
