@@ -55,7 +55,7 @@ function Map(prop: Props): ReactElement {
       <div>
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: 'AIzaSyCtGM1qte3AYvQTdTLVjz-stYpe0xDX1p0',
+            key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API? process.env.NEXT_PUBLIC_GOOGLE_MAP_API:'',
             language: 'th',
             region: 'th',
             libraries:['places']
