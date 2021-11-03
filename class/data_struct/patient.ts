@@ -5,18 +5,20 @@ export interface IPatient extends Document {
   patientName: string;
   patientHospital: any;
   patientAddress: string;
-  patientLocation: object;
+  patientLocation: any;
   patientPhoneNumber: string;
   patientStatus: string;
+  patientEmail: string;
 }
 
 export type TPatient = {
   patientName?: string;
   patientHospital?: any;
   patientAddress?: string;
-  patientLocation?: object;
+  patientLocation?: any;
   patientPhoneNumber?: string;
   patientStatus?: string;
+  patientEmail?: string;
 };
 
 export interface ISeverity extends Document {

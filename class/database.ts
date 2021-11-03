@@ -113,8 +113,6 @@ export default class Database {
 
   async addSeverityLog(newPatientSeverityLog: Object) {
     const newSeverity = new PatientSeverityLogModel(newPatientSeverityLog);
-    console.log("kuy =" + newSeverity);
-    console.log("kuy23 = " + newPatientSeverityLog);
     try {
       return newSeverity.save();
     } catch (e) {
@@ -171,8 +169,10 @@ export default class Database {
     }
   }
 
-  async getResource(resourceHospital: any) {
-    return await ResourceSchemaModel.find({ resourceHospital });
+  async getResource(condition: any) {
+    console.log("condition", condition);
+    
+    return await ResourceSchemaModel.find(condition);
   }
 
   async getAResource(id: string) {
@@ -186,4 +186,5 @@ export default class Database {
   async editResource(id: string, newData: any) {
     return await ResourceSchemaModel.findByIdAndUpdate(id, newData);
   }
+
 }

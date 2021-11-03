@@ -21,6 +21,9 @@ const PatientSchema: Schema = new Schema({
   patientStatus: {
     type: String,
   },
+  patientEmail: {
+    type: String,
+  },
 });
 
 export const PatientModel: Model<IPatient> =

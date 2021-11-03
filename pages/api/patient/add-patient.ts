@@ -22,6 +22,7 @@ export default async function addPatient(
           patientPhoneNumber,
           patientStatus,
           patientSeverityLabel,
+          patientEmail,
         } = req.body;
 
         const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
@@ -34,7 +35,8 @@ export default async function addPatient(
           patientPhoneNumber,
           patientStatus,
           patientSeverityLabel,
-          dateNow
+          dateNow,
+          patientEmail
         );
         res.status(addPatient.http).json(addPatient.data);
       } else {

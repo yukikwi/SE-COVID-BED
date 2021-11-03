@@ -107,15 +107,18 @@ class Patient {
     patientPhoneNumber: string,
     patientStatus: string,
     patientSeverityLabel: string,
-    patientSeverityDateStart: string
+    patientSeverityDateStart: string,
+    patientEmail: string
   ) {
+    console.log("patientLocation",patientLocation)
     const newPatientData = {
       patientName: `${patientName}`,
       patientHospital: `${patientHospital}`,
       patientAddress: `${patientAddress}`,
-      patientLocation: `${patientLocation}`,
+      patientLocation: {...patientLocation},
       patientPhoneNumber: `${patientPhoneNumber}`,
       patientStatus: `${patientStatus}`,
+      patientEmail: `${patientEmail}`,
     };
     if (newPatientData !== null) {
       const patientId = await this.database.addPatient(newPatientData);
