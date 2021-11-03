@@ -7,6 +7,7 @@ import { approveModalReducer } from "./approveModal/reducers";
 import { patientModalReducer } from "./addPatientModal/reducers";
 import { resourceModalReducer } from "./addResourceModal/reducers";
 import { ticketModalReducer } from "./ticketModal/reducers";
+import { mapReducer } from "./map/reducers";
 
 const rootReducer = combineReducers({
 	deleteModalReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
 	approveModalReducer,
 	patientModalReducer,
 	resourceModalReducer,
-	ticketModalReducer
+	ticketModalReducer,
+	mapReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
