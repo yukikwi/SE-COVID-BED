@@ -6,6 +6,7 @@ import { IHospital } from "../../../class/data_struct/hospital";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
+import { getMapState } from '../../../store/map/selectors';
 import { setLoc } from "../../../store/map/actions";
 import { TambonType } from '../../TamBonType'
 import tambon from '../../../public/location.json';
@@ -26,6 +27,8 @@ function AddEditForm(props: Props): ReactElement {
   const [preLat, setPreLat] = useState(0)
   const [preLong, setPreLong] = useState(0)
   const tambonData:Array<TambonType> | any = tambon["TAMBON"]
+  const loc = useSelector(getMapState)
+
   
   // UI - user list
   const setUserData = () => {
@@ -79,6 +82,8 @@ function AddEditForm(props: Props): ReactElement {
           hospitalPhoneNumber: formData.hospitalPhoneNumber,
           hospitalConvince: formData.hospitalConvince,
           hospitalAddress: formData.hospitalAddress,
+          hospitalLocationLat: loc.lat,
+          hospitalLocationLong: loc.long,
           hospitalStatus: formData.hospitalPhoneNumber,
           staff: formData.staff,
         }
