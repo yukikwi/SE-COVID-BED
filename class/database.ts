@@ -170,8 +170,6 @@ export default class Database {
   }
 
   async getResource(condition: any) {
-    console.log("condition", condition);
-    
     return await ResourceSchemaModel.find(condition);
   }
 
