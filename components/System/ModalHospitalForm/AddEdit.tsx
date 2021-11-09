@@ -270,7 +270,7 @@ function AddEditForm(props: Props): ReactElement {
       <Form.Item name="staff" label="Staff" rules={[{ required: true }]}>
         <Select placeholder="Select a option and change input text above">
           {dummyUser.map((user) => {
-            return <Option value={user._id}>{user.username}</Option>;
+            return <Option key={user._id} value={user._id}>{user.username}</Option>;
           })}
         </Select>
       </Form.Item>

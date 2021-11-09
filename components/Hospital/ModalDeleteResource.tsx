@@ -48,7 +48,7 @@ function ModalDelete(props: Props): ReactElement {
       centered
     >
       <p>
-        click "Confirm" if you’re sure that you want to remove
+        click &quot;Confirm&quot; if you’re sure that you want to remove
         <span className="tw-font-bold"> {resourceName} </span>
         , if not click cancel
       </p>
