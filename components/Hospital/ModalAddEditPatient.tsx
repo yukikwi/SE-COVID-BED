@@ -277,6 +277,7 @@ function ModalAddPatient(props: Props): ReactElement {
           ]}
         >
           <AutoComplete
+            disabled={isView} 
             options={options}
             onSearch={onSearch}
             onSelect={onSelect}
