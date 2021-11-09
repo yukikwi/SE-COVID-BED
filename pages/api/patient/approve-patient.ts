@@ -18,6 +18,7 @@ export default async function approvePatient(
         } = req.body;
 
         const approve = await patient.approvePatient(id);
+
         res.status(approve.http).json(approve.data);
       } else {
         // database connection fail

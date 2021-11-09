@@ -1,5 +1,6 @@
 import { TimePicker } from "antd";
 import Database from "./database";
+import Notification from "./notification";
 import { IPatient, ISeverity } from "./data_struct/patient";
 import { IHospital } from "./data_struct/hospital";
 import axios from "axios";
@@ -7,9 +8,11 @@ import axios from "axios";
 class Patient {
   private database: Database;
   private patient: IPatient | any;
+  private notification: Notification;
 
   constructor() {
     this.database = new Database();
+    this.notification = new Notification();
     this.patient = {};
   }
 
@@ -151,7 +154,12 @@ class Patient {
 
   async approvePatient(id: string) {
     try {
-      await this.database.approvePatient(id);
+      const patientData = await this.database.approvePatient(id);
+      console.log("temp", patientData);
+      
+      //send email notification to patient
+      await this.notification.sendNotification(patientData?.patientEmail);
+
       return {
         http: 200,
         data: {
