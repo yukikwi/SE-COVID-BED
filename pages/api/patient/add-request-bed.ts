@@ -18,6 +18,9 @@ export default async function addPatient(
         const {
           patientName,
           patientAddress,
+          patientSubDistrict,
+          patientDistrict,
+          patientProvince,
           patientLocation,
           patientPhoneNumber,
           patientSeverityLabel,
@@ -55,6 +58,9 @@ export default async function addPatient(
           patientName,
           hospitalData[shortestHospitalIndex]._id as string,
           patientAddress,
+          patientSubDistrict,
+          patientDistrict,
+          patientProvince,
           patientLocation,
           patientPhoneNumber,
           "Request",
@@ -62,6 +68,7 @@ export default async function addPatient(
           dateNow,
           patientEmail
         );
+        console.log('addPatient', addPatient)
         res.status(addPatient.http).json(addPatient.data);
         // res.status(200).json({name: "john"});
 

@@ -30,6 +30,9 @@ class Patient {
         patientName: rawPatientData?.patientName,
         patientHospital: hospitalData?.hospitalName,
         patientAddress: rawPatientData?.patientAddress,
+        patientSubDistrict: rawPatientData?.patientSubDistrict,
+        patientDistrict: rawPatientData?.patientDistrict,
+        patientProvince: rawPatientData?.patientProvince,
         patientLocation: rawPatientData?.patientLocation,
         patientPhoneNumber: rawPatientData?.patientPhoneNumber,
         patientStatus: rawPatientData?.patientStatus,
@@ -77,10 +80,14 @@ class Patient {
               patientName: patient?.patientName,
               patientHospital: hospitalData?.hospitalName,
               patientAddress: patient?.patientAddress,
+              patientSubDistrict: patient?.patientSubDistrict,
+              patientDistrict: patient?.patientDistrict,
+              patientProvince: patient?.patientProvince,
               patientLocation: patient?.patientLocation,
               patientPhoneNumber: patient?.patientPhoneNumber,
               patientStatus: patient?.patientStatus,
               patientSeverity: rawServerity?.patientSeverityLabel,
+              patientEmail: patient?.patientEmail,
             },
           ];
           console.log("patientData", patientData);
@@ -105,6 +112,9 @@ class Patient {
     patientName: string,
     patientHospital: string,
     patientAddress: string,
+    patientSubDistrict: string,
+    patientDistrict: string,
+    patientProvince: string,
     patientLocation: any,
     patientPhoneNumber: string,
     patientStatus: string,
@@ -112,11 +122,13 @@ class Patient {
     patientSeverityDateStart: string,
     patientEmail: string
   ) {
-    console.log("patientLocation",patientLocation)
     const newPatientData = {
       patientName: `${patientName}`,
       patientHospital: `${patientHospital}`,
       patientAddress: `${patientAddress}`,
+      patientSubDistrict: `${patientSubDistrict}`,
+      patientDistrict: `${patientDistrict}`,
+      patientProvince: `${patientProvince}`,
       patientLocation: {...patientLocation},
       patientPhoneNumber: `${patientPhoneNumber}`,
       patientStatus: `${patientStatus}`,
