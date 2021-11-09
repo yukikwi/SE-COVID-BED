@@ -8,9 +8,11 @@ import axios from "axios";
 class Patient {
   private database: Database;
   private patientData: IPatient | any;
+  private notification: Notification
 
   constructor() {
     this.database = new Database();
+    this.notification = new Notification()
     this.patientData = {};
   }
 
@@ -167,9 +169,11 @@ class Patient {
     try {
       const patientData = await this.database.approvePatient(id);
       console.log("temp", patientData);
+      //get patient data
+      const fullPatientData = await this.getAPatient(id);
       
       //send email notification to patient
-      await this.notification.sendNotification(id);
+      await this.notification.sendNotification(fullPatientData);
 
       return {
         http: 200,
