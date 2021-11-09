@@ -189,4 +189,13 @@ export default class Database {
     return await ResourceSchemaModel.findByIdAndUpdate(id, newData);
   }
 
+  async dischargePatient(id: string) {
+    //TODO discharge system
+    return await PatientModel.findByIdAndUpdate(
+      id,
+      { patientStatus: "In progress" },
+      { upsert: true }
+    );
+  }
+
 }
