@@ -229,6 +229,25 @@ class Patient {
     
     return(distance[0].index);
   }
+
+  async dischargePatient(id: string) {
+    try {
+      await this.database.dischargePatient(id);
+      return {
+        http: 200,
+        data: {
+          code: "Success to discharge patient",
+        },
+      };
+    } catch (e) {
+      return {
+        http: 400,
+        data: {
+          error: "Fail to discharge patient",
+        },
+      };
+    }
+  }
 }
 
 export default Patient;
