@@ -8,12 +8,14 @@ import { patientModalReducer } from "./addPatientModal/reducers";
 import { resourceModalReducer } from "./addResourceModal/reducers";
 import { ticketModalReducer } from "./ticketModal/reducers";
 import { mapReducer } from "./map/reducers";
+import { dischargeModalReducer } from "./dischargeModal/reducers";
 
 const rootReducer = combineReducers({
 	deleteModalReducer,
 	userReducer,
 	addOrEditModalReducer,
 	approveModalReducer,
+	dischargeModalReducer,
 	patientModalReducer,
 	resourceModalReducer,
 	ticketModalReducer,
