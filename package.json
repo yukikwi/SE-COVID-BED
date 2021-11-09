@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/antd": "^1.0.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/nodemailer": "^6.4.4",
     "@types/react": "17.0.27",
     "autoprefixer": "^10.3.7",
     "eslint": "7.32.0",
