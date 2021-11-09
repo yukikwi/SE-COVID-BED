@@ -55,6 +55,10 @@ export default class Database {
     return await UserModel.findOne(condition).lean();
   }
 
+  async getHospitalStaff(condition = {}){
+    return await UserModel.find({...condition, role: "hospital"}, {_id: 1, username: 1})
+  }
+
   async getHospitals(condition = {}) {
     return await HospitalModel.find(condition).populate("staff", {
       password: 0,
