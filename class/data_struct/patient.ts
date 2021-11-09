@@ -5,6 +5,9 @@ export interface IPatient extends Document {
   patientName: string;
   patientHospital: any;
   patientAddress: string;
+  patientSubDistrict: string;
+  patientDistrict: string;
+  patientProvince: any;
   patientLocation: any;
   patientPhoneNumber: string;
   patientStatus: string;
@@ -15,6 +18,9 @@ export type TPatient = {
   patientName?: string;
   patientHospital?: any;
   patientAddress?: string;
+  patientSubDistrict?: string;
+  patientDistrict?: string;
+  patientProvince?: any;
   patientLocation?: any;
   patientPhoneNumber?: string;
   patientStatus?: string;

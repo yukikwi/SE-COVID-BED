@@ -50,6 +50,9 @@ function ModalTicket({}: Props): ReactElement {
         {
           patientName: formData.patientName,
           patientAddress: formData.patientAddress,
+          patientSubDistrict: formData.patientSubDistrict,
+          patientDistrict: formData.patientDistrict,
+          patientProvince: formData.patientProvince,
           patientLocation: {
             lat: loc.lat,
             long: loc.long,
@@ -125,9 +128,9 @@ function ModalTicket({}: Props): ReactElement {
       })
       console.log(tambonDataResult)
       form.setFieldsValue({
-        subdistrict: data[0],
-        district: data[1],
-        province: data[2]
+        patientSubDistrict: data[0],
+        patientDistrict: data[1],
+        patientProvince: data[2]
       })
 
       // update Map loc
@@ -188,7 +191,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="Sub District"
-          name="subdistrict"
+          name="patientSubDistrict"
           rules={[
             { required: true, message: "Please input your sub district!" },
           ]}
@@ -202,7 +205,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="District"
-          name="district"
+          name="patientDistrict"
           rules={[
             { required: true, message: "Please input your district!" },
           ]}
@@ -212,7 +215,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="Province"
-          name="province"
+          name="patientProvince"
           rules={[
             { required: true, message: "Please input your province!" },
           ]}
