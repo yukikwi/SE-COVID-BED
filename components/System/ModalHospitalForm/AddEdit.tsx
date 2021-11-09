@@ -6,6 +6,7 @@ import { IHospital } from "../../../class/data_struct/hospital";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
+import { getMapState } from '../../../store/map/selectors';
 import { setLoc } from "../../../store/map/actions";
 import { TambonType } from '../../TamBonType'
 import tambon from '../../../public/location.json';
@@ -26,7 +27,9 @@ function AddEditForm(props: Props): ReactElement {
   const [preLat, setPreLat] = useState(0)
   const [preLong, setPreLong] = useState(0)
   const tambonData:Array<TambonType> | any = tambon["TAMBON"]
-  
+  const loc = useSelector(getMapState)
+  const [isAvailable, setIsAvaliable] = useState<boolean>()
+
   // UI - user list
   const setUserData = () => {
     setDummyUser([
@@ -55,22 +58,16 @@ function AddEditForm(props: Props): ReactElement {
   const { hospitalData, mode } = props;
   const [form] = Form.useForm();
   const { show } = useSelector(getAddOrEditModalState);
-  let formData: IHospital | any = {};
 
   console.log("hospitalData", hospitalData.isAvailable);
 
-  // get Changed value
-  const updateHospitalData = (changed: any) => {
-    formData = { ...formData, ...changed };
-    console.log('updateHospitalData', formData);
-  };
-
   // update status toggle value on change
   const updateHospitalStatus = (status: boolean) => {
-    updateHospitalData({ isAvailable: status });
+    setIsAvaliable(status)
   };
 
   const handleAdd = async () => {
+    let formData = form.getFieldsValue()
     try {
       const res = (await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/add-hospital`,
@@ -79,8 +76,11 @@ function AddEditForm(props: Props): ReactElement {
           hospitalPhoneNumber: formData.hospitalPhoneNumber,
           hospitalConvince: formData.hospitalConvince,
           hospitalAddress: formData.hospitalAddress,
+          hospitalLocationLat: loc.lat,
+          hospitalLocationLong: loc.long,
           hospitalStatus: formData.hospitalPhoneNumber,
           staff: formData.staff,
+          isAvailable
         }
       )) as any;
       notification.open({
@@ -101,11 +101,15 @@ function AddEditForm(props: Props): ReactElement {
 
   const handleEdit = async () => {
     try {
+      let formData = form.getFieldsValue()
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
         {
           id: hospitalData._id,
-          newData: formData,
+          newData: {
+            ...formData, 
+            isAvailable
+          },
         }
       );
       notification.open({
@@ -191,7 +195,6 @@ function AddEditForm(props: Props): ReactElement {
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       initialValues={hospitalData}
-      onValuesChange={updateHospitalData}
       autoComplete="off"
       form={form}
       onFinish={mode === "Add" ? handleAdd : handleEdit}
@@ -276,7 +279,6 @@ function AddEditForm(props: Props): ReactElement {
         <HospitalStatus
           hospitalStatus={hospitalData.isAvailable}
           mode={mode}
-          // hospitalStatus="open"
           updateHospitalStatus={updateHospitalStatus}
         />
       </Form.Item>

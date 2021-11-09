@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, notification, Radio, Select } from "antd";
+import { AutoComplete, Button, Form, Input, Modal, notification, Radio, Select } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPatientModalState } from "../../store/addPatientModal/selectors";
@@ -6,6 +6,7 @@ import { hidePatientModal } from "../../store/addPatientModal/actions";
 import Status from "./Status";
 import axios from "axios";
 import { getUserState } from "../../store/user/selectors";
+import tambon from '../../public/location.json';
 
 interface Props {
   patient: any;
@@ -16,6 +17,21 @@ ModalAddPatient.defaultProps = {
   isView: false,
 };
 
+type TambonType = {
+  AD_LEVEL: string;
+    TA_ID: string;
+    TAMBON_T: string;
+    TAMBON_E: string;
+    AM_ID: string;
+    AMPHOE_E: string;
+    CH_ID: string;
+    CHANGWAT_T: string;
+    CHANGWAT_E: string;
+    LAT: string;
+    LONG: string;
+    AMPHOE_T?: undefined;
+}
+
 function ModalAddPatient(props: Props): ReactElement {
   const show = useSelector(getPatientModalState);
   const [mode, setMode] = useState("Add");
@@ -25,6 +41,10 @@ function ModalAddPatient(props: Props): ReactElement {
   const userData = useSelector(getUserState);
   const [isDataChange, setIsDataChange] = useState(false);
   const [isSeverityChange, setIsSeverityChange] = useState(false);
+  const [options, setOptions] = useState<{ value: string, label: JSX.Element }[]>([]);
+  const tambonData:Array<TambonType> | any = tambon["TAMBON"]
+
+
 
   const handleCancel = () => {
     dispatch(hidePatientModal());
@@ -71,6 +91,7 @@ function ModalAddPatient(props: Props): ReactElement {
             patientPhoneNumber: formData.patientPhoneNumber,
             patientStatus: formData.patientStatus,
             patientSeverityLabel: formData.patientSeverityLabel,
+            patientEmail: formData.patientEmail,
           }
         );
 
@@ -148,6 +169,56 @@ function ModalAddPatient(props: Props): ReactElement {
     }
   };
 
+  const onSearch = (searchText: string) => {
+    const tambonDataResult = tambonData.filter((item:TambonType) => {
+      return item.TAMBON_T.includes(searchText)
+    } )
+    
+    let tambonUI = []
+    for(let i = 0; i < tambonDataResult.length; i++){
+      tambonUI.push({
+        value: `${tambonDataResult[i].TAMBON_T} - ${tambonDataResult[i].AMPHOE_T} - ${tambonDataResult[i].CHANGWAT_T}`,
+        label: (
+          <div className="tw-flex tw-justify-between">
+            <span>
+              {tambonDataResult[i].TAMBON_T} - {tambonDataResult[i].AMPHOE_T} - {tambonDataResult[i].CHANGWAT_T}
+            </span>
+          </div>
+        ),
+      })
+    }
+    if(searchText.length >= 2){
+      setOptions(
+        !searchText ? [{
+          value: '-1',
+          label: (
+            <div className="tw-flex tw-justify-between">
+            <span>
+              Please enter more than 2 characters.
+            </span>
+          </div>
+          )
+        }] : tambonUI,
+      );
+    }
+  };
+
+  const onSelect = (value: string) => {
+    const data = value.split(' - ')
+    console.log(data)
+    if(value != '-1'){
+      const tambonDataResult = tambonData.filter((x:any) => {
+        return x.TAMBON_T === data[0] && x.AMPHOE_T === data[1] && x.CHANGWAT_T === data[2]
+      })
+      console.log(tambonDataResult)
+      form.setFieldsValue({
+        subdistrict: data[0],
+        district: data[1],
+        province: data[2]
+      })
+    }
+  };
+
   return (
     <Modal
       title={`${mode} Patient Information`}
@@ -199,6 +270,41 @@ function ModalAddPatient(props: Props): ReactElement {
         </Form.Item>
 
         <Form.Item
+          label="Sub District"
+          name="subdistrict"
+          rules={[
+            { required: true, message: "Please input your sub district!" },
+          ]}
+        >
+          <AutoComplete
+            options={options}
+            onSearch={onSearch}
+            onSelect={onSelect}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="District"
+          name="district"
+          rules={[
+            { required: true, message: "Please input your district!" },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
+
+        <Form.Item
+          label="Province"
+          name="province"
+          rules={[
+            { required: true, message: "Please input your province!" },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
+
+
+        <Form.Item
           label="Phone Number"
           name="patientPhoneNumber"
           rules={[
@@ -223,6 +329,16 @@ function ModalAddPatient(props: Props): ReactElement {
             <Option value="Yellow">Yellow</Option>
             <Option value="Red">Red</Option>
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          label="Email"
+          name="patientEmail"
+          rules={[
+            { required: true, message: "Please input your email!" },
+          ]}
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item

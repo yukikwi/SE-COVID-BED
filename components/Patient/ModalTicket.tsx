@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Form, Input, Modal, Select } from 'antd'
+import { AutoComplete, Button, Form, Input, Modal, notification, Select } from 'antd'
 import React, { ReactElement, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { hideTicketModal } from '../../store/ticketModal/actions';
@@ -7,6 +7,8 @@ import tambon from '../../public/location.json';
 import Map from '../Map/Map'
 import { getMapState } from '../../store/map/selectors';
 import { setLoc } from '../../store/map/actions';
+import axios from "axios";
+
 interface Props {
   
 }
@@ -38,9 +40,41 @@ function ModalTicket({}: Props): ReactElement {
   // antd component
   const { Option } = Select;
 
-  const handleApprove = () => {
+  const handleApprove = async (formData: any) => {
     // bara submit
-    console.log(loc)
+    try {
+      console.log("formData", formData);
+      
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/patient/add-request-bed`,
+        {
+          patientName: formData.patientName,
+          patientAddress: formData.patientAddress,
+          patientLocation: {
+            lat: loc.lat,
+            long: loc.long,
+          },
+          patientPhoneNumber: formData.patientPhoneNumber,
+          patientSeverityLabel: formData.patientSeverityLabel,
+          patientEmail: formData.patientEmail,
+        }
+      );
+
+      // Notification
+      notification.open({
+        message: "Success",
+        description: "Add patient information successful",
+      });
+
+      // Close this modal
+      // handleCancel();
+    } catch (error) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    }
   }
 
   const handleCancel = () => {
@@ -134,7 +168,7 @@ function ModalTicket({}: Props): ReactElement {
       >
         <Form.Item
           label="Name"
-          name="name"
+          name="patientName"
           rules={[
             { required: true, message: "Please input your name!" },
           ]}
@@ -144,7 +178,7 @@ function ModalTicket({}: Props): ReactElement {
         
         <Form.Item
           label="Address"
-          name="address"
+          name="patientAddress"
           rules={[
             { required: true, message: "Please input your address!" },
           ]}
@@ -188,7 +222,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="Phone number"
-          name="phonenumber"
+          name="patientPhoneNumber"
           rules={[
             { required: true, message: "Please input your phone number!" },
           ]}
@@ -198,7 +232,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="Severity Level"
-          name="patientSeverity"
+          name="patientSeverityLabel"
           rules={[
             { required: true, message: "Please specific severity Level" },
           ]}
@@ -212,7 +246,7 @@ function ModalTicket({}: Props): ReactElement {
 
         <Form.Item
           label="Email"
-          name="email"
+          name="patientEmail"
           rules={[
             { required: true, message: "Please input your email!" },
           ]}

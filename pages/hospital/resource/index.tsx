@@ -139,7 +139,6 @@ const HospitalResourceIndex: NextPage = () => {
       let rawResourceData: Array<TResource> = apiResonse.data.map(
         (x: TResource, i: Number) => ({ ...x, key: i })
       );
-
       setTableData(rawResourceData);
     } catch (error) {
       notification.open({
