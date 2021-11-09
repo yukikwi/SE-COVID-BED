@@ -7,13 +7,11 @@ import axios from "axios";
 
 class Patient {
   private database: Database;
-  private patient: IPatient | any;
-  private notification: Notification;
+  private patientData: IPatient | any;
 
   constructor() {
     this.database = new Database();
-    this.notification = new Notification();
-    this.patient = {};
+    this.patientData = {};
   }
 
   async getAPatient(id: string) {
@@ -39,6 +37,7 @@ class Patient {
         patientLocation: rawPatientData?.patientLocation,
         patientPhoneNumber: rawPatientData?.patientPhoneNumber,
         patientStatus: rawPatientData?.patientStatus,
+        patientEmail: rawPatientData?.patientEmail,
         patientSeverity: rawServerity?.patientSeverityLabel,
       };
       console.log("rawPatientData", rawPatientData);
@@ -170,7 +169,7 @@ class Patient {
       console.log("temp", patientData);
       
       //send email notification to patient
-      await this.notification.sendNotification(patientData?.patientEmail);
+      await this.notification.sendNotification(id);
 
       return {
         http: 200,
