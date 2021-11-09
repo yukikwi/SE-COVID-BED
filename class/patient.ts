@@ -173,8 +173,9 @@ class Patient {
       const fullPatientData = await this.getAPatient(id);
       
       //send email notification to patient
-      await this.notification.sendNotification(fullPatientData);
-
+      const notificationRes = await this.notification.sendNotification(fullPatientData);
+      console.log("notificationRes", notificationRes);
+      
       return {
         http: 200,
         data: {

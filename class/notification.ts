@@ -4,8 +4,8 @@ import Patient from './patient';
 
 import { IPatient, ISeverity } from "./data_struct/patient";
 
-import nodemailer from "nodemailer";
-// const nodemailer = require("nodemailer");
+// import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
 class Notification{
 
@@ -13,13 +13,16 @@ class Notification{
 
     //Destructuring patientData
     const {patientName, patientHospital, patientAddress, patientSubDistrict, patientProvince, patientPhoneNumber, patientEmail, patientSeverity} = patientData.data as any;
-
+    
     // check is mail setup?
     if(process.env.EMAIL_SERVER_HOST && process.env.EMAIL_SERVER_PORT && process.env.EMAIL_SERVER_USER && process.env.EMAIL_SERVER_PASSWORD){
     //config email
       const transport = nodemailer.createTransport({
-        host: 'bara',
+        host: process.env.EMAIL_SERVER_USER,
         port: process.env.EMAIL_SERVER_PORT,
+        newline: 'unix',
+        path: '/usr/sbin/sendmail',
+        sendmail: true,
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -87,13 +90,15 @@ class Notification{
       }
 
       //send email
-      transport.sendMail(mailOptions, async function (error: any, info: any) {
+      await transport.sendMail(mailOptions, async function (error: any, info: any) {
         if(error) {
+          console.log("send email failed", error);
           return {
             http: 400,
             data: "Fail to send email",
           };
         } else {
+          console.log("send email", info);
           return {
             http: 200,
             data: "Send email successfully",
