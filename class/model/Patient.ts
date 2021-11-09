@@ -12,6 +12,15 @@ const PatientSchema: Schema = new Schema({
   patientAddress: {
     type: String,
   },
+  patientSubDistrict: {
+    type: String,
+  },
+  patientDistrict: {
+    type: String,
+  },
+  patientProvince: {
+    type: String,
+  },
   patientLocation: {
     type: Object,
   },
