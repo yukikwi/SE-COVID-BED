@@ -5,16 +5,20 @@ export interface IPatient extends Document {
   patientName: string;
   patientHospital: any;
   patientAddress: string;
+  patientLocation: any;
   patientPhoneNumber: string;
   patientStatus: string;
+  patientEmail: string;
 }
 
 export type TPatient = {
   patientName?: string;
   patientHospital?: any;
   patientAddress?: string;
+  patientLocation?: any;
   patientPhoneNumber?: string;
   patientStatus?: string;
+  patientEmail?: string;
 };
 
 export interface ISeverity extends Document {
@@ -30,4 +34,3 @@ export type TSeverity = {
   patientSeverityDateEnd?: string;
   patient?: any;
 };
-

@@ -28,6 +28,7 @@ class Patient {
         patientName: rawPatientData?.patientName,
         patientHospital: hospitalData?.hospitalName,
         patientAddress: rawPatientData?.patientAddress,
+        patientLocation: rawPatientData?.patientLocation,
         patientPhoneNumber: rawPatientData?.patientPhoneNumber,
         patientStatus: rawPatientData?.patientStatus,
         patientSeverity: rawServerity?.patientSeverityLabel,
@@ -74,6 +75,7 @@ class Patient {
               patientName: patient?.patientName,
               patientHospital: hospitalData?.hospitalName,
               patientAddress: patient?.patientAddress,
+              patientLocation: patient?.patientLocation,
               patientPhoneNumber: patient?.patientPhoneNumber,
               patientStatus: patient?.patientStatus,
               patientSeverity: rawServerity?.patientSeverityLabel,
@@ -101,17 +103,22 @@ class Patient {
     patientName: string,
     patientHospital: string,
     patientAddress: string,
+    patientLocation: any,
     patientPhoneNumber: string,
     patientStatus: string,
     patientSeverityLabel: string,
-    patientSeverityDateStart: string
+    patientSeverityDateStart: string,
+    patientEmail: string
   ) {
+    console.log("patientLocation",patientLocation)
     const newPatientData = {
       patientName: `${patientName}`,
       patientHospital: `${patientHospital}`,
       patientAddress: `${patientAddress}`,
+      patientLocation: {...patientLocation},
       patientPhoneNumber: `${patientPhoneNumber}`,
       patientStatus: `${patientStatus}`,
+      patientEmail: `${patientEmail}`,
     };
     if (newPatientData !== null) {
       const patientId = await this.database.addPatient(newPatientData);

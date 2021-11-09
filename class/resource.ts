@@ -52,7 +52,7 @@ class Resource {
   async getResource(hospitalId: string) {
     try {
       console.log("hospitalId", hospitalId);
-      const rawResource = await this.database.getResource(hospitalId);
+      const rawResource = await this.database.getResource({resourceHospital: hospitalId});
 
       console.log("rawResource", rawResource);
 

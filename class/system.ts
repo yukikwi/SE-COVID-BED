@@ -15,8 +15,8 @@ class System {
     hospitalPhoneNumber: String,
     hospitalConvince: String,
     hospitalAddress: String,
-    hospitalLocationLat: String,
-    hospitalLocationLong: String,
+    hospitalLocationLat: Number,
+    hospitalLocationLong: Number,
     staff: String
   ) {
     this.newHospitalData = {
@@ -25,8 +25,8 @@ class System {
       hospitalConvince: `${hospitalConvince}`,
       hospitalAddress: `${hospitalAddress}`,
       hospitalLocation: {
-        lat: `${hospitalLocationLat}`,
-        long: `${hospitalLocationLong}`,
+        lat: hospitalLocationLat,
+        long: hospitalLocationLong,
       },
       isAvailable: true,
       isDelete: false,

@@ -14,25 +14,29 @@ export default async function addPatient(
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
-        const { 
+        const {
           patientName,
           patientHospital,
           patientAddress,
-          patientPhoneNumber,
-          patientStatus,
-          patientSeverityLabel
-        } = req.body;
-        
-        const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
-
-        const addPatient = await patient.addPatient( 
-          patientName,
-          patientHospital,
-          patientAddress,
+          patientLocation,
           patientPhoneNumber,
           patientStatus,
           patientSeverityLabel,
-          dateNow
+          patientEmail,
+        } = req.body;
+
+        const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
+
+        const addPatient = await patient.addPatient(
+          patientName,
+          patientHospital,
+          patientAddress,
+          patientLocation,
+          patientPhoneNumber,
+          patientStatus,
+          patientSeverityLabel,
+          dateNow,
+          patientEmail
         );
         res.status(addPatient.http).json(addPatient.data);
       } else {

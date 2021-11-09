@@ -7,15 +7,21 @@ const PatientSchema: Schema = new Schema({
   },
   patientHospital: {
     type: Schema.Types.ObjectId,
-    ref: 'Hospital'
+    ref: "Hospital",
   },
   patientAddress: {
     type: String,
+  },
+  patientLocation: {
+    type: Object,
   },
   patientPhoneNumber: {
     type: String,
   },
   patientStatus: {
+    type: String,
+  },
+  patientEmail: {
     type: String,
   },
 });
