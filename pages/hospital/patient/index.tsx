@@ -165,6 +165,7 @@ const HospitalResourceIndex: NextPage = () => {
 
       setTableData(rawPatientData);
     } catch (error) {
+      
       notification.open({
         message: "Error",
         description:
