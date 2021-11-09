@@ -49,7 +49,7 @@ function ModalDelete(props: Props): ReactElement {
       centered
     >
       <p>
-        click &quot;Confirm&quot; if you’re sure that you want to remove
+        click "Confirm" if you’re sure that you want to remove
         <span className="tw-font-bold"> {hospital} </span>
         , if not click cancel
       </p>
