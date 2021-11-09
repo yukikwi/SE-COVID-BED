@@ -1,6 +1,8 @@
 import { TimePicker } from "antd";
 import Database from "./database";
 import { IPatient, ISeverity } from "./data_struct/patient";
+import { IHospital } from "./data_struct/hospital";
+import axios from "axios";
 
 class Patient {
   private database: Database;
@@ -205,6 +207,27 @@ class Patient {
         },
       };
     }
+  }
+
+  async decisionHospital(hospitalData: IHospital[], patientLocation: any) {
+    const hospitalLocation = hospitalData.map((hospital: any) => {
+      return (
+        `${hospital.hospitalLocation?.lat}, ${hospital.hospitalLocation?.long}`
+    )})        
+    console.log("hospitalLocation", hospitalLocation);
+    const destinationLocation = hospitalLocation.join('|');
+    const originLocation = `${patientLocation.lat}, ${patientLocation.long}`
+    console.log("destinationLocation", destinationLocation);
+    
+    const result = await axios.get(`${process.env.NEXT_PUBLIC_GOOGLE_API}/json?destinations=${destinationLocation}&origins=${originLocation}&key=${process.env.NEXT_PUBLIC_GOOGLE_KEY}`) as any
+    const distance = result.data.rows[0].elements.map((item: any, i: number) => {
+      return({...item, index: i})
+    })
+    distance.sort((a: any, b: any) => {
+      return(a.distance.value - b.distance.value)
+    })
+    
+    return(distance[0].index);
   }
 }
 
