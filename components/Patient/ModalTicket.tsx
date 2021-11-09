@@ -25,7 +25,6 @@ type TambonType = {
     LONG: string;
     AMPHOE_T?: undefined;
 }
-
 function ModalTicket({}: Props): ReactElement {
   const dispatch = useDispatch();
   const show = useSelector(getTicketModalState);
@@ -220,7 +219,6 @@ function ModalTicket({}: Props): ReactElement {
         >
           <Input />
         </Form.Item>
-
 
         <Map preLat={preLat} preLong={preLong} />
 
