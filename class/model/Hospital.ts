@@ -14,6 +14,15 @@ const HospitalSchema: Schema = new Schema({
   hospitalAddress: {
     type: String,
   },
+  hospitalSubDistrict: {
+    type: String,
+  },
+  hospitalDistrict: {
+    type: String,
+  },
+  hospitalProvince: {
+    type: String,
+  },
   hospitalLocation: {
     type: Object,
   },

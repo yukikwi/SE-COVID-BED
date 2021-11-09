@@ -30,27 +30,12 @@ function AddEditForm(props: Props): ReactElement {
   const loc = useSelector(getMapState)
   const [isAvailable, setIsAvaliable] = useState<boolean>()
 
-  // UI - user list
-  const setUserData = () => {
-    setDummyUser([
-      {
-        _id: "615d89bf861949c6324f57ae",
-        username: "bara1",
-      },
-      {
-        _id: "4321",
-        username: "bara2",
-      },
-      {
-        _id: "1111",
-        username: "bara3",
-      },
-      {
-        _id: "616cff05819a0b290387a93f",
-        username: "capybaraHospital",
-      },
-    ]);
+  // Fetch Data
+  const setUserData = async () => {
+    const userList = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/get-hospital-staff`) as any
+    setDummyUser(userList.data.data);
   };
+
   useEffect(() => {
     setUserData();
   }, []);
@@ -61,7 +46,7 @@ function AddEditForm(props: Props): ReactElement {
 
   console.log("hospitalData", hospitalData.isAvailable);
 
-  // update status toggle value on change
+  // Event handler
   const updateHospitalStatus = (status: boolean) => {
     setIsAvaliable(status)
   };
@@ -75,6 +60,9 @@ function AddEditForm(props: Props): ReactElement {
           hospitalName: formData.hospitalName,
           hospitalPhoneNumber: formData.hospitalPhoneNumber,
           hospitalConvince: formData.hospitalConvince,
+          hospitalSubDistrict: formData.hospitalSubDistrict,
+          hospitalDistrict: formData.hospitalDistrict,
+          hospitalProvince: formData.hospitalProvince,
           hospitalAddress: formData.hospitalAddress,
           hospitalLocationLat: loc.lat,
           hospitalLocationLong: loc.long,
@@ -158,9 +146,9 @@ function AddEditForm(props: Props): ReactElement {
       })
       console.log(tambonDataResult)
       form.setFieldsValue({
-        subdistrict: data[0],
-        district: data[1],
-        province: data[2]
+        hospitalSubDistrict: data[0],
+        hospitalDistrict: data[1],
+        hospitalProvince: data[2]
       })
 
       // update Map loc
@@ -217,7 +205,7 @@ function AddEditForm(props: Props): ReactElement {
 
       <Form.Item
           label="Sub District"
-          name="subdistrict"
+          name="hospitalSubDistrict"
           rules={[
             { required: true, message: "Please input your sub district!" },
           ]}
@@ -231,7 +219,7 @@ function AddEditForm(props: Props): ReactElement {
 
         <Form.Item
           label="District"
-          name="district"
+          name="hospitalDistrict"
           rules={[
             { required: true, message: "Please input your district!" },
           ]}
@@ -241,7 +229,7 @@ function AddEditForm(props: Props): ReactElement {
 
         <Form.Item
           label="Province"
-          name="province"
+          name="hospitalProvince"
           rules={[
             { required: true, message: "Please input your province!" },
           ]}
