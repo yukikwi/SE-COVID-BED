@@ -167,13 +167,12 @@ class Patient {
 
   async approvePatient(id: string) {
     try {
-      const patientData = await this.database.approvePatient(id);
-      console.log("temp", patientData);
+      await this.database.approvePatient(id);
       //get patient data
       const fullPatientData = await this.getAPatient(id);
       
       //send email notification to patient
-      const notificationRes = await this.notification.sendNotification(fullPatientData);
+      const notificationRes = await this.notification.sendApproveNotification(fullPatientData);
       console.log("notificationRes", notificationRes);
       
       return {
@@ -257,6 +256,14 @@ class Patient {
   async dischargePatient(id: string) {
     try {
       await this.database.dischargePatient(id);
+
+      //get patient data
+      const fullPatientData = await this.getAPatient(id);
+      
+      //send email notification to patient
+      const notificationRes = await this.notification.sendDischargeNotification(fullPatientData);
+      console.log("notificationRes", notificationRes);
+      
       return {
         http: 200,
         data: {
