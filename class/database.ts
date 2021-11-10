@@ -190,10 +190,10 @@ export default class Database {
   }
 
   async dischargePatient(id: string) {
-    //TODO discharge system
+    //change patient status to Discharged
     return await PatientModel.findByIdAndUpdate(
       id,
-      { patientStatus: "In progress" },
+      { patientStatus: "Discharged" },
       { upsert: true }
     );
   }
