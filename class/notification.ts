@@ -1,9 +1,3 @@
-import React from 'react'
-import Database from "./database";
-import Patient from './patient';
-
-import { IPatient, ISeverity } from "./data_struct/patient";
-
 // import nodemailer from "nodemailer";
 const nodemailer = require("nodemailer");
 
@@ -18,20 +12,21 @@ class Notification{
     if(process.env.EMAIL_SERVER_HOST && process.env.EMAIL_SERVER_PORT && process.env.EMAIL_SERVER_USER && process.env.EMAIL_SERVER_PASSWORD){
     //config email
       const transport = nodemailer.createTransport({
-        host: process.env.EMAIL_SERVER_USER,
+        host: process.env.EMAIL_SERVER_HOST,
         port: process.env.EMAIL_SERVER_PORT,
-        newline: 'unix',
-        path: '/usr/sbin/sendmail',
-        sendmail: true,
+        secure: false,
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
         },
+        tls: {
+          rejectUnauthorized: false
+        }
       });
 
       //content email
       const mailOptions = {
-        from: process.env.EMAIL_SERVER_USER,
+        from: `"Se Covid-19 Bed" <${process.env.EMAIL_SERVER_USER}>`,
         to: patientEmail, // FIXME: patient email
         subject: "Your bed request has been approved",
         html: `<div
@@ -91,6 +86,7 @@ class Notification{
 
       //send email
       await transport.sendMail(mailOptions, async function (error: any, info: any) {
+        transport.close();
         if(error) {
           console.log("send email failed", error);
           return {
