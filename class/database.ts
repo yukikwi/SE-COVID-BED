@@ -191,11 +191,15 @@ export default class Database {
 
   async dischargePatient(id: string) {
     //change patient status to Discharged
-    return await PatientModel.findByIdAndUpdate(
-      id,
-      { patientStatus: "Discharged" },
-      { upsert: true }
-    );
+    try{
+      return await PatientModel.findByIdAndUpdate(
+        id,
+        { patientStatus: "Discharged" },
+        { upsert: false }
+      );
+    }catch(e){
+      console.log("err",e);
+    }
+    
   }
-
 }
