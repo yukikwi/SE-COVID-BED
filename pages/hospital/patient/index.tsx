@@ -108,17 +108,21 @@ const HospitalResourceIndex: NextPage = () => {
               <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
-
-          <Tooltip title="Edit">
-            <a
-              className="hover:tw-text-blue-500"
-              onClick={() => {
-                showAddEditModal(record);
-              }}
-            >
-              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
+          { record.patientStatus !== 'Request'?
+            <Tooltip title="Edit">
+              <a
+                className="hover:tw-text-blue-500"
+                onClick={() => {
+                  showAddEditModal(record);
+                }}
+              >
+                <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+              </a>
+            </Tooltip>
+            :
+            <></>
+          }
+          
         </div>
       ),
     },
