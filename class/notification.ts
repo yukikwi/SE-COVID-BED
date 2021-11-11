@@ -51,7 +51,7 @@ class Notification{
         padding: 2rem;
         "
     >
-        <h2 style="text-align: center;">Your bed request has been approved</h2>
+    <div style="text-align: center; font-weight: normal; font-size: 24;">Your bed request has been <span style="font-weight: 900">approved</span></div>
         <p style="line-height: 1.5;">
             Bed request information <br />
             <ul>
@@ -63,10 +63,10 @@ class Notification{
                 <li>Serverity level:    ${patientSeverity}</li>
             </ul>
         </p>
-        <h2 style="text-align: center;">
-            You've been confirmed by ${patientHospital}<br />
+        <div style="text-align: center; font-weight: normal; font-size: 24;">
+            You've been confirmed by <span style="font-weight: 900">${patientHospital}</span><br />
             Please prepare and wait for the hospital staff to contact you.
-        </h2>
+        </div>
     </div>
     <div
         style="
@@ -152,7 +152,7 @@ class Notification{
         padding: 2rem;
         "
     >
-        <h2 style="text-align: center;">Your bed request has been discharged</h2>
+    <div style="text-align: center; font-weight: normal; font-size: 24;">Your bed request has been <span style="font-weight: 900">discharged</span></div>
         <p style="line-height: 1.5;">
             Bed request information <br />
             <ul>
@@ -164,10 +164,10 @@ class Notification{
                 <li>Serverity level:    ${patientSeverity}</li>
             </ul>
         </p>
-        <h2 style="text-align: center;">
-            You've been discharged by ${patientHospital}<br />
+        <div style="text-align: center; font-weight: normal; font-size: 24;">
+            You've been discharged by <span style="font-weight: 900">${patientHospital}</span><br />
             Please prepare and wait for the hospital staff to contact you.
-        </h2>
+        </div>
     </div>
     <div
         style="
