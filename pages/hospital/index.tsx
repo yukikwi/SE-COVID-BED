@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../components/Layout/Hospital";
-import { List, Switch } from "antd";
+import { List, notification, Switch } from "antd";
 import axios from "axios";
 import { getUserState } from "../../store/user/selectors";
 import { useSelector } from 'react-redux';
@@ -33,6 +33,7 @@ const HospitalIndex: NextPage = () => {
 
   // state part
   const [hospitalInfo, setHospitalInfo] = useState(data)
+  const [loading, setLoading] = useState(true)
   const userData = useSelector(getUserState);
 
   // fetch hospital information
@@ -61,21 +62,51 @@ const HospitalIndex: NextPage = () => {
         {
           type: "switch",
           title: "Status",
-          data: hospitalData.data.staff.isAvailable? 'avaliable':'unavaliable',
+          data: hospitalData.data.isAvailable? 'avaliable':'unavaliable',
         },
       ]
     )
+  }
+
+  const handleSwitch = async (event: any) => {
+    try{
+      setLoading(true);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
+        {
+          id: userData.userinfo.hospitalId,
+          newData: {
+            isAvailable: event
+          },
+        }
+      )
+      await fetchApi()
+      notification.open({
+        message: "Success",
+        description: "Change hospital status successful",
+      });
+    } catch (err) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    } finally {
+      setLoading(false);
+    }
+    
   }
 
   // onMount
   useEffect(() => {
     console.log('baraEffect')
     fetchApi()
+    setLoading(false);
   }, [])
 
   return (
     <LayoutHospital
-      title="Capybara Hospital : Info"
+      title="Capybara Hospital : Information"
       button={<></>}
     >
       <List
@@ -89,7 +120,9 @@ const HospitalIndex: NextPage = () => {
                 <Switch
                   checkedChildren="เปิด"
                   unCheckedChildren="ปิด"
-                  defaultChecked={(item.data === 'avaliable')? true: false}
+                  checked={(item.data === 'avaliable')? true: false}
+                  onClick={handleSwitch}
+                  loading={loading}
                 />
               ) : (
                 item.data
