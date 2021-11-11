@@ -12,20 +12,7 @@ const Login: NextPage = () => {
 
   // check is already signin?
   const userData = useSelector(getUserState);
-  let Content = () => {
-    if(userData.loadStatus === false || userData.login === true){
-      return(
-      <div className="tw-w-full tw-flex tw-justify-center tw-items-center">
-        <div>
-          <Spin style={{height: "50px"}} indicator={<LoadingOutlined className="tw-text-charcoal" style={{ fontSize: 50 }} spin />} />
-        </div>
-      </div>
-      )
-    }
-    else{
-      return <LoginForm />
-    }
-  }
+
   useEffect(() => {
     // check api fetch
     if(userData.loadStatus === true){
@@ -51,7 +38,16 @@ const Login: NextPage = () => {
             <div className="tw-w-8 tw-h-8 tw-rounded-full tw-bg-dark-green" />
           </div>
           <div className="tw-w-5/6 md:tw-w-1/2 tw-mx-auto">
-            <Content />
+            {
+              userData.loadStatus === true?
+              <LoginForm />
+              :
+              <div className="tw-w-full tw-flex tw-justify-center tw-items-center">
+                <div>
+                  <Spin style={{height: "50px"}} indicator={<LoadingOutlined className="tw-text-charcoal" style={{ fontSize: 50 }} spin />} />
+                </div>
+              </div>
+            }
           </div>
         </div>
       </div>
