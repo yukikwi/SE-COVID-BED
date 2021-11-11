@@ -129,13 +129,13 @@ class Notification{
       const mailOptions = {
         from: `"Se Covid-19 Bed" <${process.env.EMAIL_SERVER_USER}>`,
         to: patientEmail, // FIXME: patient email
-        subject: "Sorry, Your bed request has been discharge",// FIXME: edit content
+        subject: "Sorry, Your bed request has been discharge",
         html: `<div
         style="
         margin: 0;
-        background: #2F3E46;
+        background: #462F2F;
         width: 100%;
-        color: #84A98C;
+        color: #A98484;
         text-align: center;
         padding-top: 1rem;
         padding-bottom: 1rem;
@@ -147,12 +147,12 @@ class Notification{
     <div
         style="
         margin: 0;
-        background: #84A98C;
-        color: #354F52;
+        background: #A98484;
+        color: #462F2F;
         padding: 2rem;
         "
     >
-        <h2 style="text-align: center;">Your bed request has been approved</h2>
+        <h2 style="text-align: center;">Your bed request has been discharged</h2>
         <p style="line-height: 1.5;">
             Bed request information <br />
             <ul>
@@ -165,16 +165,16 @@ class Notification{
             </ul>
         </p>
         <h2 style="text-align: center;">
-            You've been confirmed by ${patientHospital}<br />
+            You've been discharged by ${patientHospital}<br />
             Please prepare and wait for the hospital staff to contact you.
         </h2>
     </div>
     <div
         style="
         margin: 0;
-        background: #2F3E46;
+        background: #462F2F;
         width: 100%;
-        color: #84A98C;
+        color: #A98484;
         text-align: center;
         padding-top: 1rem;
         padding-bottom: 1rem;
