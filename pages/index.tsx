@@ -10,6 +10,7 @@ const Home: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  // event handle section
   const handleClickPatient = () => {
     dispatch(showTicketModal())
   };
@@ -23,11 +24,13 @@ const Home: NextPage = () => {
       <Logo />
       <div className="tw-flex tw-justify-center tw-flex-col md:tw-flex-row">
         <PositiveButton
+          id="patient"
           className="md:tw-mr-5 tw-w-full md:tw-w-2/5"
           onClick={handleClickPatient}
           text="Patient"
         />
         <PositiveButton
+          id="staff"
           className="tw-mt-3 md:tw-mt-0 tw-w-full md:tw-w-2/5"
           onClick={handleClickGoToLogin}
           text="Staff"
