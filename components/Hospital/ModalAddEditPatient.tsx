@@ -88,6 +88,9 @@ function ModalAddPatient(props: Props): ReactElement {
             patientName: formData.patientName,
             patientHospital: hospitalId,
             patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
             patientPhoneNumber: formData.patientPhoneNumber,
             patientStatus: formData.patientStatus,
             patientSeverityLabel: formData.patientSeverityLabel,
@@ -120,8 +123,12 @@ function ModalAddPatient(props: Props): ReactElement {
           newData = {
             patientName: formData.patientName,
             patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
             patientPhoneNumber: formData.patientPhoneNumber,
-            patientStatus: formData.patientStatus
+            patientStatus: formData.patientStatus,
+            patientEmail: formData.patientEmail
           };
           newPatientSeverityLog = {};
         } else if (!isDataChange && isSeverityChange) {
@@ -136,8 +143,12 @@ function ModalAddPatient(props: Props): ReactElement {
           newData = {
             patientName: formData.patientName,
             patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
             patientPhoneNumber: formData.patientPhoneNumber,
-            patientStatus: formData.patientStatus
+            patientStatus: formData.patientStatus,
+            patientEmail: formData.patientEmail
           };
           newPatientSeverityLog = {
             patientSeverityLabel: formData.patientSeverity,
@@ -212,9 +223,9 @@ function ModalAddPatient(props: Props): ReactElement {
       })
       console.log(tambonDataResult)
       form.setFieldsValue({
-        subdistrict: data[0],
-        district: data[1],
-        province: data[2]
+        patientSubDistrict: data[0],
+        patientDistrict: data[1],
+        patientProvince: data[2]
       })
     }
   };
@@ -271,12 +282,13 @@ function ModalAddPatient(props: Props): ReactElement {
 
         <Form.Item
           label="Sub District"
-          name="subdistrict"
+          name="patientSubDistrict"
           rules={[
             { required: true, message: "Please input your sub district!" },
           ]}
         >
           <AutoComplete
+            disabled={isView} 
             options={options}
             onSearch={onSearch}
             onSelect={onSelect}
@@ -285,7 +297,7 @@ function ModalAddPatient(props: Props): ReactElement {
 
         <Form.Item
           label="District"
-          name="district"
+          name="patientDistrict"
           rules={[
             { required: true, message: "Please input your district!" },
           ]}
@@ -295,7 +307,7 @@ function ModalAddPatient(props: Props): ReactElement {
 
         <Form.Item
           label="Province"
-          name="province"
+          name="patientProvince"
           rules={[
             { required: true, message: "Please input your province!" },
           ]}
@@ -338,7 +350,7 @@ function ModalAddPatient(props: Props): ReactElement {
             { required: true, message: "Please input your email!" },
           ]}
         >
-          <Input />
+          <Input disabled={isView}/>
         </Form.Item>
 
         <Form.Item

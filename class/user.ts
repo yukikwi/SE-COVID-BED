@@ -82,6 +82,24 @@ class User {
       };
     }
   }
+  
+  async getAllHospitalStaff() {
+    try {
+      const result = await this.database.getHospitalStaff();
+
+      return {
+        http: 200,
+        data: result,
+      };
+    } catch (error) {
+      return {
+        http: 500,
+        data: {
+          error: "Fail to edit hospital",
+        },
+      };
+    }
+  }
 }
 
 export default User;

@@ -9,12 +9,20 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
+      console.log("test");
+      
       const database = new Connection();
-      const patient = new Patient();
-      const { hospitalId } = req.body;
 
+      console.log("test2");
+      const patient = new Patient();
+
+      console.log("test3");
+      const { hospitalId } = req.body;
+      
       const isDatabaseConnected = await database.connectDatabase();
+      
       if (isDatabaseConnected === true) {
+        
         const patientData = await patient.getPatients(hospitalId as string);
 
         res.status(200).json(patientData);
@@ -23,6 +31,8 @@ export default async function handler(
         res.status(500).json({ error: "fail to connect to database" });
       }
     } catch (err) {
+      console.log("err", err);
+      
       res.status(400).end();
     }
   } else {

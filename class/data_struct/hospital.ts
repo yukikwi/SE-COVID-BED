@@ -6,6 +6,9 @@ export interface IHospital extends Document {
   hospitalPhoneNumber: string;
   hospitalConvince: string;
   hospitalAddress: string;
+  hospitalSubDistrict: string;
+  hospitalDistrict: string;
+  hospitalProvince: string;
   hospitalLocation: object;
   isAvailable: boolean;
   isDelete: boolean;
@@ -17,6 +20,9 @@ export type THospital = {
   hospitalPhoneNumber?: string;
   hospitalConvince?: string;
   hospitalAddress?: string;
+  hospitalSubDistrict?: string;
+  hospitalDistrict?: string;
+  hospitalProvince?: string;
   hospitalLocation?: object;
   isAvailable?: boolean;
   isDelete?: boolean;

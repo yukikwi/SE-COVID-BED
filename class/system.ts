@@ -15,6 +15,9 @@ class System {
     hospitalPhoneNumber: String,
     hospitalConvince: String,
     hospitalAddress: String,
+    hospitalSubDistrict: String,
+    hospitalDistrict: String,
+    hospitalProvince: String,
     hospitalLocationLat: Number,
     hospitalLocationLong: Number,
     staff: String
@@ -24,6 +27,9 @@ class System {
       hospitalPhoneNumber: `${hospitalPhoneNumber}`,
       hospitalConvince: `${hospitalConvince}`,
       hospitalAddress: `${hospitalAddress}`,
+      hospitalSubDistrict: `${hospitalSubDistrict}`,
+      hospitalDistrict: `${hospitalDistrict}`,
+      hospitalProvince: `${hospitalProvince}`,
       hospitalLocation: {
         lat: hospitalLocationLat,
         long: hospitalLocationLong,
