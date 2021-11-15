@@ -28,19 +28,23 @@ TCF_index_002 Index page staff btn
 # Login page
 TCF_login_001 Test login as hospital
     Open Browser    ${URL}/login            ${BROWSER}
+    Sleep           3s
     Input Text      id=basic_username       ${HUSERNAME}
     Input Text      id=basic_password       ${PASSWORD}
     Submit Form
     Sleep           3s
     Page Should Contain                     Capybara Hospital : Information
+    Run Keyword     TCF_logout_001 Test logout
     Close Browser
 TCF_login_002 Test login as system admin
     Open Browser    ${URL}/login            ${BROWSER}
+    Sleep           3s
     Input Text      id=basic_username       ${SUSERNAME}
     Input Text      id=basic_password       ${PASSWORD}
     Submit Form
     Sleep           3s
     Page Should Contain                     Hospital List
+    Run Keyword     TCF_logout_001 Test logout
     Close Browser
 TCF_login_003 Test login as wrong credential
     Open Browser    ${URL}/login            ${BROWSER}
@@ -50,3 +54,9 @@ TCF_login_003 Test login as wrong credential
     Sleep           3s
     Page Should Contain                     Wrong username / password
     Close Browser
+
+*** Keywords ***
+TCF_logout_001 Test logout
+    Click Link      id=logout
+    Sleep           3s
+    Page Should Contain            Login
