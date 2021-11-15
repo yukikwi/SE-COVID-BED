@@ -48,5 +48,5 @@ TCF_login_003 Test login as wrong credential
     Input Text      id=basic_password       barara
     Submit Form
     Sleep           3s
-    Page Should Contain                     error
+    Page Should Contain                     Wrong username / password
     Close Browser
