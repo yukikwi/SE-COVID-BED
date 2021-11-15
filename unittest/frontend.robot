@@ -34,7 +34,7 @@ TCF_login_001 Test login as hospital
     Submit Form
     Sleep           3s
     Page Should Contain                     Capybara Hospital : Information
-    Run Keyword     TCF_logout_001 Test logout
+    Run Keyword     KWF_logout Test logout
     Close Browser
 TCF_login_002 Test login as system admin
     Open Browser    ${URL}/login            ${BROWSER}
@@ -44,10 +44,13 @@ TCF_login_002 Test login as system admin
     Submit Form
     Sleep           3s
     Page Should Contain                     Hospital List
-    Run Keyword     TCF_logout_001 Test logout
+    Run Keyword     KWF_SYS_001 Edit hospital info fetch test
+    Run Keyword     KWF_SYS_001 Edit hospital info edit test
+    Run Keyword     KWF_logout Test logout
     Close Browser
 TCF_login_003 Test login as wrong credential
     Open Browser    ${URL}/login            ${BROWSER}
+    Sleep           3s
     Input Text      id=basic_username       ${SUSERNAME}
     Input Text      id=basic_password       barara
     Submit Form
@@ -56,7 +59,34 @@ TCF_login_003 Test login as wrong credential
     Close Browser
 
 *** Keywords ***
-TCF_logout_001 Test logout
+KWF_logout Test logout
     Click Link      id=logout
     Sleep           3s
     Page Should Contain            Login
+
+KWF_SYS_001 Edit hospital info fetch test
+    Click Link      id=hospital-6165a8b28e0dcd5dbc863fc3
+    Sleep           3s
+    Page Should Contain            Capybara Hospital
+    Press Keys	    None	    ESC
+KWF_SYS_001 Edit hospital info edit test
+    Click Link      id=hospital-6165a8b28e0dcd5dbc863fc3
+    Sleep           3s
+    Page Should Contain            Capybara Hospital
+    Input Text      id=basic_hospitalName       Capybara Hospital2         True
+    Submit Form
+    Sleep           3s
+    Press Keys	    None	    ESC
+    Sleep           1s
+    Page Should Contain            Capybara Hospital2
+    # Restore data
+    Click Link      id=hospital-6165a8b28e0dcd5dbc863fc3
+    Sleep           3s
+    Page Should Contain            Capybara Hospital2
+    Input Text      id=basic_hospitalName       Capybara Hospital          True
+    Submit Form
+    Sleep           3s
+    Press Keys	    None	    ESC
+    Sleep           1s
+    Page Should Contain            Capybara Hospital
+    Press Keys	    None	    ESC
