@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Connection from "../../class/database";
-import System from "../../class/system";
+import Hospital from "../../class/hospital";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,14 +9,14 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const database = new Connection();
-      const system = new System();
+      const hospital = new Hospital();
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const { id, newData } = req.body;
 
         // use method login from userlogin class
-        const editHospital = await system.editHospital(id, newData);
+        const editHospital = await hospital.editHospital(id, newData);
         res.status(editHospital.http).json(editHospital.data);
       } else {
         // database connection fail
