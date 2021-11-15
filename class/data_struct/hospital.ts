@@ -16,6 +16,7 @@ export interface IHospital extends Document {
 }
 
 export type THospital = {
+  _id?: string;
   hospitalName?: string;
   hospitalPhoneNumber?: string;
   hospitalConvince?: string;

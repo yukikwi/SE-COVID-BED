@@ -55,6 +55,7 @@ function TableAction(props: Props): ReactElement {
 
       <Tooltip title="Edit">
         <a
+          id={`hospital-${record.key}`}
           className="hover:tw-text-yellow-500"
           onClick={handleEdit}
         >

@@ -132,7 +132,6 @@ const HospitalResourceIndex: NextPage = () => {
         />
         <ModalAddEdit
           id={selectedHospital?.key as string}
-          hospital={selectedHospital?.hospital as string}
         />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
