@@ -28,7 +28,7 @@ function LoginForm({}: Props): ReactElement {
   const handleClickLogin = async () => {
     try {
       const res = (await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/login`,
+        `${process.env.NEXT_PUBLIC_APP_API}/user/login`,
         {
           username,
           password,

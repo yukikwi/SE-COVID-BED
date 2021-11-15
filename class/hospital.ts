@@ -10,39 +10,42 @@ class Hospital {
     this.newHospitalData = {};
   }
 
+  //Method that used to send hospital data to database class for add new hospital to database.
   async addHospital(
-    hospitalName: String,
-    hospitalPhoneNumber: String,
-    hospitalConvince: String,
-    hospitalAddress: String,
-    hospitalSubDistrict: String,
-    hospitalDistrict: String,
-    hospitalProvince: String,
-    hospitalLocationLat: Number,
-    hospitalLocationLong: Number,
-    staff: String
+    hospitalName: string,
+    hospitalPhoneNumber: string,
+    hospitalConvince: string,
+    hospitalAddress: string,
+    hospitalSubDistrict: string,
+    hospitalDistrict: string,
+    hospitalProvince: string,
+    hospitalLocationLat: number,
+    hospitalLocationLong: number,
+    staff: string
   ) {
+    //Assign data into object newHospitalData
     this.newHospitalData = {
-      hospitalName: `${hospitalName}`,
-      hospitalPhoneNumber: `${hospitalPhoneNumber}`,
-      hospitalConvince: `${hospitalConvince}`,
-      hospitalAddress: `${hospitalAddress}`,
-      hospitalSubDistrict: `${hospitalSubDistrict}`,
-      hospitalDistrict: `${hospitalDistrict}`,
-      hospitalProvince: `${hospitalProvince}`,
+      hospitalName: hospitalName,
+      hospitalPhoneNumber: hospitalPhoneNumber,
+      hospitalConvince: hospitalConvince,
+      hospitalAddress: hospitalAddress,
+      hospitalSubDistrict: hospitalSubDistrict,
+      hospitalDistrict: hospitalDistrict,
+      hospitalProvince: hospitalProvince,
       hospitalLocation: {
         lat: hospitalLocationLat,
         long: hospitalLocationLong,
       },
       isAvailable: true,
       isDelete: false,
-      staff: `${staff}`,
+      staff: staff,
     };
 
-    console.log(this.newHospitalData);
     if (this.newHospitalData) {
+      //Send newHospitalData to database class
       const result = await this.database.addHospital(this.newHospitalData);
       return {
+        //When add hospital data successful return status 201, code message and hospital data that recently added.
         http: 201,
         data: {
           code: "Success to add hospital",
@@ -51,6 +54,7 @@ class Hospital {
       };
     } else {
       return {
+        //When add hospital data fail return status 400 and code message.
         http: 400,
         data: {
           error: "Fail to add hospital",
@@ -59,11 +63,16 @@ class Hospital {
     }
   }
 
+  //Method for deactivate hospital
   async deleteHospital(id: string) {
     try {
+
+      //Call database class for connect to mongoDB
       let deleteStatus = await this.database.deleteHospital(id);
+      
       if (deleteStatus === 404) {
         return {
+          //cannot found hospital data in database return status 404, error message.
           http: 404,
           data: {
             code: "Hospital not found",
@@ -71,6 +80,7 @@ class Hospital {
         };
       } else if (deleteStatus === 500) {
         return {
+          //Has problem when update data return status 500, error message.
           http: 500,
           data: {
             code: "Invalid id",
@@ -78,6 +88,7 @@ class Hospital {
         };
       } else {
         return {
+          //When delete hospital data successful return status 200 and code message
           http: 200,
           data: {
             code: "Success to delete hospital",
@@ -86,6 +97,7 @@ class Hospital {
       }
     } catch (error) {
       return {
+        //When delete hospital data fail return status 500, code message.
         http: 500,
         data: {
           error: "Fail to delete hospital",
@@ -94,11 +106,14 @@ class Hospital {
     }
   }
 
+  //Method for edit or update hospital data
   async editHospital(id: string, newData: object) {
     try {
+      //Call database class for connect to mongoDB
       this.database.editHospital(id, newData);
 
       return {
+        //When edit hospital data successful return status 200 and code message
         http: 200,
         data: {
           code: "Success to edit hospital",
@@ -106,6 +121,7 @@ class Hospital {
       };
     } catch (error) {
       return {
+        //When edit hospital data failed return status 500 and error message
         http: 500,
         data: {
           error: "Fail to edit hospital",

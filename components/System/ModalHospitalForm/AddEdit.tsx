@@ -32,7 +32,7 @@ function AddEditForm(props: Props): ReactElement {
 
   // Fetch Data
   const setUserData = async () => {
-    const userList = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/get-hospital-staff`) as any
+    const userList = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/user/get-hospital-staff`) as any
     setDummyUser(userList.data.data);
   };
 
@@ -55,7 +55,7 @@ function AddEditForm(props: Props): ReactElement {
     let formData = form.getFieldsValue()
     try {
       const res = (await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/add-hospital`,
+        `${process.env.NEXT_PUBLIC_APP_API}/hospital/add-hospital`,
         {
           hospitalName: formData.hospitalName,
           hospitalPhoneNumber: formData.hospitalPhoneNumber,
@@ -91,7 +91,7 @@ function AddEditForm(props: Props): ReactElement {
     try {
       let formData = form.getFieldsValue()
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
+        `${process.env.NEXT_PUBLIC_APP_API}/hospital/edit-hospital`,
         {
           id: hospitalData._id,
           newData: {

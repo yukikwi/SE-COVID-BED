@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Connection from "../../class/database";
-import Hospital from "../../class/hospital";
+import Connection from "../../../class/database";
+import Hospital from "../../../class/hospital";
 
 export default async function addHospital(
   req: NextApiRequest,

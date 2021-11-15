@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Connection from "../../class/database";
-import User from "../../class/user";
+import Connection from "../../../class/database";
+import User from "../../../class/user";
 import { serialize } from 'cookie'
 
 export default async function login(
