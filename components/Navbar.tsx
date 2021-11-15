@@ -87,6 +87,16 @@ function Navbar(props: Props): ReactElement {
     )
   }
 
+  // logo router
+  const goToHome = () => {
+    if(userData.userinfo && typeof(userData.userinfo.hospitalId) === 'string'){
+      if(userData.userinfo.role === 'system_admin' && userData.userinfo.hospitalId === undefined)
+        router.push('/system')
+      else
+        router.push('/hospital')
+    }
+  }
+
   const RenderMenuIcon = () => {
     if(menuShow === false)
       return (
@@ -105,8 +115,8 @@ function Navbar(props: Props): ReactElement {
   return (
     <div className="tw-text-dark-matcha-green tw-bg-dark-green tw-p-3 tw-flex tw-items-center tw-grid tw-grid-cols-2">
       <div className="tw-col-span-1">
-        <h1 className="tw-text-dark-matcha-green tw-font-bold tw-text-2xl tw-italic">COVID-19</h1>
-        <h3 className="tw-text-dark-matcha-green tw-font-bold tw-text">Manage hospital resouce</h3>
+        <h1 className="tw-text-dark-matcha-green tw-font-bold tw-text-2xl tw-italic tw-cursor-pointer" onClick={() => {goToHome()}}>COVID-19</h1>
+        <h3 className="tw-text-dark-matcha-green tw-font-bold tw-text tw-cursor-pointer" onClick={() => {goToHome()}}>Manage hospital resouce</h3>
       </div>
       <HospitalMenu />
     </div>

@@ -189,4 +189,17 @@ export default class Database {
     return await ResourceSchemaModel.findByIdAndUpdate(id, newData);
   }
 
+  async dischargePatient(id: string) {
+    //change patient status to Discharged
+    try{
+      return await PatientModel.findByIdAndUpdate(
+        id,
+        { patientStatus: "Discharged" },
+        { upsert: false }
+      );
+    }catch(e){
+      console.log("err",e);
+    }
+    
+  }
 }

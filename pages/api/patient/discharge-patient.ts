@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import Database from "../../../class/database";
 import Patient from "../../../class/patient";
 
-export default async function approvePatient(
+export default async function dischargePatient(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
@@ -17,9 +17,8 @@ export default async function approvePatient(
           id
         } = req.body;
 
-        const approve = await patient.approvePatient(id);
-
-        res.status(approve.http).json(approve.data);
+        const discharge = await patient.dischargePatient(id);
+        res.status(discharge.http).json(discharge.data);
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });

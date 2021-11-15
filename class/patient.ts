@@ -1,16 +1,19 @@
 import { TimePicker } from "antd";
 import Database from "./database";
+import Notification from "./notification";
 import { IPatient, ISeverity } from "./data_struct/patient";
 import { IHospital } from "./data_struct/hospital";
 import axios from "axios";
 
 class Patient {
   private database: Database;
-  private patient: IPatient | any;
+  private patientData: IPatient | any;
+  private notification: Notification
 
   constructor() {
     this.database = new Database();
-    this.patient = {};
+    this.notification = new Notification()
+    this.patientData = {};
   }
 
   async getAPatient(id: string) {
@@ -30,9 +33,13 @@ class Patient {
         patientName: rawPatientData?.patientName,
         patientHospital: hospitalData?.hospitalName,
         patientAddress: rawPatientData?.patientAddress,
+        patientSubDistrict: rawPatientData?.patientSubDistrict,
+        patientDistrict: rawPatientData?.patientDistrict,
+        patientProvince: rawPatientData?.patientProvince,
         patientLocation: rawPatientData?.patientLocation,
         patientPhoneNumber: rawPatientData?.patientPhoneNumber,
         patientStatus: rawPatientData?.patientStatus,
+        patientEmail: rawPatientData?.patientEmail,
         patientSeverity: rawServerity?.patientSeverityLabel,
       };
       console.log("rawPatientData", rawPatientData);
@@ -77,10 +84,14 @@ class Patient {
               patientName: patient?.patientName,
               patientHospital: hospitalData?.hospitalName,
               patientAddress: patient?.patientAddress,
+              patientSubDistrict: patient?.patientSubDistrict,
+              patientDistrict: patient?.patientDistrict,
+              patientProvince: patient?.patientProvince,
               patientLocation: patient?.patientLocation,
               patientPhoneNumber: patient?.patientPhoneNumber,
               patientStatus: patient?.patientStatus,
               patientSeverity: rawServerity?.patientSeverityLabel,
+              patientEmail: patient?.patientEmail,
             },
           ];
           console.log("patientData", patientData);
@@ -105,6 +116,9 @@ class Patient {
     patientName: string,
     patientHospital: string,
     patientAddress: string,
+    patientSubDistrict: string,
+    patientDistrict: string,
+    patientProvince: string,
     patientLocation: any,
     patientPhoneNumber: string,
     patientStatus: string,
@@ -112,11 +126,13 @@ class Patient {
     patientSeverityDateStart: string,
     patientEmail: string
   ) {
-    console.log("patientLocation",patientLocation)
     const newPatientData = {
       patientName: `${patientName}`,
       patientHospital: `${patientHospital}`,
       patientAddress: `${patientAddress}`,
+      patientSubDistrict: `${patientSubDistrict}`,
+      patientDistrict: `${patientDistrict}`,
+      patientProvince: `${patientProvince}`,
       patientLocation: {...patientLocation},
       patientPhoneNumber: `${patientPhoneNumber}`,
       patientStatus: `${patientStatus}`,
@@ -152,6 +168,13 @@ class Patient {
   async approvePatient(id: string) {
     try {
       await this.database.approvePatient(id);
+      //get patient data
+      const fullPatientData = await this.getAPatient(id);
+      
+      //send email notification to patient
+      const notificationRes = await this.notification.sendApproveNotification(fullPatientData);
+      console.log("notificationRes", notificationRes);
+      
       return {
         http: 200,
         data: {
@@ -228,6 +251,33 @@ class Patient {
     })
     
     return(distance[0].index);
+  }
+
+  async dischargePatient(id: string) {
+    try {
+      await this.database.dischargePatient(id);
+
+      //get patient data
+      const fullPatientData = await this.getAPatient(id);
+      
+      //send email notification to patient
+      const notificationRes = await this.notification.sendDischargeNotification(fullPatientData);
+      console.log("notificationRes", notificationRes);
+      
+      return {
+        http: 200,
+        data: {
+          code: "Success to discharge patient",
+        },
+      };
+    } catch (e) {
+      return {
+        http: 400,
+        data: {
+          error: "Fail to discharge patient",
+        },
+      };
+    }
   }
 }
 

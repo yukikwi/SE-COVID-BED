@@ -1,23 +1,28 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../components/Layout/Hospital";
-import { List, Switch } from "antd";
+import { List, notification, Switch } from "antd";
+import axios from "axios";
+import { getUserState } from "../../store/user/selectors";
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
 
 const HospitalIndex: NextPage = () => {
+  // pre-set data
   const data = [
     {
       type: "string",
       title: "Hospital Name",
-      data: "Capybara Hospital",
+      data: "loading...",
     },
     {
       type: "string",
       title: "Hospital address",
-      data: "BaraLand",
+      data: "loading...",
     },
     {
       type: "string",
       title: "Staff Name",
-      data: "Dr.DIO",
+      data: "loading...",
     },
     {
       type: "switch",
@@ -26,14 +31,87 @@ const HospitalIndex: NextPage = () => {
     },
   ];
 
+  // state part
+  const [hospitalInfo, setHospitalInfo] = useState(data)
+  const [loading, setLoading] = useState(true)
+  const userData = useSelector(getUserState);
+
+  // fetch hospital information
+  const fetchApi = async () => {
+    const hospitalData = await axios.get(
+      `${process.env.NEXT_PUBLIC_APP_API}/hospital/${userData.userinfo.hospitalId}` 
+    ) as any
+
+    setHospitalInfo(
+      [
+        {
+          type: "string",
+          title: "Hospital Name",
+          data: hospitalData.data.hospitalName,
+        },
+        {
+          type: "string",
+          title: "Hospital address",
+          data: hospitalData.data.hospitalAddress,
+        },
+        {
+          type: "string",
+          title: "Staff Name",
+          data: hospitalData.data.staff.username,
+        },
+        {
+          type: "switch",
+          title: "Status",
+          data: hospitalData.data.isAvailable? 'avaliable':'unavaliable',
+        },
+      ]
+    )
+  }
+
+  const handleSwitch = async (event: any) => {
+    try{
+      setLoading(true);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
+        {
+          id: userData.userinfo.hospitalId,
+          newData: {
+            isAvailable: event
+          },
+        }
+      )
+      await fetchApi()
+      notification.open({
+        message: "Success",
+        description: "Change hospital status successful",
+      });
+    } catch (err) {
+      notification.open({
+        message: "Error",
+        description:
+          "Cannot connect to api. Please contact admin for more information.",
+      });
+    } finally {
+      setLoading(false);
+    }
+    
+  }
+
+  // onMount
+  useEffect(() => {
+    console.log('baraEffect')
+    fetchApi()
+    setLoading(false);
+  }, [])
+
   return (
     <LayoutHospital
-      title="Capybara Hospital : Info"
+      title="Capybara Hospital : Information"
       button={<></>}
     >
       <List
         bordered
-        dataSource={data}
+        dataSource={hospitalInfo}
         renderItem={(item) => (
           <List.Item>
             <span>
@@ -42,7 +120,9 @@ const HospitalIndex: NextPage = () => {
                 <Switch
                   checkedChildren="เปิด"
                   unCheckedChildren="ปิด"
-                  defaultChecked
+                  checked={(item.data === 'avaliable')? true: false}
+                  onClick={handleSwitch}
+                  loading={loading}
                 />
               ) : (
                 item.data
