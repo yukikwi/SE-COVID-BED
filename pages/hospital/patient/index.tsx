@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
 import ApproveModal from "../../../components/Hospital/ModalApprove"
 import DischargeModal from "../../../components/Hospital/ModalDischarge"
-import { Table, Button, Tooltip, notification } from "antd";
+import { Table, Button, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
   PlusSquareOutlined
