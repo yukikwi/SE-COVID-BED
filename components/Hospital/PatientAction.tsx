@@ -71,6 +71,7 @@ function PatientAction(props: Props): ReactElement {
       
       <Tooltip title="View">
         <a
+          id={`patient-${record._id}-view`}
           className="hover:tw-text-yellow-500"
           onClick={() => {
             showAddEditModal(record, true);
@@ -82,7 +83,7 @@ function PatientAction(props: Props): ReactElement {
       { record.patientStatus !== 'Request'?
         <Tooltip title="Edit">
           <a
-            // id={`patient-${record._id}`}
+            id={`patient-${record._id}-edit`}
             className="hover:tw-text-blue-500"
             onClick={() => {
               showAddEditModal(record);
