@@ -45,10 +45,10 @@ function Navbar(props: Props): ReactElement {
         <React.Fragment>
           { navBackToSys }
           <Link href="/hospital/resource">
-            <a className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Resource</a>
+            <a id="resource" className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Resource</a>
           </Link>
           <Link href="/hospital/patient">
-            <a className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Patient</a>
+            <a id="patient" className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Patient</a>
           </Link>
         </React.Fragment>
       )
