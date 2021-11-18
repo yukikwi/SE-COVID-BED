@@ -1,15 +1,13 @@
 import Database from "./database";
-import { TResource, IResource } from "./data_struct/resource";
 
 class Resource {
   private database: Database;
-  private resource: TResource | any;
 
   constructor() {
     this.database = new Database();
-    this.resource = {};
   }
 
+  //Method for add new resource.
   async addResource(
     resourceName: string,
     resourceCode: string,
@@ -28,11 +26,14 @@ class Resource {
       status,
       resourceHospital,
     };
-    console.log("newResource", newResource);
 
     if (newResource) {
+
+      //Add new resource data
       await this.database.addResource(newResource);
+      
       return {
+        //When add resource data successful return status 201, success message and resource data.
         http: 201,
         data: {
           code: "Success to add resource",
@@ -41,6 +42,7 @@ class Resource {
       };
     } else {
       return {
+        //When add resource data fail return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to add resource",
@@ -49,19 +51,21 @@ class Resource {
     }
   }
 
+  //Method for get all resource data by hospital id.
   async getResource(hospitalId: string) {
     try {
-      console.log("hospitalId", hospitalId);
+
+      //Get resource data by hospital id.
       const rawResource = await this.database.getResource({resourceHospital: hospitalId});
 
-      console.log("rawResource", rawResource);
-
       return {
+        //When get resource data successful return status 200, success message and resource data.
         http: 200,
         data: rawResource,
       };
     } catch (error) {
       return {
+        //When get resource data fail return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to query resource",
@@ -70,19 +74,21 @@ class Resource {
     }
   }
 
+  //Method for get one resource by resourceId.
   async getAResource(id: string) {
     try {
-      console.log("id", id);
+
       const rawResource = await this.database.getAResource(id);
 
-      console.log("rawResource", rawResource);
-
       return {
+        //When get resource data successful return status 200 and resource data.
         http: 200,
         data: rawResource,
       };
     } catch (error) {
       return {
+
+        //When get resource data failed return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to query resource",
@@ -91,10 +97,16 @@ class Resource {
     }
   }
 
+  //Method for delete resource data
   async deleteResource(id: string) {
     try {
-      let deleteResource = await this.database.deleteResource(id);
+
+      //Call database class for connect mongoDB
+      await this.database.deleteResource(id);
+      
       return {
+
+        //When delete resource data successful return status 200 and code message.
         http: 200,
         data: {
           code: "Success to delete Resource",
@@ -102,6 +114,8 @@ class Resource {
       };
     } catch (error) {
       return {
+
+        //When delete resource data failed return status 500 and error message.
         http: 500,
         data: {
           error: "Fail to delete Resource",
@@ -110,10 +124,15 @@ class Resource {
     }
   }
 
+  //Method for edit or update resource data
   async editResource(id: string, newData: any) {
     try {
-      let editResource = await this.database.editResource(id, newData);
+
+      //Call database class for connect mongoDB
+      await this.database.editResource(id, newData);
+
       return {
+        //When update resource data successful return status 200 and code message.
         http: 200,
         data: {
           code: "Success to edit Resource",
@@ -121,6 +140,7 @@ class Resource {
       };
     } catch (error) {
       return {
+        //When update resource data failed return status 500 and error message.
         http: 500,
         data: {
           error: "Fail to edit Resource",

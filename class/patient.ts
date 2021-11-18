@@ -1,4 +1,3 @@
-import { TimePicker } from "antd";
 import Database from "./database";
 import { IPatient, ISeverity } from "./data_struct/patient";
 import { IHospital } from "./data_struct/hospital";
@@ -6,11 +5,9 @@ import axios from "axios";
 
 class Patient {
   private database: Database;
-  private patient: IPatient | any;
 
   constructor() {
     this.database = new Database();
-    this.patient = {};
   }
 
   //Method for get one patient by id.
