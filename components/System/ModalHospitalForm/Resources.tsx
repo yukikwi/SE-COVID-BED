@@ -29,6 +29,16 @@ interface Record {
   add?: boolean;
 }
 
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean;
+  dataIndex: string;
+  title: any;
+  inputType: "number" | "text";
+  record: Record;
+  index: number;
+  children: React.ReactNode;
+}
+
 function Resources({ hospitalId }: Props): ReactElement {
   // Init state
   const { show } = useSelector(getAddOrEditModalState);
@@ -116,6 +126,7 @@ function Resources({ hospitalId }: Props): ReactElement {
     }
   };
 
+  // exec on hospitalId or modal state change
   useEffect(() => {
     fetchApiResource();
     form.resetFields();
@@ -262,16 +273,6 @@ function Resources({ hospitalId }: Props): ReactElement {
       console.log("Validate Failed:", errInfo);
     }
   };
-
-  interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    title: any;
-    inputType: "number" | "text";
-    record: Record;
-    index: number;
-    children: React.ReactNode;
-  }
 
   // Edit cell UI
   const EditableCell: React.FC<EditableCellProps> = ({
