@@ -5,15 +5,10 @@ import DischargeModal from "../../../components/Hospital/ModalDischarge"
 import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
-  EyeOutlined,
-  EditOutlined,
-  CheckCircleOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
-import { showDischargeModal as storeShowDischargeModal } from "../../../store/dischargeModal/actions";
 import { showPatientModal } from "../../../store/addPatientModal/actions";
 import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatient";
 import { IPatient } from "../../../class/data_struct/patient";
@@ -21,7 +16,7 @@ import axios from "axios";
 import { getUserState } from "../../../store/user/selectors";
 import { getPatientModalState } from "../../../store/addPatientModal/selectors";
 import { getApproveModalState } from "../../../store/approveModal/selectors";
-import CloseCircleOutlined from "@ant-design/icons/lib/icons/CloseCircleOutlined";
+import PatientAction from "../../../components/Hospital/PatientAction"
 
 type TPatient = {
   key: string;
@@ -45,19 +40,6 @@ const HospitalResourceIndex: NextPage = () => {
   const userData = useSelector(getUserState);
   const addEditPatientModalState = useSelector(getPatientModalState);
   const approveModalState = useSelector(getApproveModalState);
-
-  // Approve Modal handler
-  const showApproveModal = (patient: TPatient) => {
-    console.log("Display");
-    setApproveDischargePatient(patient);
-    dispatch(storeShowApproveModal());
-  };
-  // Discharge Modal handler
-  const showDischargeModal = (patient: TPatient) => {
-    console.log("Display");
-    setApproveDischargePatient(patient);
-    dispatch(storeShowDischargeModal());
-  };
 
   // Add Modal handler
   const showAddEditModal = (
@@ -94,58 +76,15 @@ const HospitalResourceIndex: NextPage = () => {
       title: "Action",
       key: "action",
       render: (record: TPatient) => (
-        <div>
-          { Approve(record) }
-          
-          
-          <Tooltip title="View">
-            <a
-              className="hover:tw-text-yellow-500"
-              onClick={() => {
-                showAddEditModal(record, true);
-              }}
-            >
-              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-          { record.patientStatus !== 'Request'?
-            <Tooltip title="Edit">
-              <a
-                className="hover:tw-text-blue-500"
-                onClick={() => {
-                  showAddEditModal(record);
-                }}
-              >
-                <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-              </a>
-            </Tooltip>
-            :
-            <></>
-          }
-          
-        </div>
+        <PatientAction
+          record={record}
+          setApproveDischargePatient={(patient: TPatient) => {setApproveDischargePatient(patient)}}
+          setEditPatient={(patient: TPatient) => {setEditPatient(patient)}}
+          setIsView={(isView: boolean) => {setIsView(isView)}}
+        />
       ),
     },
   ];
-
-  const Approve = (record:TPatient) => {
-    if(record.patientStatus === 'Request'){
-      return (
-        <React.Fragment>
-          <Tooltip title="Approve">
-            <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
-              <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-          <Tooltip title="Discharge">
-            <a className="hover:tw-text-red-500" onClick={() => {showDischargeModal(record)}}>
-              <CloseCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-        </React.Fragment>
-      )
-    }
-  }
 
   // function to connect API
   const fetchApiPatient = async (
@@ -182,6 +121,7 @@ const HospitalResourceIndex: NextPage = () => {
     fetchApiPatient(selectTab);
   }, [addEditPatientModalState, approveModalState, selectTab]);
 
+  // ui part
   return (
     <LayoutHospital
       title="Capybara Hospital : Patient list"
@@ -203,6 +143,7 @@ const HospitalResourceIndex: NextPage = () => {
       <div className="tw-overflow-x-scroll">
         <div className="tw-flex tw-flex-row tw-mb-3">
           <Button
+            id="tab-request"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto tw-mr-3"
             type="primary"
             shape="round"
@@ -215,6 +156,7 @@ const HospitalResourceIndex: NextPage = () => {
             Request
           </Button>
           <Button
+            id="tab-in-progress"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto tw-mr-3"
             type="primary"
             shape="round"
@@ -227,6 +169,7 @@ const HospitalResourceIndex: NextPage = () => {
             In progress
           </Button>
           <Button
+            id="tab-complete"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto"
             type="primary"
             shape="round"

@@ -31,7 +31,7 @@ const HospitalIndex: NextPage = () => {
     },
   ];
 
-  // state part
+  // state and redux part
   const [hospitalInfo, setHospitalInfo] = useState(data)
   const [loading, setLoading] = useState(true)
   const userData = useSelector(getUserState);
@@ -68,6 +68,7 @@ const HospitalIndex: NextPage = () => {
     )
   }
 
+  //event handler
   const handleSwitch = async (event: any) => {
     try{
       setLoading(true);
