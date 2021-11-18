@@ -4,11 +4,14 @@ import PositiveButton from "../components/PositiveButton";
 import { useRouter } from "next/router";
 import ModalTicket from "../components/Patient/ModalTicket";
 import { showTicketModal } from "../store/ticketModal/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserState } from "../store/user/selectors";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  // check is already signin?
+  const userData = useSelector(getUserState);
 
   // event handle section
   const handleClickPatient = () => {
@@ -16,7 +19,21 @@ const Home: NextPage = () => {
   };
 
   const handleClickGoToLogin = () => {
-    router.push("/login");
+    // check api fetch
+    if(userData.loadStatus === true){
+      if(userData.login === true && userData.userinfo){
+        // redirect...
+        if(userData.userinfo.role === 'system_admin'){
+          router.push("/system");
+        }
+        if(userData.userinfo.role === 'hospital'){
+          router.push("/hospital");
+        }
+      }
+    }
+    else{
+      router.push("/login");
+    }
   };
 
   return (
