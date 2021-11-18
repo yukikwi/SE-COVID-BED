@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd'
 import React, { ReactElement } from 'react'
 import { useDispatch } from 'react-redux';
-import { TPatient } from '../../class/data_struct/patient';
 import { showPatientModal } from '../../store/addPatientModal/actions';
 import { showApproveModal as storeShowApproveModal } from "../../store/approveModal/actions";
 import { showDischargeModal as storeShowDischargeModal } from "../../store/dischargeModal/actions";
@@ -13,7 +12,7 @@ import {
 } from "@ant-design/icons";
 
 interface Props {
-  record: TPatient,
+  record: any,
   setApproveDischargePatient: (patient: any) => void,
   setEditPatient: (patient: any) => void,
   setIsView: (isView: boolean) => void
@@ -25,19 +24,19 @@ function PatientAction(props: Props): ReactElement {
   const { setApproveDischargePatient, setEditPatient, setIsView, record } = props
   
   // Approve Modal handler
-  const showApproveModal = (patient: TPatient) => {
+  const showApproveModal = (patient: any) => {
     setApproveDischargePatient(patient);
     dispatch(storeShowApproveModal());
   };
   // Discharge Modal handler
-  const showDischargeModal = (patient: TPatient) => {
+  const showDischargeModal = (patient: any) => {
     setApproveDischargePatient(patient);
     dispatch(storeShowDischargeModal());
   };
   
   // Add-Edit Modal handler
   const showAddEditModal = (
-    patient: TPatient | undefined = undefined,
+    patient: any | undefined = undefined,
     isView: boolean = false
   ) => {
     setEditPatient(patient);
@@ -46,7 +45,7 @@ function PatientAction(props: Props): ReactElement {
   };
 
   // Approve action part
-  const Approve = (record:TPatient) => {
+  const Approve = (record:any) => {
     if(record.patientStatus === 'Request'){
       return (
         <React.Fragment>
@@ -83,6 +82,7 @@ function PatientAction(props: Props): ReactElement {
       { record.patientStatus !== 'Request'?
         <Tooltip title="Edit">
           <a
+            // id={`patient-${record._id}`}
             className="hover:tw-text-blue-500"
             onClick={() => {
               showAddEditModal(record);

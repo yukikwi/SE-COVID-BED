@@ -18,20 +18,11 @@ import { getPatientModalState } from "../../../store/addPatientModal/selectors";
 import { getApproveModalState } from "../../../store/approveModal/selectors";
 import PatientAction from "../../../components/Hospital/PatientAction"
 
-type TPatient = {
-  key: string;
-  patientName: string;
-  patientAddress: string;
-  patientPhoneNumber: string;
-  patientSeverity: "Red" | "Yellow" | "Green";
-  patientStatus: "Request" | "In progress" | "Complete";
-};
-
 const HospitalResourceIndex: NextPage = () => {
   // cast state and method
   const [tableData, setTableData] = useState<Array<any>>();
-  const [approveDischargePatient, setApproveDischargePatient] = useState<TPatient>();
-  const [editPatient, setEditPatient] = useState<TPatient>();
+  const [approveDischargePatient, setApproveDischargePatient] = useState<any>();
+  const [editPatient, setEditPatient] = useState<any>();
   const [isView, setIsView] = useState<boolean>();
   const [selectTab, setSelectTab] = useState<
     "Request" | "In progress" | "Complete"
@@ -43,7 +34,7 @@ const HospitalResourceIndex: NextPage = () => {
 
   // Add Modal handler
   const showAddEditModal = (
-    patient: TPatient | undefined = undefined,
+    patient: any | undefined = undefined,
     isView: boolean = false
   ) => {
     setEditPatient(patient);
@@ -61,25 +52,25 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: "Severity level",
       key: "patientSeverity",
-      render: (record: TPatient) => (
+      render: (record: any) => (
         <Status type="severity" patientSeverity={record.patientSeverity} />
       ),
     },
     {
       title: "Status",
       key: "patientStatus",
-      render: (record: TPatient) => (
+      render: (record: any) => (
         <Status type="patient" status={record.patientStatus} />
       ),
     },
     {
       title: "Action",
       key: "action",
-      render: (record: TPatient) => (
+      render: (record: any) => (
         <PatientAction
           record={record}
-          setApproveDischargePatient={(patient: TPatient) => {setApproveDischargePatient(patient)}}
-          setEditPatient={(patient: TPatient) => {setEditPatient(patient)}}
+          setApproveDischargePatient={(patient: any) => {setApproveDischargePatient(patient)}}
+          setEditPatient={(patient: any) => {setEditPatient(patient)}}
           setIsView={(isView: boolean) => {setIsView(isView)}}
         />
       ),
@@ -101,7 +92,7 @@ const HospitalResourceIndex: NextPage = () => {
       );
 
       let rawPatientData: Array<IPatient> = apiResonse.data.data.filter(
-        (item: TPatient) => {
+        (item: any) => {
           return item.patientStatus === selectTab;
         }
       );
