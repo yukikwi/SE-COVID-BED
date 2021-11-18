@@ -20,6 +20,7 @@ const Home: NextPage = () => {
 
   const handleClickGoToLogin = () => {
     // check api fetch
+    console.log(userData)
     if(userData.loadStatus === true){
       if(userData.login === true && userData.userinfo){
         // redirect...
@@ -30,9 +31,9 @@ const Home: NextPage = () => {
           router.push("/hospital");
         }
       }
-    }
-    else{
-      router.push("/login");
+      else{
+        router.push("/login");
+      }
     }
   };
 
