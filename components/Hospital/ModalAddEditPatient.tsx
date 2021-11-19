@@ -7,6 +7,7 @@ import Status from "./Status";
 import axios from "axios";
 import { getUserState } from "../../store/user/selectors";
 import tambon from '../../public/location.json';
+import { TambonType } from "../../class/data_struct/TamBonType";
 
 interface Props {
   patient: any;
@@ -16,21 +17,6 @@ interface Props {
 ModalAddPatient.defaultProps = {
   isView: false,
 };
-
-type TambonType = {
-  AD_LEVEL: string;
-  TA_ID: string;
-  TAMBON_T: string;
-  TAMBON_E: string;
-  AM_ID: string;
-  AMPHOE_E: string;
-  CH_ID: string;
-  CHANGWAT_T: string;
-  CHANGWAT_E: string;
-  LAT: string;
-  LONG: string;
-  AMPHOE_T?: undefined;
-}
 
 function ModalAddPatient(props: Props): ReactElement {
   // state and redux part

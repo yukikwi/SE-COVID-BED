@@ -8,26 +8,14 @@ import Map from '../Map/Map'
 import { getMapState } from '../../store/map/selectors';
 import { setLoc } from '../../store/map/actions';
 import axios from "axios";
+import { TambonType } from '../../class/data_struct/TamBonType';
 
 interface Props {
   
 }
 
-type TambonType = {
-  AD_LEVEL: string;
-    TA_ID: string;
-    TAMBON_T: string;
-    TAMBON_E: string;
-    AM_ID: string;
-    AMPHOE_E: string;
-    CH_ID: string;
-    CHANGWAT_T: string;
-    CHANGWAT_E: string;
-    LAT: string;
-    LONG: string;
-    AMPHOE_T?: undefined;
-}
 function ModalTicket({}: Props): ReactElement {
+  // redux and state part
   const dispatch = useDispatch();
   const show = useSelector(getTicketModalState);
   const [form] = Form.useForm();
@@ -40,26 +28,18 @@ function ModalTicket({}: Props): ReactElement {
   // antd component
   const { Option } = Select;
 
+  // event handler
   const handleApprove = async (formData: any) => {
-    // bara submit
     try {
-      console.log("formData", formData);
       
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient/add-request-bed`,
         {
-          patientName: formData.patientName,
-          patientAddress: formData.patientAddress,
-          patientSubDistrict: formData.patientSubDistrict,
-          patientDistrict: formData.patientDistrict,
-          patientProvince: formData.patientProvince,
+          ...formData,
           patientLocation: {
             lat: loc.lat,
             long: loc.long,
-          },
-          patientPhoneNumber: formData.patientPhoneNumber,
-          patientSeverityLabel: formData.patientSeverityLabel,
-          patientEmail: formData.patientEmail,
+          }
         }
       );
 
@@ -81,7 +61,6 @@ function ModalTicket({}: Props): ReactElement {
   }
 
   const handleCancel = () => {
-    // bara
     dispatch(hideTicketModal())
   }
 
