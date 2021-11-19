@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAddOrEditModalState } from "../../../store/addOrEditHospitalModal/selectors";
 import { getMapState } from '../../../store/map/selectors';
 import { setLoc } from "../../../store/map/actions";
-import { TambonType } from '../../TamBonType'
+import { TambonType } from '../../../class/data_struct/TamBonType'
 import tambon from '../../../public/location.json';
 import Map from '../../Map/Map'
 
