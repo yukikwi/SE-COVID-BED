@@ -102,15 +102,15 @@ KWF_HOS_001 Show patient list
     Click Button    id=tab-in-progress
     Sleep           1s
     Page Should Contain            NonTokTakTay
+    Run Keyword     KWF_HOS_002 Edit patient
     Click Button    id=tab-complete
     Sleep           1s
     Page Should Contain            bara2
-    Run Keyword     KWF_HOS_002 Edit patient
     Click Button    id=tab-request
     Sleep           1s
     Page Should Contain            aa
 KWF_HOS_002 Edit patient
-    Click Link      id=patient-617031a84c14d30e282bf2d3-view
+    Click Link      id=patient-617031a84c14d30e282bf2d3-edit
     Sleep           1s
     Input Text      id=basic_patientName       NonTokTakTayA         clear=True
     Submit Form
@@ -118,7 +118,7 @@ KWF_HOS_002 Edit patient
     Press Keys	    None	    ESC
     Sleep           1s
     Page Should Contain            NonTokTakTayA
-    Click Link      id=patient-617031a84c14d30e282bf2d3-view
+    Click Link      id=patient-617031a84c14d30e282bf2d3-edit
     Sleep           1s
     Input Text      id=basic_patientName       NonTokTakTay         clear=True
     Submit Form
