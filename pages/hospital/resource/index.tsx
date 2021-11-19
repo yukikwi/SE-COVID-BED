@@ -7,10 +7,7 @@ import { showResourceModal as storeShowResourceModal } from "../../../store/addR
 import { getResourceModalState } from "../../../store/addResourceModal/selectors";
 import { getDeleteResourceModalState } from "../../../store/deleteModal/selectors";
 import {
-  EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,39 +15,32 @@ import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
 import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
 import { getUserState } from "../../../store/user/selectors";
 import axios from "axios";
-
-type TResource = {
-  _id: string;
-  key: string;
-  resourceName: string;
-  resourceCode?: string;
-  maximum?: number;
-  available?: number;
-  remark?: string;
-};
+import ResourceAction from "../../../components/Hospital/ResourceAction";
+import { TResourceUI } from "../../../class/data_struct/resource";
 
 const HospitalResourceIndex: NextPage = () => {
-  // state part
-  const [resource, setResource] = useState<TResource | undefined>({
+  // state and redux part
+  const [resource, setResource] = useState<TResourceUI | undefined>({
     _id: "",
     key: "0",
     resourceName: "Loading...",
   });
   const [isView, setIsView] = useState<boolean>();
-  const [tableData, setTableData] = useState<Array<TResource>>();
+  const [tableData, setTableData] = useState<Array<TResourceUI>>();
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
   const deleteResourceModalState = useSelector(getDeleteResourceModalState);
   const addEditResourceModalState = useSelector(getResourceModalState);
 
+  // event handler
   // delete modal handler
-  const showDeleteResourceModal = (resource: TResource) => {
+  const showDeleteResourceModal = (resource: TResourceUI) => {
     setResource(resource);
     dispatch(storeShowResourceDeleteModal());
   };
 
   const showAddEditResourceModal = (
-    resource: TResource | undefined = undefined,
+    resource: TResourceUI | undefined = undefined,
     isView: boolean = false
   ) => {
     setResource(resource);
@@ -58,7 +48,7 @@ const HospitalResourceIndex: NextPage = () => {
     dispatch(storeShowResourceModal());
   };
 
-  // Dummy Hospital data
+  // Table Column template
   const columns = [
     {
       title: "Resource",
@@ -78,48 +68,19 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: "Status",
       key: "status",
-      render: (record: TResource) => (
+      render: (record: TResourceUI) => (
         <Status available={record.available} amount={record.maximum} />
       ),
     },
     {
       title: "Action",
       key: "action",
-      render: (record: TResource) => (
-        <div>
-          <Tooltip title="View">
-            <a
-              className="hover:tw-text-green-500"
-              onClick={() => {
-                showAddEditResourceModal(record, true);
-              }}
-            >
-              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-
-          <Tooltip title="Edit">
-            <a
-              className="hover:tw-text-yellow-500"
-              onClick={() => {
-                showAddEditResourceModal(record);
-              }}
-            >
-              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-
-          <Tooltip title="Remove">
-            <a
-              className="hover:tw-text-red-500"
-              onClick={() => {
-                showDeleteResourceModal(record);
-              }}
-            >
-              <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-        </div>
+      render: (record: TResourceUI) => (
+        <ResourceAction
+          record={record}
+          showAddEditResourceModal={(record:TResourceUI, isEdit: boolean) => {showAddEditResourceModal(record, isEdit)}}
+          showDeleteResourceModal={(record:TResourceUI) => {showDeleteResourceModal(record)}}
+        />
       ),
     },
   ];
@@ -136,8 +97,8 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawResourceData: Array<TResource> = apiResonse.data.map(
-        (x: TResource, i: Number) => ({ ...x, key: i })
+      let rawResourceData: Array<TResourceUI> = apiResonse.data.map(
+        (x: TResourceUI, i: Number) => ({ ...x, key: i })
       );
       setTableData(rawResourceData);
     } catch (error) {
