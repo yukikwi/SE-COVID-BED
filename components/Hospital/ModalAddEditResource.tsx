@@ -4,9 +4,7 @@ import {
   Input,
   InputNumber,
   Modal,
-  notification,
-  Radio,
-  Select,
+  notification
 } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,21 +48,15 @@ function ModalAddResource(props: Props): ReactElement {
 
   const handleApprove = async (formData: any) => {
     // Api for call here
-
     if (mode === "Add") {
       try {
         const hospitalId = userData.userinfo.hospitalId;
 
-        const res = await axios.post(
+        await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/resource/add-resource`,
           {
-            resourceName: formData.resourceName,
-            resourceCode: formData.resourceCode,
-            maximum: formData.maximum,
-            available: formData.available,
-            remark: formData.remark,
-            status: formData.status,
-            resourceHospital: hospitalId,
+            ...formData,
+            resourceHospital: hospitalId
           }
         );
         notification.open({
@@ -84,13 +76,14 @@ function ModalAddResource(props: Props): ReactElement {
     } else {
       //call edit api
       try {
-        const res = await axios.post(
+        await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
           {
             id: resource._id,
             newData: formData
           }
         );
+
         notification.open({
           message: "Success",
           description: "Edit resource information successful",
