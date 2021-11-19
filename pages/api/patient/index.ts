@@ -9,8 +9,13 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
+      console.log("test");
+      
       const database = new Connection();
+
+      console.log("test2");
       const patient = new Patient();
+
       const { hospitalId } = req.body;
 
       if(hospitalId) {
@@ -28,6 +33,8 @@ export default async function handler(
       }
       
     } catch (err) {
+      console.log("err", err);
+      
       res.status(400).end();
     }
   } else {
