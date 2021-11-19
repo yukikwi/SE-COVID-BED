@@ -9,11 +9,9 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      console.log("test");
       
       const database = new Connection();
 
-      console.log("test2");
       const patient = new Patient();
 
       const { hospitalId } = req.body;
@@ -23,7 +21,7 @@ export default async function handler(
         if (isDatabaseConnected === true) {
           const patientData = await patient.getPatients(hospitalId as string);
 
-          res.status(patientData.http).json(patientData);
+          res.status(patientData.http).json(patientData.data);
         } else {
           // database connection fail
           res.status(500).json({ error: "fail to connect to database" });
