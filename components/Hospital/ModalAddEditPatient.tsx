@@ -320,9 +320,6 @@ function ModalAddPatient(props: Props): ReactElement {
           ]}
         >
           <Radio.Group disabled={isView} onChange={handleDataChange}>
-            <Radio value="Request">
-              <Status type="patient" status="Request" />
-            </Radio>
             <Radio value="In progress">
               <Status type="patient" status="In progress" />
             </Radio>
