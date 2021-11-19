@@ -13,15 +13,20 @@ export default async function handler(
       const patient = new Patient();
       const { hospitalId } = req.body;
 
-      const isDatabaseConnected = await database.connectDatabase();
-      if (isDatabaseConnected === true) {
-        const patientData = await patient.getPatients(hospitalId as string);
+      if(hospitalId) {
+        const isDatabaseConnected = await database.connectDatabase();
+        if (isDatabaseConnected === true) {
+          const patientData = await patient.getPatients(hospitalId as string);
 
-        res.status(200).json(patientData);
+          res.status(patientData.http).json(patientData);
+        } else {
+          // database connection fail
+          res.status(500).json({ error: "fail to connect to database" });
+        }
       } else {
-        // database connection fail
-        res.status(500).json({ error: "fail to connect to database" });
+        res.status(400).end();
       }
+      
     } catch (err) {
       res.status(400).end();
     }
