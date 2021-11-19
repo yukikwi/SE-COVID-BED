@@ -36,6 +36,7 @@ TCF_login_001 Test login as hospital
     Sleep           3s
     Page Should Contain                     Capybara Hospital : Information
     Run Keyword     KWF_HOS_001 Show patient list
+    Run Keyword     KWF_HOS_003 Show resource list
     Run Keyword     KWF_logout Test logout
     Close Browser
 TCF_login_002 Test login as system admin
@@ -126,3 +127,26 @@ KWF_HOS_002 Edit patient
     Press Keys	    None	    ESC
     Sleep           1s
     Page Should Contain            NonTokTakTay
+
+KWF_HOS_003 Show resource list
+    Click Link      id=resource
+    Sleep           3s
+    Page Should Contain            Bed
+    Run Keyword     KWF_HOS_004 Edit resource
+KWF_HOS_004 Edit resource
+    Click Link      id=resource-61829f1ad8c327e93e718cea-edit
+    Sleep           1s
+    Input Text      id=basic_resourceName       King size bed         clear=True
+    Submit Form
+    Sleep           3s
+    Press Keys	    None	    ESC
+    Sleep           1s
+    Page Should Contain            King size bed
+    Click Link      id=resource-61829f1ad8c327e93e718cea-edit
+    Sleep           1s
+    Input Text      id=basic_resourceName       Bed         clear=True
+    Submit Form
+    Sleep           3s
+    Press Keys	    None	    ESC
+    Sleep           1s
+    Page Should Contain            Bed
