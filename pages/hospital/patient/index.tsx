@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import ApproveModal from "../../../components/Hospital/ModalApprove"
-import DischargeModal from "../../../components/Hospital/ModalDischarge"
 import { Table, Button, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
@@ -10,20 +8,23 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showPatientModal } from "../../../store/addPatientModal/actions";
-import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatient";
 import { IPatient } from "../../../class/data_struct/patient";
 import axios from "axios";
 import { getUserState } from "../../../store/user/selectors";
 import { getPatientModalState } from "../../../store/addPatientModal/selectors";
 import { getApproveModalState } from "../../../store/approveModal/selectors";
 import PatientAction from "../../../components/Hospital/PatientAction"
+import dynamic from "next/dynamic";
+const ApproveModal = dynamic(import("../../../components/Hospital/ModalApprove"));
+const DischargeModal = dynamic(import("../../../components/Hospital/ModalDischarge"));
+const ModalAddEditPatient = dynamic(import("../../../components/Hospital/ModalAddEditPatient"));
 
 const HospitalResourceIndex: NextPage = () => {
   // cast state and method
   const [tableData, setTableData] = useState<Array<any>>();
   const [approveDischargePatient, setApproveDischargePatient] = useState<any>();
   const [editPatient, setEditPatient] = useState<any>();
-  const [isView, setIsView] = useState<boolean>();
+  const [isView, setIsView] = useState<boolean>(false);
   const [selectTab, setSelectTab] = useState<
     "Request" | "In progress" | "Complete"
   >("Request");

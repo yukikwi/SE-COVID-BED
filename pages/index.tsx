@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
+import dynamic from 'next/dynamic'
 import Logo from "../components/Logo";
 import PositiveButton from "../components/PositiveButton";
 import { useRouter } from "next/router";
-import ModalTicket from "../components/Patient/ModalTicket";
 import { showTicketModal } from "../store/ticketModal/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserState } from "../store/user/selectors";
+const ModalTicket = dynamic(import("../components/Patient/ModalTicket"));
 
 const Home: NextPage = () => {
   const router = useRouter();

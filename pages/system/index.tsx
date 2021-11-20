@@ -1,8 +1,6 @@
 import type { NextPage } from "next";
 import axios from "axios";
 import LayoutHospital from "../../components/Layout/Hospital";
-import ModalDelete from "../../components/System/ModalDelete";
-import ModalAddEdit from "../../components/System/ModalAddEdit";
 import { Table, Button, notification, Tooltip } from "antd";
 import {PlusSquareOutlined} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +10,9 @@ import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
 import TableAction from "../../components/System/TableAction";
+import dynamic from "next/dynamic";
+const ModalDelete = dynamic(import("../../components/System/ModalDelete"));
+const ModalAddEdit = dynamic(import("../../components/System/ModalAddEdit"));
 
 export type TUiHospital = {
   key: string;

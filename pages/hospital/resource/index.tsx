@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import { Table, Button, Tooltip, notification } from "antd";
+import { Table, Button, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions";
 import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions";
@@ -11,12 +11,13 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
-import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
 import { getUserState } from "../../../store/user/selectors";
 import axios from "axios";
 import ResourceAction from "../../../components/Hospital/ResourceAction";
 import { TResourceUI } from "../../../class/data_struct/resource";
+import dynamic from "next/dynamic";
+const ModalDelete = dynamic(import("../../../components/Hospital/ModalDeleteResource"));
+const ModalAddResource = dynamic(import("../../../components/Hospital/ModalAddEditResource"));
 
 const HospitalResourceIndex: NextPage = () => {
   // state and redux part
@@ -25,7 +26,7 @@ const HospitalResourceIndex: NextPage = () => {
     key: "0",
     resourceName: "Loading...",
   });
-  const [isView, setIsView] = useState<boolean>();
+  const [isView, setIsView] = useState<boolean>(false);
   const [tableData, setTableData] = useState<Array<TResourceUI>>();
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
