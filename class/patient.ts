@@ -278,7 +278,6 @@ class Patient {
     
     //call google API for calculate distance from patient to active hospitals
     const result = await axios.get(`${process.env.NEXT_PUBLIC_GOOGLE_API}/json?destinations=${destinationLocation}&origins=${originLocation}&key=${process.env.NEXT_PUBLIC_GOOGLE_KEY}`) as any
-    console.log("result", result);
     
 
     //sort all distance for find nearest hospital 
