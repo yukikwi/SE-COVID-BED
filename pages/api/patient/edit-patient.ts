@@ -12,14 +12,14 @@ export default async function handler(
       const database = new Database();
       const patient = new Patient();
 
-      const isDatabaseConnected = await database.connectDatabase();
+      if(req.body) {
+        const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const { id, newData, newPatientSeverityLog } = req.body;
         const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
 
         // use method login from userlogin class
         if (newData && newPatientSeverityLog) {
-          console.log("both");
           const newSeverity: any = {
             patientSeverityLabel: newPatientSeverityLog.patientSeverityLabel,
             patientSeverityDateStart: dateNow,
@@ -34,12 +34,10 @@ export default async function handler(
 
           res.status(editPatient.http).json(editPatient.data);
         } else if (newData) {
-          console.log("data");
           const editPatient = await patient.editPatient(id, newData);
 
           res.status(editPatient.http).json(editPatient.data);
         } else {
-          console.log("else");
           const newSeverity: any = {
             patientSeverityLabel: newPatientSeverityLog.patientSeverityLabel,
             patientSeverityDateStart: dateNow,
@@ -56,9 +54,11 @@ export default async function handler(
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
       }
+      } else {
+        res.status(400).end();
+      }
+      
     } catch (err) {
-      console.log("error", err);
-
       res.status(500).end();
     }
   } else {

@@ -188,7 +188,6 @@ class Patient {
       
       //send email notification to patient
       const notificationRes = await this.notification.sendApproveNotification(fullPatientData);
-      console.log("notificationRes", notificationRes);
       
       return {
         //When approve patient to hospital successful return status 200 and code message.
