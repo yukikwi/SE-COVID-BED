@@ -72,10 +72,10 @@ class Hospital {
       
       if (deleteStatus === 404) {
         return {
-          //Hospital data in database is null return status 404, error message.
+          //Id doens't exist in database return status 404, error message.
           http: 404,
           data: {
-            code: "Hospital information is null",
+            error: "Invalid id",
           },
         };
       } else if (deleteStatus === 500) {
@@ -83,7 +83,7 @@ class Hospital {
           //Has problem when update data return status 500, error message.
           http: 500,
           data: {
-            code: "Invalid id",
+            error: "Fail to delete hospital",
           },
         };
       } else {

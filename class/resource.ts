@@ -47,7 +47,7 @@ class Resource {
       });
 
       return {
-        //When get resource data successful return status 200, success message and resource data.
+        //When get resource data successful return status 200 and resource data.
         http: 200,
         data: rawResource,
       };
