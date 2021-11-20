@@ -268,7 +268,7 @@ class Patient {
     const hospitalLocation = hospitalData.map((hospital: any) => {
       return (
         `${hospital.hospitalLocation?.lat}, ${hospital.hospitalLocation?.long}`
-    )})        
+    )})
   
     //set hospitals location format prepare for calculate distance by google map API
     const destinationLocation = hospitalLocation.join('|');
@@ -278,7 +278,9 @@ class Patient {
     
     //call google API for calculate distance from patient to active hospitals
     const result = await axios.get(`${process.env.NEXT_PUBLIC_GOOGLE_API}/json?destinations=${destinationLocation}&origins=${originLocation}&key=${process.env.NEXT_PUBLIC_GOOGLE_KEY}`) as any
+    console.log("result", result);
     
+
     //sort all distance for find nearest hospital 
     const distance = result.data.rows[0].elements.map((item: any, i: number) => {
       return({...item, index: i})
