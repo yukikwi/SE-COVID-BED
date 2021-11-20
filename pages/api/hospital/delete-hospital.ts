@@ -17,14 +17,12 @@ export default async function handler(
 
         // use method login from userlogin class
         const deleteHospitalStatus = await hospital.deleteHospital(id);
-        console.log(deleteHospitalStatus);
         res.status(deleteHospitalStatus.http).json(deleteHospitalStatus.data);
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
       }
     }catch(err){
-      console.log(err)
       res.status(500).end();
     }
   }else {
