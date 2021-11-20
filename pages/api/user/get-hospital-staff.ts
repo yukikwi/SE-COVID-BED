@@ -12,12 +12,9 @@ export default async function handler(
       const userData = await user.getAllHospitalStaff()
       res.status(200).json(userData);
     } catch (err) {
-      console.log("err", err);
       res.status(400).end();
     }
   } else {
-    console.log("method");
-
     res.status(400).end();
   }
 }
