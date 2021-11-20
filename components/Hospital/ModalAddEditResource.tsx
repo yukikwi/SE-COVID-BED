@@ -25,6 +25,7 @@ ModalAddResource.defaultProps = {
 function ModalAddResource(props: Props): ReactElement {
   const show = useSelector(getResourceModalState);
   const [mode, setMode] = useState("Add");
+  const [avaliableLimit, setAvaliableLimit] = useState(0)
   const [form] = Form.useForm();
   const userData = useSelector(getUserState);
   const { isView, resource } = props;
@@ -36,14 +37,20 @@ function ModalAddResource(props: Props): ReactElement {
 
   // UI handle
   useEffect(() => {
-    if (show === false) form.resetFields();
+    if (show === false)
+      form.resetFields();
     else if (typeof resource !== "undefined") {
-      console.log("patient", resource);
-
       form.setFieldsValue(resource);
-      if (isView === true) setMode("View");
-      else setMode("Edit");
-    } else setMode("Add");
+      if (isView === true)
+        setMode("View");
+      else
+        setMode("Edit");
+    }
+    else
+      setMode("Add");
+    
+    // set limit
+    setAvaliableLimit(form.getFieldValue("maximum"))
   }, [show]);
 
   const handleApprove = async (formData: any) => {
@@ -168,7 +175,7 @@ function ModalAddResource(props: Props): ReactElement {
             { required: true, message: "Please input your resource maximum!" },
           ]}
         >
-          <InputNumber disabled={isView} />
+          <InputNumber min="0" disabled={isView} onChange={() => setAvaliableLimit(form.getFieldValue("maximum"))} />
         </Form.Item>
 
         <Form.Item
@@ -181,7 +188,7 @@ function ModalAddResource(props: Props): ReactElement {
             },
           ]}
         >
-          <InputNumber disabled={isView} />
+          <InputNumber min={0} max={avaliableLimit} disabled={isView} />
         </Form.Item>
 
         <Form.Item
