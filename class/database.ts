@@ -97,7 +97,7 @@ export default class Database {
     try {
       //Use getAHospital method to get hospital data by id.
       let getHospitalData = await this.getAHospital(id);
-      //Hospital data does not exist return 404.
+      //Hospital data is null return 404.
       if (!getHospitalData) return 404;
       //Hospital data exists then use command findByIdAndUpdate by id and update isDelete to true.
       else return await HospitalModel.findByIdAndUpdate(id, { isDelete: true });
@@ -110,7 +110,7 @@ export default class Database {
   //Method for edit hospital data to database.
   async editHospital(id: string, newData: Object) {
     //Use command findByIdAndUpdate to update new data of hospital data by id to database.
-    return await HospitalModel.findByIdAndUpdate(id, newData, { upsert: true });
+    return await HospitalModel.findByIdAndUpdate(id, newData);
   }
 
   //Method for get all patient data by hospital id from database.

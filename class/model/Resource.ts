@@ -17,9 +17,6 @@ const ResourceSchema: Schema = new Schema({
   remark: {
     type: String
   },
-  status: {
-    type: String
-  },
   resourceHospital: {
     type: Schema.Types.ObjectId,
     ref: 'Hospital'

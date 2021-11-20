@@ -72,10 +72,10 @@ class Hospital {
       
       if (deleteStatus === 404) {
         return {
-          //cannot found hospital data in database return status 404, error message.
+          //Hospital data in database is null return status 404, error message.
           http: 404,
           data: {
-            code: "Hospital not found",
+            code: "Hospital information is null",
           },
         };
       } else if (deleteStatus === 500) {
@@ -110,7 +110,7 @@ class Hospital {
   async editHospital(id: string, newData: object) {
     try {
       //Call database class for connect to mongoDB
-      this.database.editHospital(id, newData);
+      await this.database.editHospital(id, newData);
 
       return {
         //When edit hospital data successful return status 200 and code message

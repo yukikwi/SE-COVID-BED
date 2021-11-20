@@ -14,10 +14,16 @@ export default async function handler(
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const { id, newData } = req.body;
-
-        // use method login from userlogin class
-        const editHospital = await hospital.editHospital(id, newData);
-        res.status(editHospital.http).json(editHospital.data);
+        
+        if(!id){
+          res.status(400).json({ error: "Hospital id is null"});
+        } else if(!newData) {
+          res.status(400).json({ error: "New data is null"});
+        } else {
+          // use method login from userlogin class
+          const editHospital = await hospital.editHospital(id, newData);
+          res.status(editHospital.http).json(editHospital.data);
+        }
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
