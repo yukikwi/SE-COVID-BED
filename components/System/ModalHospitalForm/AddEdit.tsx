@@ -43,8 +43,6 @@ function AddEditForm(props: Props): ReactElement {
   useEffect(() => {
     setAddHospital({ _id: null });
     form.resetFields();
-    console.log('Update prelat prelong')
-    console.log(hospitalData)
     if(mode === "Edit" && typeof(hospitalData.hospitalLocation?.lat) !== 'undefined'){
       setPreLat(Number(hospitalData.hospitalLocation?.lat))
       setPreLong(Number(hospitalData.hospitalLocation?.long))
@@ -209,40 +207,32 @@ function AddEditForm(props: Props): ReactElement {
             rules={[
               { required: true, message: "Please input your sub district!" },
             ]}
-          >
-            <AutoComplete
-              options={options}
-              onSearch={onSearch}
-              onSelect={onSelect}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="District"
-            name="hospitalDistrict"
-            rules={[
-              { required: true, message: "Please input your district!" },
-            ]}
-          >
-            <Input disabled />
-          </Form.Item>
-
-          <Form.Item
-            label="Province"
-            name="hospitalProvince"
-            rules={[
-              { required: true, message: "Please input your province!" },
-            ]}
-          >
-            <Input disabled />
-          </Form.Item>
+        >
+          <AutoComplete
+            options={options}
+            onSearch={onSearch}
+            onSelect={onSelect}
+          />
+        </Form.Item>
 
         <Form.Item
-          label="Hospital convince"
-          name="hospitalConvince"
-          rules={[{ required: true, message: "Please input Hospital convince!" }]}
+          label="District"
+          name="hospitalDistrict"
+          rules={[
+            { required: true, message: "Please input your district!" },
+          ]}
         >
-          <Input />
+          <Input disabled />
+        </Form.Item>
+
+        <Form.Item
+          label="Province"
+          name="hospitalProvince"
+          rules={[
+            { required: true, message: "Please input your province!" },
+          ]}
+        >
+          <Input disabled />
         </Form.Item>
 
         <Form.Item
