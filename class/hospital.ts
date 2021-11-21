@@ -14,7 +14,6 @@ class Hospital {
   async addHospital(
     hospitalName: string,
     hospitalPhoneNumber: string,
-    hospitalConvince: string,
     hospitalAddress: string,
     hospitalSubDistrict: string,
     hospitalDistrict: string,
@@ -27,7 +26,6 @@ class Hospital {
     this.newHospitalData = {
       hospitalName: hospitalName,
       hospitalPhoneNumber: hospitalPhoneNumber,
-      hospitalConvince: hospitalConvince,
       hospitalAddress: hospitalAddress,
       hospitalSubDistrict: hospitalSubDistrict,
       hospitalDistrict: hospitalDistrict,

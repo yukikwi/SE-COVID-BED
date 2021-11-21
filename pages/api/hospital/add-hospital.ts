@@ -16,7 +16,6 @@ export default async function addHospital(
         const {
           hospitalName,
           hospitalPhoneNumber,
-          hospitalConvince,
           hospitalAddress,
           hospitalSubDistrict,
           hospitalDistrict,
@@ -29,7 +28,6 @@ export default async function addHospital(
         const addHospitalStatus = await hospital.addHospital(
           hospitalName,
           hospitalPhoneNumber,
-          hospitalConvince,
           hospitalAddress,
           hospitalSubDistrict,
           hospitalDistrict,
