@@ -24,7 +24,10 @@ export type THospital = {
   hospitalSubDistrict?: string;
   hospitalDistrict?: string;
   hospitalProvince?: string;
-  hospitalLocation?: object;
+  hospitalLocation?: {
+    lat: number | Number;
+    long: number | Number;
+  };
   isAvailable?: boolean;
   isDelete?: boolean;
   staff?: any;

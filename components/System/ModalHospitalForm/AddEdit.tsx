@@ -43,6 +43,16 @@ function AddEditForm(props: Props): ReactElement {
   useEffect(() => {
     setAddHospital({ _id: null });
     form.resetFields();
+    console.log('Update prelat prelong')
+    console.log(hospitalData)
+    if(mode === "Edit" && typeof(hospitalData.hospitalLocation?.lat) !== 'undefined'){
+      setPreLat(Number(hospitalData.hospitalLocation?.lat))
+      setPreLong(Number(hospitalData.hospitalLocation?.long))
+      dispatch(setLoc({
+        lat: Number(hospitalData.hospitalLocation?.lat),
+        long: Number(hospitalData.hospitalLocation?.long),
+      }))
+    }
   }, [hospitalData, show]);
 
   // Fetch Data
@@ -63,17 +73,9 @@ function AddEditForm(props: Props): ReactElement {
       const res = (await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/add-hospital`,
         {
-          hospitalName: formData.hospitalName,
-          hospitalPhoneNumber: formData.hospitalPhoneNumber,
-          hospitalConvince: formData.hospitalConvince,
-          hospitalSubDistrict: formData.hospitalSubDistrict,
-          hospitalDistrict: formData.hospitalDistrict,
-          hospitalProvince: formData.hospitalProvince,
-          hospitalAddress: formData.hospitalAddress,
+          ...formData,
           hospitalLocationLat: loc.lat,
           hospitalLocationLong: loc.long,
-          hospitalStatus: formData.hospitalPhoneNumber,
-          staff: formData.staff,
           isAvailable
         }
       )) as any;
@@ -102,6 +104,8 @@ function AddEditForm(props: Props): ReactElement {
           id: hospitalData._id,
           newData: {
             ...formData, 
+            hospitalLocationLat: loc.lat,
+            hospitalLocationLong: loc.long,
             isAvailable
           },
         }
