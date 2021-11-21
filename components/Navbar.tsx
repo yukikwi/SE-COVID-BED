@@ -36,8 +36,12 @@ function Navbar(props: Props): ReactElement {
       let navBackToSys
       if(userData.userinfo.role === 'system_admin'){
         navBackToSys = (
-          <a onClick={ returnSys }>
-            <a className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3">Back to system</a>
+          <a
+            id="back-to-system"
+            className="tw-w-full sm:tw-w-auto tw-transition tw-duration-500 tw-ease-in-out hover:tw-bg-charcoal hover:tw-text-white tw-py-3 tw-px-2 tw-rounded-lg sm:tw-ml-3"
+            onClick={ returnSys }
+          >
+            Back to system
           </a>
         )
       }

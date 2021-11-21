@@ -50,12 +50,20 @@ function PatientAction(props: Props): ReactElement {
       return (
         <React.Fragment>
           <Tooltip title="Approve">
-            <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
+            <a
+              id={`patient-${record._id}-approve`}
+              className="hover:tw-text-green-500"
+              onClick={() => {showApproveModal(record)}}
+            >
               <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>
           <Tooltip title="Discharge">
-            <a className="hover:tw-text-red-500" onClick={() => {showDischargeModal(record)}}>
+            <a
+              id={`patient-${record._id}-discharge`}
+              className="hover:tw-text-red-500"
+              onClick={() => {showDischargeModal(record)}}
+            >
               <CloseCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
             </a>
           </Tooltip>

@@ -43,6 +43,7 @@ function TableAction(props: Props): ReactElement {
     <div>
       <Tooltip title="View">
         <a
+          id={`hospital-${record.key}-view`}
           className="hover:tw-text-green-500"
           onClick={() => {
             dispatch(setHospitalId(record.key));
@@ -55,7 +56,7 @@ function TableAction(props: Props): ReactElement {
 
       <Tooltip title="Edit">
         <a
-          id={`hospital-${record.key}`}
+          id={`hospital-${record.key}-edit`}
           className="hover:tw-text-yellow-500"
           onClick={handleEdit}
         >
@@ -65,6 +66,7 @@ function TableAction(props: Props): ReactElement {
 
       <Tooltip title="Remove">
         <a
+          id={`hospital-${record.key}-delete`}
           className="hover:tw-text-red-500"
           onClick={handleRemove}
         >
