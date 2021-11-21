@@ -17,7 +17,7 @@ const ModalAddEdit = dynamic(import("../../components/System/ModalAddEdit"));
 export type TUiHospital = {
   key: string;
   hospital: string;
-  convince: string;
+  province: string;
   staff: string;
   isAvailable: boolean;
 };
@@ -55,7 +55,7 @@ const HospitalResourceIndex: NextPage = () => {
         (hospital: IHospital) => ({
           key: hospital._id,
           hospital: hospital.hospitalName,
-          convince: hospital.hospitalConvince,
+          province: hospital.hospitalProvince,
           staff: (hospital.staff && typeof hospital.staff.username === "string") ?
             hospital.staff.username
             :
@@ -86,9 +86,9 @@ const HospitalResourceIndex: NextPage = () => {
       },
     },
     {
-      title: "Convince",
-      dataIndex: "convince",
-      key: "convince",
+      title: "Province",
+      dataIndex: "province",
+      key: "province",
     },
     {
       title: "Staff",
