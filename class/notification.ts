@@ -27,7 +27,7 @@ class Notification{
       //content email
       const mailOptions = {
         from: `"Se Covid-19 Bed" <${process.env.EMAIL_SERVER_USER}>`,
-        to: patientEmail, // FIXME: patient email
+        to: patientEmail,
         subject: "Your bed request has been approved",
         html: `<div
         style="
@@ -128,7 +128,7 @@ class Notification{
       //content email
       const mailOptions = {
         from: `"Se Covid-19 Bed" <${process.env.EMAIL_SERVER_USER}>`,
-        to: patientEmail, // FIXME: patient email
+        to: patientEmail,
         subject: "Sorry, Your bed request has been discharge",
         html: `<div
         style="
