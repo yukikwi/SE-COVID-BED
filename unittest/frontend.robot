@@ -125,7 +125,7 @@ KWF_HOS_001 Show patient list
     Click Button    id=tab-request
     Sleep           1s
     Page Should Contain            aa
-    Run Keyword     KWF_HOS_006 Approve patient
+    Run Keyword     KWF_HOS_006 Add patient
 KWF_HOS_002 Approve patient
     Click Link      id=patient-6198aa6712d95c92e6f79f1e-approve
     Sleep           3s
@@ -161,7 +161,7 @@ KWF_HOS_005 Edit patient
     Press Keys	    None	    ESC
     Sleep           1s
     Page Should Contain            NonTokTakTay
-KWF_HOS_006 Approve patient
+KWF_HOS_006 Add patient
     Click Button      id=add-patient
     Sleep           3s
     Page Should Contain         Add Patient Information
@@ -193,14 +193,15 @@ KWF_HOS_008 Edit resource
     Press Keys	    None	    ESC
     Sleep           1s
     Page Should Contain            Bed
+    Sleep           1s
 KWF_HOS_009 View resource
-    Click Button      id=resource-61829f1ad8c327e93e718cea-view
+    Click Link      id=resource-61829f1ad8c327e93e718cea-view
     Sleep           3s
     Page Should Contain         View Resource Information
     Press Keys	    None	    ESC
     Sleep           1s
 KWF_HOS_010 Delete resource
-    Click Button      id=resource-61829f1ad8c327e93e718cea-remove
+    Click Link      id=resource-61829f1ad8c327e93e718cea-remove
     Sleep           3s
     Page Should Contain         Delete Resource
     Press Keys	    None	    ESC
