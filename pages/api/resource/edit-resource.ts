@@ -13,14 +13,24 @@ export default async function handler(
 
       const { id, newData } = req.body;
 
-      const isDatabaseConnected = await database.connectDatabase();
-      if (isDatabaseConnected === true) {
-        const resourceData = await resource.editResource(id, newData);
+      if (req.body) {
+        const isDatabaseConnected = await database.connectDatabase();
+        if (isDatabaseConnected === true) {
 
-        res.status(resourceData.http).json(resourceData.data);
+          if(!id){
+            res.status(500).json({ error: "Resource id is null" });
+          } else if (!newData) {
+            res.status(500).json({ error: "New data is null" });
+          } else {
+            const resourceData = await resource.editResource(id, newData);
+            res.status(resourceData.http).json(resourceData.data);
+          }
+        } else {
+          // database connection fail
+          res.status(500).json({ error: "fail to connect to database" });
+        }
       } else {
-        // database connection fail
-        res.status(500).json({ error: "fail to connect to database" });
+        res.status(400).json({ error: "Resource id and new data is null" });
       }
     } catch (err) {
       res.status(400).end();
