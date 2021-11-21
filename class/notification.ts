@@ -88,13 +88,11 @@ class Notification{
       await transport.sendMail(mailOptions, async function (error: any, info: any) {
         transport.close();
         if(error) {
-          console.log("send email failed", error);
           return {
             http: 400,
             data: "Fail to send email",
           };
         } else {
-          console.log("send email", info);
           return {
             http: 200,
             data: "Send email successfully",
@@ -189,13 +187,11 @@ class Notification{
       await transport.sendMail(mailOptions, async function (error: any, info: any) {
         transport.close();
         if(error) {
-          console.log("send email failed", error);
           return {
             http: 400,
             data: "Fail to send email",
           };
         } else {
-          console.log("send email", info);
           return {
             http: 200,
             data: "Send email successfully",
