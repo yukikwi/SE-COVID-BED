@@ -19,7 +19,7 @@ class User {
   //Method for automatic login using token.
   async loginFromToken(token: string){
     //Get user information by token.
-    let userData = await this.database.getAUser({ token });
+    let userData = await this.database.getAUser({ token }) as TUser;
 
     if (userData && userData.password) {
       if(userData.role === "hospital"){
@@ -56,7 +56,7 @@ class User {
   async login(username: string, password: string) {
     
     //query userData by username
-    const userData = await this.database.getAUser({ username });
+    const userData = await this.database.getAUser({ username }) as TUser;
 
     //compare password
     if (userData && userData.password) { //if username is available in database
