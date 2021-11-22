@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Connection from "../../class/database";
-import System from "../../class/system";
+import Connection from "../../../class/database";
+import Hospital from "../../../class/hospital";
 
 export default async function addHospital(
   req: NextApiRequest,
@@ -9,14 +9,13 @@ export default async function addHospital(
   if (req.method === "POST") {
     try {
       const database = new Connection();
-      const system = new System();
+      const hospital = new Hospital();
 
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const {
           hospitalName,
           hospitalPhoneNumber,
-          hospitalConvince,
           hospitalAddress,
           hospitalSubDistrict,
           hospitalDistrict,
@@ -26,10 +25,9 @@ export default async function addHospital(
           staff,
         } = req.body;
 
-        const addHospitalStatus = await system.addHospital(
+        const addHospitalStatus = await hospital.addHospital(
           hospitalName,
           hospitalPhoneNumber,
-          hospitalConvince,
           hospitalAddress,
           hospitalSubDistrict,
           hospitalDistrict,

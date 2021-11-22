@@ -4,7 +4,6 @@ import { Document } from "mongoose";
 export interface IHospital extends Document {
   hospitalName: string;
   hospitalPhoneNumber: string;
-  hospitalConvince: string;
   hospitalAddress: string;
   hospitalSubDistrict: string;
   hospitalDistrict: string;
@@ -18,7 +17,6 @@ export interface IHospital extends Document {
 export type THospital = {
   hospitalName?: string;
   hospitalPhoneNumber?: string;
-  hospitalConvince?: string;
   hospitalAddress?: string;
   hospitalSubDistrict?: string;
   hospitalDistrict?: string;

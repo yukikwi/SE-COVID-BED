@@ -1,39 +1,33 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Connection from "../../../class/database";
-import Resource from "../../../class/resource";
+import Hospital from "../../../class/hospital";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<any>
 ) {
   if (req.method === "POST") {
     try {
       const database = new Connection();
-      const resource = new Resource();
-
-      const { id, newData } = req.body;
+      const hospital = new Hospital();
 
       if (req.body) {
         const isDatabaseConnected = await database.connectDatabase();
         if (isDatabaseConnected === true) {
+          const { id } = req.body;
 
-          if(!id){
-            res.status(500).json({ error: "Resource id is null" });
-          } else if (!newData) {
-            res.status(500).json({ error: "New data is null" });
-          } else {
-            const resourceData = await resource.editResource(id, newData);
-            res.status(resourceData.http).json(resourceData.data);
-          }
+          // use method login from userlogin class
+          const deleteHospitalStatus = await hospital.deleteHospital(id);
+          res.status(deleteHospitalStatus.http).json(deleteHospitalStatus.data);
         } else {
           // database connection fail
           res.status(500).json({ error: "fail to connect to database" });
         }
       } else {
-        res.status(400).json({ error: "Resource id and new data is null" });
+        res.status(400).json({ error: "Hospital id is null" });
       }
     } catch (err) {
-      res.status(400).end();
+      res.status(500).end();
     }
   } else {
     res.status(400).end();

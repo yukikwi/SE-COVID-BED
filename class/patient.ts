@@ -1,4 +1,3 @@
-import { TimePicker } from "antd";
 import Database from "./database";
 import Notification from "./notification";
 import { IPatient, ISeverity } from "./data_struct/patient";
@@ -7,23 +6,25 @@ import axios from "axios";
 
 class Patient {
   private database: Database;
-  private patientData: IPatient | any;
   private notification: Notification
 
   constructor() {
     this.database = new Database();
     this.notification = new Notification()
-    this.patientData = {};
   }
 
+  //Method for get one patient by id.
   async getAPatient(id: string) {
     try {
+      //Get a patient data filter by id form database with database class.
       const rawPatientData = await this.database.getAPatient(id as string);
 
+      //Get a severity data of current patient filter by id form database with database class.
       const rawServerity = await this.database.getActiveSeverity(
         rawPatientData?._id as string
       );
 
+      //Get a hospital data that current patient is related filter by hospital id form database with database class.
       const hospitalData = await this.database.getAHospital(
         rawPatientData?.patientHospital as string
       );
@@ -42,15 +43,14 @@ class Patient {
         patientEmail: rawPatientData?.patientEmail,
         patientSeverity: rawServerity?.patientSeverityLabel,
       };
-      console.log("rawPatientData", rawPatientData);
-      console.log("rawServerity", rawServerity);
-      console.log("hospitalData", hospitalData);
       return {
+        //When get patient data successful return status 200 and patient data.
         http: 200,
         data: patientData,
       };
     } catch (error) {
       return {
+        //When get patient data fail return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to query patient",
@@ -59,24 +59,27 @@ class Patient {
     }
   }
 
+  //Method for get all patient by hospital id.
   async getPatients(hospitalId: string) {
     let patientData: any = [];
     try {
-      console.log("hospitalId", hospitalId);
 
+      //Get all patient data filter by id form database with database class.
       const rawPatientData: any = await this.database.getPatients(hospitalId);
-      console.log("rawPatientData", rawPatientData);
 
       await Promise.all(
         rawPatientData.map(async (patient: IPatient) => {
+          //Map and get last severity data of each patient filter by patient id form database with database class.
           const rawServerity = await this.database.getActiveSeverity(
             patient?._id as string
           );
 
+          //Map and get hospital data of each patient filter by hospital id form patient data form database with database class.
           const hospitalData = await this.database.getAHospital(
             patient?.patientHospital as string
           );
 
+          //Add all patient data to array.
           patientData = [
             ...patientData,
             {
@@ -94,16 +97,16 @@ class Patient {
               patientEmail: patient?.patientEmail,
             },
           ];
-          console.log("patientData", patientData);
         })
       );
-      console.log("patientDataaaa", patientData);
       return {
+        //When get all patient data successful return status 200 and array of all patient data.
         http: 200,
         data: patientData,
       };
     } catch (error) {
       return {
+        //When get all patient data fail return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to query patient",
@@ -112,6 +115,7 @@ class Patient {
     }
   }
 
+  //Method for add new patient.
   async addPatient(
     patientName: string,
     patientHospital: string,
@@ -127,27 +131,34 @@ class Patient {
     patientEmail: string
   ) {
     const newPatientData = {
-      patientName: `${patientName}`,
-      patientHospital: `${patientHospital}`,
-      patientAddress: `${patientAddress}`,
-      patientSubDistrict: `${patientSubDistrict}`,
-      patientDistrict: `${patientDistrict}`,
-      patientProvince: `${patientProvince}`,
+      patientName: patientName,
+      patientHospital: patientHospital,
+      patientAddress: patientAddress,
+      patientSubDistrict: patientSubDistrict,
+      patientDistrict: patientDistrict,
+      patientProvince: patientProvince,
       patientLocation: {...patientLocation},
-      patientPhoneNumber: `${patientPhoneNumber}`,
-      patientStatus: `${patientStatus}`,
-      patientEmail: `${patientEmail}`,
+      patientPhoneNumber: patientPhoneNumber,
+      patientStatus: patientStatus,
+      patientEmail: patientEmail,
     };
     if (newPatientData !== null) {
+      
+      //Add new patient data
       const patientId = await this.database.addPatient(newPatientData);
+      
       const newPatientSeverityLog = {
-        patientSeverityLabel: `${patientSeverityLabel}`,
-        patientSeverityDateStart: `${patientSeverityDateStart}`,
+        patientSeverityLabel: patientSeverityLabel,
+        patientSeverityDateStart: patientSeverityDateStart,
         patientSeverityDateEnd: "9999-12-31 00:00:00",
-        patient: `${patientId}`,
+        patient: patientId,
       };
+      
+      //Add new severity data of this patient
       await this.database.addSeverityLog(newPatientSeverityLog);
+      
       return {
+        //When add patient data successful return status 201, success message, patient data and severity of this patient.
         http: 201,
         data: {
           code: "Success to add patient",
@@ -157,6 +168,7 @@ class Patient {
       };
     } else {
       return {
+        //When add patient data fail return status 400 and error message.
         http: 400,
         data: {
           error: "Fail to add patient",
@@ -165,17 +177,20 @@ class Patient {
     }
   }
 
+  //Method for approve patient to hospital
   async approvePatient(id: string) {
     try {
+
+      //Call database class for connect mongoDB
       await this.database.approvePatient(id);
       //get patient data
       const fullPatientData = await this.getAPatient(id);
       
       //send email notification to patient
       const notificationRes = await this.notification.sendApproveNotification(fullPatientData);
-      console.log("notificationRes", notificationRes);
       
       return {
+        //When approve patient to hospital successful return status 200 and code message.
         http: 200,
         data: {
           code: "Success to approve patient",
@@ -183,6 +198,7 @@ class Patient {
       };
     } catch (e) {
       return {
+        //When approve patient to hospital failed return status 500 and error message.
         http: 400,
         data: {
           error: "Fail to approve patient",
@@ -191,10 +207,15 @@ class Patient {
     }
   }
 
+  //Method for edit or update patient data
   async editPatient(id: string, newData: object) {
     try {
+
+      //Call database class for connect mongoDB
       await this.database.editPatient(id, newData);
+
       return {
+        //When update patient data successful return status 200 and code message.
         http: 200,
         data: {
           code: "Success to edit Patient",
@@ -202,6 +223,8 @@ class Patient {
       };
     } catch (error) {
       return {
+        
+        //When update patient data failed return status 500 and error message.
         http: 500,
         data: {
           error: "Fail to edit Patient",
@@ -210,13 +233,17 @@ class Patient {
     }
   }
 
+  //Method for edit or update patient severity status
   async editActiveSeverity(newPatientSeverityLog: ISeverity) {
     try {
-      const temp = await this.database.editActiveSeverity(
+
+      //Call database class for connect mongoDB
+      await this.database.editActiveSeverity(
         newPatientSeverityLog
       );
 
       return {
+        //When update patient severity status successful return status 200 and code message.
         http: 200,
         data: {
           code: "Success to edit severity log",
@@ -224,6 +251,7 @@ class Patient {
       };
     } catch (error) {
       return {
+        //When update patient severity status failed return status 500 and error message.
         http: 500,
         data: {
           error: "Fail to edit severity log",
@@ -232,17 +260,26 @@ class Patient {
     }
   }
 
+  //Method for make a tentative decision for hospital suggestion 
   async decisionHospital(hospitalData: IHospital[], patientLocation: any) {
+
+    //get location from active hospitals
     const hospitalLocation = hospitalData.map((hospital: any) => {
       return (
         `${hospital.hospitalLocation?.lat}, ${hospital.hospitalLocation?.long}`
-    )})        
-    console.log("hospitalLocation", hospitalLocation);
+    )})
+  
+    //set hospitals location format prepare for calculate distance by google map API
     const destinationLocation = hospitalLocation.join('|');
+
+    //set patient location format prepare for calculate distance by google map API
     const originLocation = `${patientLocation.lat}, ${patientLocation.long}`
-    console.log("destinationLocation", destinationLocation);
     
+    //call google API for calculate distance from patient to active hospitals
     const result = await axios.get(`${process.env.NEXT_PUBLIC_GOOGLE_API}/json?destinations=${destinationLocation}&origins=${originLocation}&key=${process.env.NEXT_PUBLIC_GOOGLE_KEY}`) as any
+    
+
+    //sort all distance for find nearest hospital 
     const distance = result.data.rows[0].elements.map((item: any, i: number) => {
       return({...item, index: i})
     })
@@ -250,6 +287,7 @@ class Patient {
       return(a.distance.value - b.distance.value)
     })
     
+    //return nearest hospital data
     return(distance[0].index);
   }
 

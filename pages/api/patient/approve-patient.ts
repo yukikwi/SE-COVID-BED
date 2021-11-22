@@ -11,7 +11,8 @@ export default async function approvePatient(
       const database = new Database();
       const patient = new Patient();
 
-      const isDatabaseConnected = await database.connectDatabase();
+      if(req.body) {
+        const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const {
           id
@@ -24,6 +25,10 @@ export default async function approvePatient(
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
       }
+      } else {
+        res.status(400).end();
+      }
+      
     } catch (err) {
       res.status(400).end();
     }

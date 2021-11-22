@@ -20,7 +20,7 @@ export default async function handler(
         // const patientData = await database.getAPatient(id as string);
         const patientData = await patient.getAPatient(id as string);
 
-        res.status(200).json(patientData.data);
+        res.status(patientData.http).json(patientData.data);
       } else {
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });

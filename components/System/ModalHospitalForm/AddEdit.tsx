@@ -55,7 +55,7 @@ function AddEditForm(props: Props): ReactElement {
     let formData = form.getFieldsValue()
     try {
       const res = (await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/add-hospital`,
+        `${process.env.NEXT_PUBLIC_APP_API}/hospital/add-hospital`,
         {
           hospitalName: formData.hospitalName,
           hospitalPhoneNumber: formData.hospitalPhoneNumber,
