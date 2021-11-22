@@ -13,35 +13,18 @@ HospitalStatus.defaultProps = {
 };
 
 function HospitalStatus(props: Props): ReactElement {
+  // props
   const { hospitalStatus, updateHospitalStatus, mode } = props;
-  if (mode === "Add") {
-    return (
-      <Switch
-        onChange={updateHospitalStatus}
-        checkedChildren="Open"
-        unCheckedChildren="Close"
-        defaultChecked
-        disabled
-      />
-    );
-  } else if (hospitalStatus) {
-    return (
-      <Switch
-        onChange={updateHospitalStatus}
-        checkedChildren="Open"
-        unCheckedChildren="Close"
-        defaultChecked
-      />
-    );
-  } else {
-    return (
-      <Switch
-        onChange={updateHospitalStatus}
-        checkedChildren="Open"
-        unCheckedChildren="Close"
-      />
-    );
-  }
+
+  return (
+    <Switch
+      onChange={updateHospitalStatus}
+      checkedChildren="Open"
+      unCheckedChildren="Close"
+      defaultChecked={hospitalStatus}
+      disabled={mode === "Add"}
+    />
+  );
 }
 
 export default HospitalStatus;
