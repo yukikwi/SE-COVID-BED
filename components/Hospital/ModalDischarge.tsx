@@ -24,17 +24,15 @@ function Discharge(props: Props): ReactElement {
 
   const handleDischarge = async () => {
     // Api for discharge here
-    // For Api use this to set table data
     const id = patient._id;
     try {
-      let apiResonse: any = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient/discharge-patient`,
         {
           id,
         }
       );
 
-      console.log("apiResonse", apiResonse);
       notification.open({
         message: "Success",
         description: "Connect to api successful.",
@@ -58,7 +56,7 @@ function Discharge(props: Props): ReactElement {
       onCancel={handleCancel}
     >
       <p>
-        click “Confirm” if you’re sure that you want to discharge patient named{" "}
+        click “Confirm” if you’re sure that you want to discharge patient named &nbsp;
         <span className="tw-font-bold">{patient.patientName}</span>, if not
         click cancel.
       </p>

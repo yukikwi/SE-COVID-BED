@@ -15,13 +15,17 @@ export interface IHospital extends Document {
 }
 
 export type THospital = {
+  _id?: string;
   hospitalName?: string;
   hospitalPhoneNumber?: string;
   hospitalAddress?: string;
   hospitalSubDistrict?: string;
   hospitalDistrict?: string;
   hospitalProvince?: string;
-  hospitalLocation?: object;
+  hospitalLocation?: {
+    lat?: number | Number;
+    long?: number | Number;
+  };
   isAvailable?: boolean;
   isDelete?: boolean;
   staff?: any;

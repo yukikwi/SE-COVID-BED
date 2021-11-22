@@ -24,18 +24,15 @@ function Approve(props: Props): ReactElement {
 
   const handleApprove = async () => {
     // Api for approve here
-    console.log("patient", patient);
-    // For Api use this to set table data
     const id = patient._id;
     try {
-      let apiResonse: any = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient/approve-patient`,
         {
           id,
         }
       );
 
-      console.log("apiResonse", apiResonse);
       notification.open({
         message: "Success",
         description: "Connect to api successful.",
@@ -59,7 +56,7 @@ function Approve(props: Props): ReactElement {
       onCancel={handleCancel}
     >
       <p>
-        click “Confirm” if you’re sure that you want to approve patient named{" "}
+        click “Confirm” if you’re sure that you want to approve patient named &nbsp;
         <span className="tw-font-bold">{patient.patientName}</span>, if not
         click cancel.
       </p>

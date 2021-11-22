@@ -1,33 +1,24 @@
 import type { NextPage } from "next";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import LayoutHospital from "../../components/Layout/Hospital";
-import ModalDelete from "../../components/System/ModalDelete";
-import ModalAddEdit from "../../components/System/ModalAddEdit";
 import { Table, Button, notification, Tooltip } from "antd";
-import Status from "../../components/System/Status";
-import {
-  EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  PlusSquareOutlined,
-} from "@ant-design/icons";
+import {PlusSquareOutlined} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { showHospitalDeleteModal } from "../../store/deleteModal/actions";
 import { showAddOrEditModal } from "../../store/addOrEditHospitalModal/actions";
 import { IHospital } from "../../class/data_struct/hospital";
 import { useEffect, useState } from "react";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { getAddOrEditModalState } from "../../store/addOrEditHospitalModal/selectors";
-import { setHospitalId } from "../../store/user/actions";
-import { useRouter } from "next/router";
+import TableAction from "../../components/System/TableAction";
+import dynamic from "next/dynamic";
+const ModalDelete = dynamic(import("../../components/System/ModalDelete"));
+const ModalAddEdit = dynamic(import("../../components/System/ModalAddEdit"));
 
 export type TUiHospital = {
   key: string;
   hospital: string;
-  convince: string;
+  province: string;
   staff: string;
-  available: number;
-  amount: number;
   isAvailable: boolean;
 };
 
@@ -37,106 +28,22 @@ type selectHospitalType = {
 };
 
 const HospitalResourceIndex: NextPage = () => {
+  //state & redux part
   const [selectedHospital, setSelectedHospital] = useState<selectHospitalType>({
     key: "",
     hospital: "",
   });
-
-  // Redux part
+  const [data, setData] = useState<Array<TUiHospital>>();
   const deleteModalState = useSelector(getDeleteModalState);
   const addEditModalState = useSelector(getAddOrEditModalState);
-  const router = useRouter();
   const dispatch = useDispatch();
 
+  // refresh when deleteModalState or addEditModalState change
   useEffect(() => {
     getHospitalsData();
   }, [deleteModalState, addEditModalState]);
 
-  // Dummy Hospital data
-  const columns = [
-    {
-      title: "Hospital",
-      dataIndex: "hospital",
-      key: "hospital",
-      sorter: {
-        compare: (a: TUiHospital, b: TUiHospital) =>
-          a.hospital.localeCompare(b.hospital),
-      },
-    },
-    {
-      title: "Convince",
-      dataIndex: "convince",
-      key: "convince",
-    },
-    {
-      title: "Staff",
-      dataIndex: "staff",
-      key: "staff",
-    },
-    {
-      title: "Status",
-      key: "status",
-      render: (record: TUiHospital) => (
-        <Status
-          isAvailable={record.isAvailable}
-          available={record.available}
-          amount={record.amount}
-        />
-      ),
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (record: TUiHospital) => (
-        <div>
-          <Tooltip title="View">
-            <a
-              className="hover:tw-text-green-500"
-              onClick={() => {
-                dispatch(setHospitalId(record.key));
-                router.push("/hospital");
-              }}
-            >
-              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-
-          <Tooltip title="Edit">
-            <a
-              className="hover:tw-text-yellow-500"
-              onClick={() => {
-                dispatch(showAddOrEditModal("Edit"));
-                setSelectedHospital({
-                  key: record.key,
-                  hospital: record.hospital,
-                });
-              }}
-            >
-              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-
-          <Tooltip title="Remove">
-            <a
-              className="hover:tw-text-red-500"
-              onClick={() => {
-                dispatch(showHospitalDeleteModal());
-                setSelectedHospital({
-                  key: record.key,
-                  hospital: record.hospital,
-                });
-              }}
-            >
-              <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
-            </a>
-          </Tooltip>
-        </div>
-      ),
-    },
-  ];
-
-  // Fetch data from api
-  const [data, setData] = useState<Array<TUiHospital>>();
+  // Method: Fetch data from api
   const getHospitalsData = async () => {
     try {
       let apiResonse = await axios.get(
@@ -148,32 +55,17 @@ const HospitalResourceIndex: NextPage = () => {
         (hospital: IHospital) => ({
           key: hospital._id,
           hospital: hospital.hospitalName,
-          convince: hospital.hospitalConvince,
-          staff:
-            hospital.staff && typeof hospital.staff.username === "string"
-              ? hospital.staff.username
-              : "not specific",
-          amount: 32,
-          available: 32,
+          province: hospital.hospitalProvince,
+          staff: (hospital.staff && typeof hospital.staff.username === "string") ?
+            hospital.staff.username
+            :
+            "not specific",
           isAvailable: hospital.isAvailable,
         })
       );
-      console.log("temp", hospitalData);
-
+      
+      // set data
       setData(hospitalData);
-
-      // for (let i = 0; i < rawHospitalData.length; i++) {
-      //   hospitalData.push({
-      //     key: i.toString(),
-      //     _id: rawHospitalData[i]._id,
-      //     hospital: rawHospitalData[i].hospitalName,
-      //     convince: rawHospitalData[i].hospitalConvince,
-      //     staff: "Dr.Dio",
-      //     amount: 32,
-      //     available: 32,
-      //     isClose: rawHospitalData[i].isAvailable,
-      //   });
-      // }
     } catch (error) {
       notification.open({
         message: "Error",
@@ -183,22 +75,55 @@ const HospitalResourceIndex: NextPage = () => {
     }
   };
 
+  // Column template
+  const columns = [
+    {
+      title: "Hospital",
+      dataIndex: "hospital",
+      key: "hospital",
+      sorter: {
+        compare: (a: TUiHospital, b: TUiHospital) => a.hospital.localeCompare(b.hospital)
+      },
+    },
+    {
+      title: "Province",
+      dataIndex: "province",
+      key: "province",
+    },
+    {
+      title: "Staff",
+      dataIndex: "staff",
+      key: "staff",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (record: TUiHospital) => (
+        <TableAction record={record} setSelectedHospital={(data:selectHospitalType) => { setSelectedHospital(data)}} />
+      ),
+    },
+  ];
+
+  // add hospital button ui
+  const addHospitalBtn = 
+  <Button
+    className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
+    type="primary"
+    shape="round"
+    icon={<PlusSquareOutlined />}
+    size="large"
+    onClick={() => {
+      dispatch(showAddOrEditModal("Add"));
+    }}
+  >
+    add hospital
+  </Button>
+
   return (
     <LayoutHospital
       title="Hospital List"
       button={
-        <Button
-          className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
-          type="primary"
-          shape="round"
-          icon={<PlusSquareOutlined />}
-          size="large"
-          onClick={() => {
-            dispatch(showAddOrEditModal("Add"));
-          }}
-        >
-          add hospital
-        </Button>
+        addHospitalBtn
       }
     >
       <div>
@@ -208,7 +133,6 @@ const HospitalResourceIndex: NextPage = () => {
         />
         <ModalAddEdit
           id={selectedHospital?.key as string}
-          hospital={selectedHospital?.hospital as string}
         />
         <div className="tw-overflow-x-scroll">
           <Table columns={columns} dataSource={data} />
