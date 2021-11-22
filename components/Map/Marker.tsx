@@ -7,7 +7,6 @@ interface Props {
 }
 
 function Marker({}: Props): ReactElement {
-  // map marker
   return (
     <div style={{
       position: 'relative', color: '#D73534',

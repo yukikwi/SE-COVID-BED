@@ -1,41 +1,21 @@
 import type { NextPage } from "next";
-import dynamic from 'next/dynamic'
 import Logo from "../components/Logo";
 import PositiveButton from "../components/PositiveButton";
 import { useRouter } from "next/router";
+import ModalTicket from "../components/Patient/ModalTicket";
 import { showTicketModal } from "../store/ticketModal/actions";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserState } from "../store/user/selectors";
-const ModalTicket = dynamic(import("../components/Patient/ModalTicket"));
+import { useDispatch } from "react-redux";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  // check is already signin?
-  const userData = useSelector(getUserState);
 
-  // event handle section
   const handleClickPatient = () => {
     dispatch(showTicketModal())
   };
 
   const handleClickGoToLogin = () => {
-    // check api fetch
-    console.log(userData)
-    if(userData.loadStatus === true){
-      if(userData.login === true && userData.userinfo){
-        // redirect...
-        if(userData.userinfo.role === 'system_admin'){
-          router.push("/system");
-        }
-        if(userData.userinfo.role === 'hospital'){
-          router.push("/hospital");
-        }
-      }
-      else{
-        router.push("/login");
-      }
-    }
+    router.push("/login");
   };
 
   return (
@@ -43,13 +23,11 @@ const Home: NextPage = () => {
       <Logo />
       <div className="tw-flex tw-justify-center tw-flex-col md:tw-flex-row">
         <PositiveButton
-          id="patient"
           className="md:tw-mr-5 tw-w-full md:tw-w-2/5"
           onClick={handleClickPatient}
           text="Patient"
         />
         <PositiveButton
-          id="staff"
           className="tw-mt-3 md:tw-mt-0 tw-w-full md:tw-w-2/5"
           onClick={handleClickGoToLogin}
           text="Staff"

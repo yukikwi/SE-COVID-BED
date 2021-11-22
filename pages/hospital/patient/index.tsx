@@ -1,30 +1,43 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import { Table, Button, notification } from "antd";
+import ApproveModal from "../../../components/Hospital/ModalApprove"
+import DischargeModal from "../../../components/Hospital/ModalDischarge"
+import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import {
-  PlusSquareOutlined
+  EyeOutlined,
+  EditOutlined,
+  CheckCircleOutlined,
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { showApproveModal as storeShowApproveModal } from "../../../store/approveModal/actions";
+import { showDischargeModal as storeShowDischargeModal } from "../../../store/dischargeModal/actions";
 import { showPatientModal } from "../../../store/addPatientModal/actions";
+import ModalAddEditPatient from "../../../components/Hospital/ModalAddEditPatient";
 import { IPatient } from "../../../class/data_struct/patient";
 import axios from "axios";
 import { getUserState } from "../../../store/user/selectors";
 import { getPatientModalState } from "../../../store/addPatientModal/selectors";
 import { getApproveModalState } from "../../../store/approveModal/selectors";
-import PatientAction from "../../../components/Hospital/PatientAction"
-import dynamic from "next/dynamic";
-const ApproveModal = dynamic(import("../../../components/Hospital/ModalApprove"));
-const DischargeModal = dynamic(import("../../../components/Hospital/ModalDischarge"));
-const ModalAddEditPatient = dynamic(import("../../../components/Hospital/ModalAddEditPatient"));
+import CloseCircleOutlined from "@ant-design/icons/lib/icons/CloseCircleOutlined";
+
+type TPatient = {
+  key: string;
+  patientName: string;
+  patientAddress: string;
+  patientPhoneNumber: string;
+  patientSeverity: "Red" | "Yellow" | "Green";
+  patientStatus: "Request" | "In progress" | "Complete";
+};
 
 const HospitalResourceIndex: NextPage = () => {
   // cast state and method
   const [tableData, setTableData] = useState<Array<any>>();
-  const [approveDischargePatient, setApproveDischargePatient] = useState<any>();
-  const [editPatient, setEditPatient] = useState<any>();
-  const [isView, setIsView] = useState<boolean>(false);
+  const [approveDischargePatient, setApproveDischargePatient] = useState<TPatient>();
+  const [editPatient, setEditPatient] = useState<TPatient>();
+  const [isView, setIsView] = useState<boolean>();
   const [selectTab, setSelectTab] = useState<
     "Request" | "In progress" | "Complete"
   >("Request");
@@ -33,9 +46,22 @@ const HospitalResourceIndex: NextPage = () => {
   const addEditPatientModalState = useSelector(getPatientModalState);
   const approveModalState = useSelector(getApproveModalState);
 
+  // Approve Modal handler
+  const showApproveModal = (patient: TPatient) => {
+    console.log("Display");
+    setApproveDischargePatient(patient);
+    dispatch(storeShowApproveModal());
+  };
+  // Discharge Modal handler
+  const showDischargeModal = (patient: TPatient) => {
+    console.log("Display");
+    setApproveDischargePatient(patient);
+    dispatch(storeShowDischargeModal());
+  };
+
   // Add Modal handler
   const showAddEditModal = (
-    patient: any | undefined = undefined,
+    patient: TPatient | undefined = undefined,
     isView: boolean = false
   ) => {
     setEditPatient(patient);
@@ -53,30 +79,73 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: "Severity level",
       key: "patientSeverity",
-      render: (record: any) => (
+      render: (record: TPatient) => (
         <Status type="severity" patientSeverity={record.patientSeverity} />
       ),
     },
     {
       title: "Status",
       key: "patientStatus",
-      render: (record: any) => (
+      render: (record: TPatient) => (
         <Status type="patient" status={record.patientStatus} />
       ),
     },
     {
       title: "Action",
       key: "action",
-      render: (record: any) => (
-        <PatientAction
-          record={record}
-          setApproveDischargePatient={(patient: any) => {setApproveDischargePatient(patient)}}
-          setEditPatient={(patient: any) => {setEditPatient(patient)}}
-          setIsView={(isView: boolean) => {setIsView(isView)}}
-        />
+      render: (record: TPatient) => (
+        <div>
+          { Approve(record) }
+          
+          
+          <Tooltip title="View">
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                showAddEditModal(record, true);
+              }}
+            >
+              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+          { record.patientStatus !== 'Request'?
+            <Tooltip title="Edit">
+              <a
+                className="hover:tw-text-blue-500"
+                onClick={() => {
+                  showAddEditModal(record);
+                }}
+              >
+                <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+              </a>
+            </Tooltip>
+            :
+            <></>
+          }
+          
+        </div>
       ),
     },
   ];
+
+  const Approve = (record:TPatient) => {
+    if(record.patientStatus === 'Request'){
+      return (
+        <React.Fragment>
+          <Tooltip title="Approve">
+            <a className="hover:tw-text-green-500" onClick={() => {showApproveModal(record)}}>
+              <CheckCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+          <Tooltip title="Discharge">
+            <a className="hover:tw-text-red-500" onClick={() => {showDischargeModal(record)}}>
+              <CloseCircleOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+        </React.Fragment>
+      )
+    }
+  }
 
   // function to connect API
   const fetchApiPatient = async (
@@ -93,7 +162,7 @@ const HospitalResourceIndex: NextPage = () => {
       );
 
       let rawPatientData: Array<IPatient> = apiResonse.data.data.filter(
-        (item: any) => {
+        (item: TPatient) => {
           return item.patientStatus === selectTab;
         }
       );
@@ -113,13 +182,11 @@ const HospitalResourceIndex: NextPage = () => {
     fetchApiPatient(selectTab);
   }, [addEditPatientModalState, approveModalState, selectTab]);
 
-  // ui part
   return (
     <LayoutHospital
       title="Capybara Hospital : Patient list"
       button={
         <Button
-          id="add-patient"
           className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
@@ -136,7 +203,6 @@ const HospitalResourceIndex: NextPage = () => {
       <div className="tw-overflow-x-scroll">
         <div className="tw-flex tw-flex-row tw-mb-3">
           <Button
-            id="tab-request"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto tw-mr-3"
             type="primary"
             shape="round"
@@ -149,7 +215,6 @@ const HospitalResourceIndex: NextPage = () => {
             Request
           </Button>
           <Button
-            id="tab-in-progress"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto tw-mr-3"
             type="primary"
             shape="round"
@@ -162,7 +227,6 @@ const HospitalResourceIndex: NextPage = () => {
             In progress
           </Button>
           <Button
-            id="tab-complete"
             className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-items-center tw-justify-center tw-h-auto"
             type="primary"
             shape="round"

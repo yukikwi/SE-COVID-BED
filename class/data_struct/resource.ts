@@ -19,13 +19,3 @@ export type TResource = {
     remark: string;
     resourceHospital: ObjectId | string;
 }
-
-export type TResourceUI = {
-  _id: string;
-  key: string;
-  resourceName: string;
-  resourceCode?: string;
-  maximum?: number;
-  available?: number;
-  remark?: string;
-};

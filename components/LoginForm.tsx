@@ -10,14 +10,22 @@ import { useDispatch } from 'react-redux';
 interface Props {}
 
 function LoginForm({}: Props): ReactElement {
-  // state part
   const router = useRouter();
   const [form] = Form.useForm();
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
 
-  // form submit event
-  const handleFormSubmit = async () => {
-    const { username, password } = form.getFieldsValue()
+  const handleOnChangeUsername = (e: any) => {
+    console.log('Username: '+username)
+    setUsername(e.target.value);
+  };
+
+  const handleOnChangePassword = (e: any) => {
+    setPassword(e.target.value);
+  };
+
+  const handleClickLogin = async () => {
     try {
       const res = (await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/user/login`,
@@ -26,12 +34,9 @@ function LoginForm({}: Props): ReactElement {
           password,
         }
       )) as any;
-      
-      // check is credential correct
+      console.log("connected");
       if (res.status === 200) {
         const userData = res.data.userData
-
-        // redirect by role
         if(userData.role === 'system_admin'){
           router.push("/system");
         }
@@ -42,12 +47,14 @@ function LoginForm({}: Props): ReactElement {
         message.success("success");
       }
     } catch (err: any) {
-      // check wrong credential or server error
+      console.log("error");
       if (err.response.status !== 400) {
+        setUsername('');
+        setPassword('');
         form.setFieldsValue({
           password: ''
         })
-        message.error("Wrong username / password");
+        message.error(err.response.data.error);
       } else {
         message.error("Internal server error");
       }
@@ -56,7 +63,7 @@ function LoginForm({}: Props): ReactElement {
 
   return (
     <div>
-      <Form name="basic" form={form} onFinish={handleFormSubmit}>
+      <Form name="basic" form={form} initialValues={{}} autoComplete="off">
         <Form.Item
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
@@ -65,6 +72,8 @@ function LoginForm({}: Props): ReactElement {
             size="large"
             placeholder="USERNAME"
             prefix={<UserOutlined />}
+            value={username}
+            onChange={handleOnChangeUsername}
           />
         </Form.Item>
 
@@ -76,15 +85,16 @@ function LoginForm({}: Props): ReactElement {
             size="large"
             placeholder="PASSWORD"
             prefix={<LockOutlined />}
+            value={password}
+            onChange={handleOnChangePassword}
           />
         </Form.Item>
 
         <Form.Item className="tw-text-center">
           <PositiveButton
-            id="login"
             className="tw-mt-3 md:tw-mt-0 tw-w-full"
-            onClick={()=>{}}
             htmlType="submit"
+            onClick={handleClickLogin}
             text="Login"
           />
         </Form.Item>
