@@ -6,11 +6,11 @@ export interface IUser extends Document {
     password?: string,
     token?: string,
     role?: string,
-    hospitalId?: ObjectId | string
 }
 
 // export type
 export type TUser = {
+    _id?: any,
     username?: string,
     password?: string,
     token?: string,

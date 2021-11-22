@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connection from "../../class/database";
-import { UserModel } from "../../class/model/index";
+import connection from "../../../class/database";
+import { UserModel } from "../../../class/model/index";
 import { hash } from "bcrypt";
 
 type Data = {

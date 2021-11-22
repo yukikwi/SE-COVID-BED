@@ -8,9 +8,6 @@ const HospitalSchema: Schema = new Schema({
   hospitalPhoneNumber: {
     type: String,
   },
-  hospitalConvince: {
-    type: String,
-  },
   hospitalAddress: {
     type: String,
   },

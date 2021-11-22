@@ -18,7 +18,6 @@ export default async function handler(
 
       if (isDatabaseConnected === true) {
         const hospitalData = await database.getAHospital(id as string);
-        console.log("hospital::", hospitalData);
 
         res.status(200).json(hospitalData);
       } else {
@@ -26,11 +25,9 @@ export default async function handler(
         res.status(500).json({ error: "fail to connect to database" });
       }
     } catch (err) {
-      console.log("err", err);
       res.status(400).end();
     }
   } else {
-    console.log("method");
 
     res.status(400).end();
   }

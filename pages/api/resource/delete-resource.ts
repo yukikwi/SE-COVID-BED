@@ -12,7 +12,7 @@ export default async function handler(
       const resource = new Resource();
 
       const { id } = req.body;
-
+      if(req.body){
       const isDatabaseConnected = await database.connectDatabase();
       if (isDatabaseConnected === true) {
         const resourceData = await resource.deleteResource(id);
@@ -22,6 +22,9 @@ export default async function handler(
         // database connection fail
         res.status(500).json({ error: "fail to connect to database" });
       }
+    } else {
+      res.status(400).json({ error: "Resource id is null" });
+    }
     } catch (err) {
       res.status(400).end();
     }

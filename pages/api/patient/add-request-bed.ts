@@ -29,7 +29,6 @@ export default async function addPatient(
 
         const dateNow = moment(new Date()).format("YYYY-MM-DD HH:mm:SS");
 
-        console.log("patientLocation", patientLocation);
         //1 Query by resource "Bed" > 0
         const availableResource = await database.getResource({ resourceName: "Bed", available: { $gte: 0 }});
         const availableHospitalId = availableResource.map((resource) => resource.resourceHospital as string)        
@@ -49,6 +48,7 @@ export default async function addPatient(
             }
           ]
         });
+        
 
         //2. calculate distance (google map api)
         const shortestHospitalIndex = await patient.decisionHospital(hospitalData, patientLocation);
@@ -68,7 +68,6 @@ export default async function addPatient(
           dateNow,
           patientEmail
         );
-        console.log('addPatient', addPatient)
         res.status(addPatient.http).json(addPatient.data);
         // res.status(200).json({name: "john"});
 

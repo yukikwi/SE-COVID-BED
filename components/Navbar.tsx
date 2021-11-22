@@ -69,7 +69,7 @@ function Navbar(props: Props): ReactElement {
 
   // logout
   const logout = async () =>{
-    await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/logout`)
+    await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/user/logout`)
     dispatch(storelogout())
   }
   const HospitalMenu = () => {

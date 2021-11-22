@@ -19,7 +19,7 @@ function ModalDelete(props: Props): ReactElement {
   // Delete method
   const deleteHospital = async () => {
     try{
-      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/delete-hospital`,{
+      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/hospital/delete-hospital`,{
         id
       })
       console.log(apiResonse.data)

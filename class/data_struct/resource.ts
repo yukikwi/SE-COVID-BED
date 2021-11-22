@@ -7,7 +7,6 @@ export interface IResource extends Document {
     maximum: number;
     available: number;
     remark: string;
-    status: string;
     resourceHospital: ObjectId | string;
 }
 
@@ -18,7 +17,6 @@ export type TResource = {
     maximum: number;
     available: number;
     remark: string;
-    status: string;
     resourceHospital: ObjectId | string;
 }
 
