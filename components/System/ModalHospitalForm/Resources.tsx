@@ -29,10 +29,21 @@ interface Record {
   add?: boolean;
 }
 
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean;
+  dataIndex: string;
+  title: any;
+  inputType: "number" | "text";
+  record: Record;
+  index: number;
+  children: React.ReactNode;
+}
+
 function Resources({ hospitalId }: Props): ReactElement {
   // Init state
   const { show } = useSelector(getAddOrEditModalState);
   const [editingKey, setEditingKey] = useState("");
+  const [avaliableLimit, setAvaliableLimit] = useState(0)
   const [removeOnCancelKey, setRemoveOnCancelKey] = useState(false);
   const [data, setData] = useState<Array<any>>([]);
   const [form] = Form.useForm();
@@ -47,7 +58,7 @@ function Resources({ hospitalId }: Props): ReactElement {
         }
       );
 
-      let rawResourceData: Array<IResource> = apiResonse.data;
+      let rawResourceData: Array<IResource> = apiResonse.data.map((data:Record, i:number) => {return {...data, key: i}});
       setData(rawResourceData);
     } catch (error) {
       notification.open({
@@ -116,6 +127,7 @@ function Resources({ hospitalId }: Props): ReactElement {
     }
   };
 
+  // exec on hospitalId or modal state change
   useEffect(() => {
     fetchApiResource();
     form.resetFields();
@@ -135,6 +147,8 @@ function Resources({ hospitalId }: Props): ReactElement {
     });
     // set editing key to specific row
     setEditingKey(record.key);
+    // set avaliableLimit
+    setAvaliableLimit(form.getFieldValue("maximum"))
   };
 
   const cancel = () => {
@@ -189,6 +203,7 @@ function Resources({ hospitalId }: Props): ReactElement {
       render: (_: any, record: Record) => {
         // render option: save, cancel
         const editable = isEditing(record);
+        
         return editable ? (
           <span>
             <a
@@ -263,16 +278,6 @@ function Resources({ hospitalId }: Props): ReactElement {
     }
   };
 
-  interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    title: any;
-    inputType: "number" | "text";
-    record: Record;
-    index: number;
-    children: React.ReactNode;
-  }
-
   // Edit cell UI
   const EditableCell: React.FC<EditableCellProps> = ({
     editing,
@@ -285,7 +290,15 @@ function Resources({ hospitalId }: Props): ReactElement {
     ...restProps
   }) => {
     // Number input or text input
-    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+    let inputNode = <Input />
+    if(inputType === "number"){
+      if(dataIndex === "maximum"){
+        inputNode = <InputNumber min={0} onChange={() => setAvaliableLimit(form.getFieldValue("maximum"))} />
+      }
+      else{
+        inputNode = <InputNumber min={0} max={avaliableLimit} />
+      }
+    }
 
     return (
       <td {...restProps}>
