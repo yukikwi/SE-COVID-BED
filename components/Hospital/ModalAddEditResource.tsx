@@ -4,7 +4,9 @@ import {
   Input,
   InputNumber,
   Modal,
-  notification
+  notification,
+  Radio,
+  Select,
 } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +27,6 @@ ModalAddResource.defaultProps = {
 function ModalAddResource(props: Props): ReactElement {
   const show = useSelector(getResourceModalState);
   const [mode, setMode] = useState("Add");
-  const [avaliableLimit, setAvaliableLimit] = useState(0)
   const [form] = Form.useForm();
   const userData = useSelector(getUserState);
   const { isView, resource } = props;
@@ -37,33 +38,33 @@ function ModalAddResource(props: Props): ReactElement {
 
   // UI handle
   useEffect(() => {
-    if (show === false)
-      form.resetFields();
+    if (show === false) form.resetFields();
     else if (typeof resource !== "undefined") {
+      console.log("patient", resource);
+
       form.setFieldsValue(resource);
-      if (isView === true)
-        setMode("View");
-      else
-        setMode("Edit");
-    }
-    else
-      setMode("Add");
-    
-    // set limit
-    setAvaliableLimit(form.getFieldValue("maximum"))
+      if (isView === true) setMode("View");
+      else setMode("Edit");
+    } else setMode("Add");
   }, [show]);
 
   const handleApprove = async (formData: any) => {
     // Api for call here
+
     if (mode === "Add") {
       try {
         const hospitalId = userData.userinfo.hospitalId;
 
-        await axios.post(
+        const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/resource/add-resource`,
           {
-            ...formData,
-            resourceHospital: hospitalId
+            resourceName: formData.resourceName,
+            resourceCode: formData.resourceCode,
+            maximum: formData.maximum,
+            available: formData.available,
+            remark: formData.remark,
+            status: formData.status,
+            resourceHospital: hospitalId,
           }
         );
         notification.open({
@@ -83,14 +84,13 @@ function ModalAddResource(props: Props): ReactElement {
     } else {
       //call edit api
       try {
-        await axios.post(
+        const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/resource/edit-resource`,
           {
             id: resource._id,
             newData: formData
           }
         );
-
         notification.open({
           message: "Success",
           description: "Edit resource information successful",
@@ -175,7 +175,7 @@ function ModalAddResource(props: Props): ReactElement {
             { required: true, message: "Please input your resource maximum!" },
           ]}
         >
-          <InputNumber min="0" disabled={isView} onChange={() => setAvaliableLimit(form.getFieldValue("maximum"))} />
+          <InputNumber disabled={isView} />
         </Form.Item>
 
         <Form.Item
@@ -188,7 +188,7 @@ function ModalAddResource(props: Props): ReactElement {
             },
           ]}
         >
-          <InputNumber min={0} max={avaliableLimit} disabled={isView} />
+          <InputNumber disabled={isView} />
         </Form.Item>
 
         <Form.Item

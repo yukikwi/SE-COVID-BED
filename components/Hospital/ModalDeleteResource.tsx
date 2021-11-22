@@ -19,10 +19,11 @@ function ModalDelete(props: Props): ReactElement {
   // Delete method
   const deleteResource = async () => {
     try{
-      await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/resource/delete-resource`,{
+      console.log(id);
+      let apiResonse = await axios.post(`${process.env.NEXT_PUBLIC_APP_API}/resource/delete-resource`,{
         id
       })
-      
+      console.log(apiResonse);
       notification.open({
         message: "Success",
         description: "Delete resource successful.",

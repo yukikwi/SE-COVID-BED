@@ -1,47 +1,56 @@
 import type { NextPage } from "next";
 import LayoutHospital from "../../../components/Layout/Hospital";
-import { Table, Button, notification } from "antd";
+import { Table, Button, Tooltip, notification } from "antd";
 import Status from "../../../components/Hospital/Status";
 import { showResourceDeleteModal as storeShowResourceDeleteModal } from "../../../store/deleteModal/actions";
 import { showResourceModal as storeShowResourceModal } from "../../../store/addResourceModal/actions";
 import { getResourceModalState } from "../../../store/addResourceModal/selectors";
 import { getDeleteResourceModalState } from "../../../store/deleteModal/selectors";
 import {
-  PlusSquareOutlined
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ModalDelete from "../../../components/Hospital/ModalDeleteResource";
+import ModalAddResource from "../../../components/Hospital/ModalAddEditResource";
 import { getUserState } from "../../../store/user/selectors";
 import axios from "axios";
-import ResourceAction from "../../../components/Hospital/ResourceAction";
-import { TResourceUI } from "../../../class/data_struct/resource";
-import dynamic from "next/dynamic";
-const ModalDelete = dynamic(import("../../../components/Hospital/ModalDeleteResource"));
-const ModalAddResource = dynamic(import("../../../components/Hospital/ModalAddEditResource"));
+
+type TResource = {
+  _id: string;
+  key: string;
+  resourceName: string;
+  resourceCode?: string;
+  maximum?: number;
+  available?: number;
+  remark?: string;
+};
 
 const HospitalResourceIndex: NextPage = () => {
-  // state and redux part
-  const [resource, setResource] = useState<TResourceUI | undefined>({
+  // state part
+  const [resource, setResource] = useState<TResource | undefined>({
     _id: "",
     key: "0",
     resourceName: "Loading...",
   });
-  const [isView, setIsView] = useState<boolean>(false);
-  const [tableData, setTableData] = useState<Array<TResourceUI>>();
+  const [isView, setIsView] = useState<boolean>();
+  const [tableData, setTableData] = useState<Array<TResource>>();
   const dispatch = useDispatch();
   const userData = useSelector(getUserState);
   const deleteResourceModalState = useSelector(getDeleteResourceModalState);
   const addEditResourceModalState = useSelector(getResourceModalState);
 
-  // event handler
   // delete modal handler
-  const showDeleteResourceModal = (resource: TResourceUI) => {
+  const showDeleteResourceModal = (resource: TResource) => {
     setResource(resource);
     dispatch(storeShowResourceDeleteModal());
   };
 
   const showAddEditResourceModal = (
-    resource: TResourceUI | undefined = undefined,
+    resource: TResource | undefined = undefined,
     isView: boolean = false
   ) => {
     setResource(resource);
@@ -49,7 +58,7 @@ const HospitalResourceIndex: NextPage = () => {
     dispatch(storeShowResourceModal());
   };
 
-  // Table Column template
+  // Dummy Hospital data
   const columns = [
     {
       title: "Resource",
@@ -69,19 +78,48 @@ const HospitalResourceIndex: NextPage = () => {
     {
       title: "Status",
       key: "status",
-      render: (record: TResourceUI) => (
+      render: (record: TResource) => (
         <Status available={record.available} amount={record.maximum} />
       ),
     },
     {
       title: "Action",
       key: "action",
-      render: (record: TResourceUI) => (
-        <ResourceAction
-          record={record}
-          showAddEditResourceModal={(record:TResourceUI, isEdit: boolean) => {showAddEditResourceModal(record, isEdit)}}
-          showDeleteResourceModal={(record:TResourceUI) => {showDeleteResourceModal(record)}}
-        />
+      render: (record: TResource) => (
+        <div>
+          <Tooltip title="View">
+            <a
+              className="hover:tw-text-green-500"
+              onClick={() => {
+                showAddEditResourceModal(record, true);
+              }}
+            >
+              <EyeOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+
+          <Tooltip title="Edit">
+            <a
+              className="hover:tw-text-yellow-500"
+              onClick={() => {
+                showAddEditResourceModal(record);
+              }}
+            >
+              <EditOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+
+          <Tooltip title="Remove">
+            <a
+              className="hover:tw-text-red-500"
+              onClick={() => {
+                showDeleteResourceModal(record);
+              }}
+            >
+              <DeleteOutlined className="tw-font-base tw-text-lg tw-mr-3" />
+            </a>
+          </Tooltip>
+        </div>
       ),
     },
   ];
@@ -98,8 +136,8 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawResourceData: Array<TResourceUI> = apiResonse.data.map(
-        (x: TResourceUI, i: Number) => ({ ...x, key: i })
+      let rawResourceData: Array<TResource> = apiResonse.data.map(
+        (x: TResource, i: Number) => ({ ...x, key: i })
       );
       setTableData(rawResourceData);
     } catch (error) {
@@ -120,7 +158,6 @@ const HospitalResourceIndex: NextPage = () => {
       title="Capybara Hospital : Resource list"
       button={
         <Button
-          id="add-resource"
           className="tw-bg-dark-matcha-green tw-border-transparent hover:tw-bg-charcoal hover:tw-border-transparent focus:tw-bg-charcoal focus:tw-border-transparent tw-float-right tw-flex tw-flex-row tw-items-center tw-justify-center tw-h-auto"
           type="primary"
           shape="round"
