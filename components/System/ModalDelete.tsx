@@ -1,9 +1,10 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
 import { getDeleteModalState } from "../../store/deleteModal/selectors";
 import { hideHospitalDeleteModal } from '../../store/deleteModal/actions';
 import axios, { AxiosError } from 'axios';
+import { IHospital } from '../../class/data_struct/hospital';
 
 interface Props {
   id: string;
@@ -11,10 +12,18 @@ interface Props {
 }
 
 function ModalDelete(props: Props): ReactElement {
-  // state & redux part
+  // redux part
   const dispatch = useDispatch();
   const showHospitalDeleteModal = useSelector(getDeleteModalState);
   const { id, hospital } = props;
+
+  //
+  const notifyError = () => {
+    notification.open({
+      message: 'Error',
+      description: 'Cannot connect to api. Please contact admin for more information.'
+    });
+  }
 
   // Delete method
   const deleteHospital = async () => {
@@ -26,10 +35,7 @@ function ModalDelete(props: Props): ReactElement {
       dispatch(hideHospitalDeleteModal())
     }
     catch(error: any | AxiosError){
-      notification.open({
-        message: 'Error',
-        description: 'Cannot connect to api. Please contact admin for more information.'
-      });
+      notifyError()
     }
   }
 

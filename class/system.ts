@@ -39,6 +39,7 @@ class System {
       staff: `${staff}`,
     };
 
+    console.log(this.newHospitalData);
     if (this.newHospitalData) {
       const result = await this.database.addHospital(this.newHospitalData);
       return {
@@ -93,17 +94,8 @@ class System {
     }
   }
 
-  async editHospital(id: string, formData: any) {
+  async editHospital(id: string, newData: object) {
     try {
-      const newData = {
-        ...formData,
-        hospitalLocation: {
-          lat: formData.hospitalLocationLat,
-          long: formData.hospitalLocationLong,
-        },
-        hospitalLocationLat: undefined,
-        hospitalLocationLong: undefined
-      }
       this.database.editHospital(id, newData);
 
       return {

@@ -7,8 +7,6 @@ import Status from "./Status";
 import axios from "axios";
 import { getUserState } from "../../store/user/selectors";
 import tambon from '../../public/location.json';
-import { TambonType } from "../../class/data_struct/TamBonType";
-import { validatePhoneNumber } from "../../utils/validate";
 
 interface Props {
   patient: any;
@@ -19,8 +17,22 @@ ModalAddPatient.defaultProps = {
   isView: false,
 };
 
+type TambonType = {
+  AD_LEVEL: string;
+    TA_ID: string;
+    TAMBON_T: string;
+    TAMBON_E: string;
+    AM_ID: string;
+    AMPHOE_E: string;
+    CH_ID: string;
+    CHANGWAT_T: string;
+    CHANGWAT_E: string;
+    LAT: string;
+    LONG: string;
+    AMPHOE_T?: undefined;
+}
+
 function ModalAddPatient(props: Props): ReactElement {
-  // state and redux part
   const show = useSelector(getPatientModalState);
   const [mode, setMode] = useState("Add");
   const [form] = Form.useForm();
@@ -31,7 +43,12 @@ function ModalAddPatient(props: Props): ReactElement {
   const [isSeverityChange, setIsSeverityChange] = useState(false);
   const [options, setOptions] = useState<{ value: string, label: JSX.Element }[]>([]);
   const tambonData:Array<TambonType> | any = tambon["TAMBON"]
-  const [phoneNumStatus, setPhoneNumStatus] = useState(false)
+
+
+
+  const handleCancel = () => {
+    dispatch(hidePatientModal());
+  };
 
   // Antd component
   const { Option } = Select;
@@ -42,40 +59,42 @@ function ModalAddPatient(props: Props): ReactElement {
     setIsSeverityChange(false);
     if (show === false) form.resetFields();
     else if (typeof patient !== "undefined") {
+      console.log("patient", patient);
+
       form.setFieldsValue(patient);
-      if (isView === true)
-        setMode("View");
-      else
-        setMode("Edit");
-    }
-    else
-      setMode("Add");
+      if (isView === true) setMode("View");
+      else setMode("Edit");
+    } else setMode("Add");
   }, [show]);
 
-  // event handler
-  const handleCancel = () => {
-    dispatch(hidePatientModal());
-  };
-
-  const handleSeverityChange = () => {
+  const handleSeverityChange = (event: any) => {
     setIsSeverityChange(true);
   };
 
-  const handleDataChange = () => {
+  const handleDataChange = (event: any) => {
     setIsDataChange(true);
   }
 
   const handleApprove = async (formData: any) => {
     // Api for approve here
+    console.log("mode", mode);
 
     const hospitalId = userData.userinfo.hospitalId;
     if (mode === "Add") {
       try {
-        await axios.post(
+        const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
           {
-            ...formData,
-            patientHospital: hospitalId
+            patientName: formData.patientName,
+            patientHospital: hospitalId,
+            patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus,
+            patientSeverityLabel: formData.patientSeverityLabel,
+            patientEmail: formData.patientEmail,
           }
         );
 
@@ -96,32 +115,56 @@ function ModalAddPatient(props: Props): ReactElement {
       }
     } else if (mode === "Edit") {
       try {
+        console.log(formData);
         let newData = {};
         let newPatientSeverityLog = {};
         if(isDataChange && !isSeverityChange) {
-          newData = formData;
+          console.log("isDataChange");
+          newData = {
+            patientName: formData.patientName,
+            patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus,
+            patientEmail: formData.patientEmail
+          };
           newPatientSeverityLog = {};
         } else if (!isDataChange && isSeverityChange) {
+          console.log("isSeverityChange");
           newData = {};
           newPatientSeverityLog = {
             patientSeverityLabel: formData.patientSeverity,
             patient: patient._id
           };
         } else {
-          newData = formData;
+          console.log("change both");
+          newData = {
+            patientName: formData.patientName,
+            patientAddress: formData.patientAddress,
+            patientSubDistrict: formData.patientSubDistrict,
+            patientDistrict: formData.patientDistrict,
+            patientProvince: formData.patientProvince,
+            patientPhoneNumber: formData.patientPhoneNumber,
+            patientStatus: formData.patientStatus,
+            patientEmail: formData.patientEmail
+          };
           newPatientSeverityLog = {
             patientSeverityLabel: formData.patientSeverity,
             patient: patient._id
           };
         }
 
-        await axios.post(
+        const res = await axios.post(
           `${process.env.NEXT_PUBLIC_APP_API}/patient/edit-patient`,
           {
             id: patient._id,
             newData,
             newPatientSeverityLog,
           });
+          console.log(newData);
+          console.log(newPatientSeverityLog);
           notification.open({
             message: "Success",
             description:
@@ -155,10 +198,20 @@ function ModalAddPatient(props: Props): ReactElement {
         ),
       })
     }
-    if(searchText.length >= 2)
-      setOptions(tambonUI);
-    else
-      setOptions([]);
+    if(searchText.length >= 2){
+      setOptions(
+        !searchText ? [{
+          value: '-1',
+          label: (
+            <div className="tw-flex tw-justify-between">
+            <span>
+              Please enter more than 2 characters.
+            </span>
+          </div>
+          )
+        }] : tambonUI,
+      );
+    }
   };
 
   const onSelect = (value: string) => {
@@ -176,13 +229,6 @@ function ModalAddPatient(props: Props): ReactElement {
       })
     }
   };
-
-  // validate phone number on change
-  const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // update validate status
-    const text = e.target.value
-    setPhoneNumStatus(validatePhoneNumber(text))
-  }
 
   return (
     <Modal
@@ -253,7 +299,7 @@ function ModalAddPatient(props: Props): ReactElement {
           label="District"
           name="patientDistrict"
           rules={[
-            { required: true, message: "Please choose sub district from provided list!" },
+            { required: true, message: "Please input your district!" },
           ]}
         >
           <Input disabled />
@@ -263,7 +309,7 @@ function ModalAddPatient(props: Props): ReactElement {
           label="Province"
           name="patientProvince"
           rules={[
-            { required: true, message: "Please choose sub district from provided list!" },
+            { required: true, message: "Please input your province!" },
           ]}
         >
           <Input disabled />
@@ -279,10 +325,8 @@ function ModalAddPatient(props: Props): ReactElement {
               message: "Please input your patient phone number!",
             },
           ]}
-          hasFeedback
-          validateStatus={phoneNumStatus? 'success':'error'}
         >
-          <Input disabled={isView} onChange={(e) => {handleDataChange; onPhoneNumberChange(e)}} />
+          <Input disabled={isView} onChange={handleDataChange} />
         </Form.Item>
 
         <Form.Item
@@ -303,14 +347,7 @@ function ModalAddPatient(props: Props): ReactElement {
           label="Email"
           name="patientEmail"
           rules={[
-            {
-              required: true,
-              message: "Please input your email!"
-            },
-            {
-              type: 'email',
-              message: 'The input is not valid E-mail!',
-            }
+            { required: true, message: "Please input your email!" },
           ]}
         >
           <Input disabled={isView}/>
@@ -324,6 +361,9 @@ function ModalAddPatient(props: Props): ReactElement {
           ]}
         >
           <Radio.Group disabled={isView} onChange={handleDataChange}>
+            <Radio value="Request">
+              <Status type="patient" status="Request" />
+            </Radio>
             <Radio value="In progress">
               <Status type="patient" status="In progress" />
             </Radio>

@@ -8,15 +8,26 @@ import Map from '../Map/Map'
 import { getMapState } from '../../store/map/selectors';
 import { setLoc } from '../../store/map/actions';
 import axios from "axios";
-import { TambonType } from '../../class/data_struct/TamBonType';
-import { validatePhoneNumber } from '../../utils/validate';
 
 interface Props {
   
 }
 
+type TambonType = {
+  AD_LEVEL: string;
+    TA_ID: string;
+    TAMBON_T: string;
+    TAMBON_E: string;
+    AM_ID: string;
+    AMPHOE_E: string;
+    CH_ID: string;
+    CHANGWAT_T: string;
+    CHANGWAT_E: string;
+    LAT: string;
+    LONG: string;
+    AMPHOE_T?: undefined;
+}
 function ModalTicket({}: Props): ReactElement {
-  // redux and state part
   const dispatch = useDispatch();
   const show = useSelector(getTicketModalState);
   const [form] = Form.useForm();
@@ -25,23 +36,30 @@ function ModalTicket({}: Props): ReactElement {
   const loc = useSelector(getMapState)
   const [preLat, setPreLat] = useState(0)
   const [preLong, setPreLong] = useState(0)
-  const [phoneNumStatus, setPhoneNumStatus] = useState(false)
 
   // antd component
   const { Option } = Select;
 
-  // event handler
   const handleApprove = async (formData: any) => {
+    // bara submit
     try {
+      console.log("formData", formData);
       
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_API}/patient/add-request-bed`,
         {
-          ...formData,
+          patientName: formData.patientName,
+          patientAddress: formData.patientAddress,
+          patientSubDistrict: formData.patientSubDistrict,
+          patientDistrict: formData.patientDistrict,
+          patientProvince: formData.patientProvince,
           patientLocation: {
             lat: loc.lat,
             long: loc.long,
-          }
+          },
+          patientPhoneNumber: formData.patientPhoneNumber,
+          patientSeverityLabel: formData.patientSeverityLabel,
+          patientEmail: formData.patientEmail,
         }
       );
 
@@ -63,6 +81,7 @@ function ModalTicket({}: Props): ReactElement {
   }
 
   const handleCancel = () => {
+    // bara
     dispatch(hideTicketModal())
   }
 
@@ -115,6 +134,7 @@ function ModalTicket({}: Props): ReactElement {
       })
 
       // update Map loc
+      console.log('Update prop')
       dispatch(setLoc({
         lat: Number(tambonDataResult[0].LAT),
         long: Number(tambonDataResult[0].LONG),
@@ -123,13 +143,6 @@ function ModalTicket({}: Props): ReactElement {
       setPreLong(Number(tambonDataResult[0].LONG))
     }
   };
-
-  // validate phone number on change
-  const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // update validate status
-    const text = e.target.value
-    setPhoneNumStatus(validatePhoneNumber(text))
-  }
 
   return (
     <Modal
@@ -194,7 +207,7 @@ function ModalTicket({}: Props): ReactElement {
           label="District"
           name="patientDistrict"
           rules={[
-            { required: true, message: "Please choose sub district from provided list!" },
+            { required: true, message: "Please input your district!" },
           ]}
         >
           <Input disabled />
@@ -204,7 +217,7 @@ function ModalTicket({}: Props): ReactElement {
           label="Province"
           name="patientProvince"
           rules={[
-            { required: true, message: "Please choose sub district from provided list!" },
+            { required: true, message: "Please input your province!" },
           ]}
         >
           <Input disabled />
@@ -216,10 +229,8 @@ function ModalTicket({}: Props): ReactElement {
           rules={[
             { required: true, message: "Please input your phone number!" },
           ]}
-          hasFeedback
-          validateStatus={phoneNumStatus? 'success':'error'}
         >
-          <Input onChange={onPhoneNumberChange} />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -240,14 +251,7 @@ function ModalTicket({}: Props): ReactElement {
           label="Email"
           name="patientEmail"
           rules={[
-            {
-              required: true,
-              message: "Please input your email!"
-            },
-            {
-              type: 'email',
-              message: 'The input is not valid E-mail!',
-            }
+            { required: true, message: "Please input your email!" },
           ]}
         >
           <Input />

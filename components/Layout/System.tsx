@@ -16,6 +16,7 @@ LayoutSystem.defaultProps = {
 
 function LayoutSystem(props: Props): ReactElement {
   const {children, title, button} = props
+  const dispatch = useDispatch();
 
   // check permission
   const userData = useSelector(getUserState);
