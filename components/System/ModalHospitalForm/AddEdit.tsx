@@ -11,6 +11,7 @@ import { setLoc } from "../../../store/map/actions";
 import { TambonType } from '../../../class/data_struct/TamBonType'
 import tambon from '../../../public/location.json';
 import Map from '../../Map/Map'
+import { validatePhoneNumber } from "../../../utils/validate";
 
 interface Props {
   hospitalData: THospital;
@@ -34,6 +35,7 @@ function AddEditForm(props: Props): ReactElement {
   const { hospitalData, mode } = props;
   const [form] = Form.useForm();
   const { show } = useSelector(getAddOrEditModalState);
+  const [phoneNumStatus, setPhoneNumStatus] = useState(false)
   
   // on mount
   useEffect(() => {
@@ -171,6 +173,13 @@ function AddEditForm(props: Props): ReactElement {
   };
   // end map handler
 
+  // handle hospital number validate
+  const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // update validate status
+    const text = e.target.value
+    setPhoneNumStatus(validatePhoneNumber(text))
+  }
+
   // render modal content after fetch hospitalData finish
   if (mode === "Edit" && hospitalData?.hospitalName === "")
     return <div></div>
@@ -219,7 +228,7 @@ function AddEditForm(props: Props): ReactElement {
           label="District"
           name="hospitalDistrict"
           rules={[
-            { required: true, message: "Please input your district!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -229,7 +238,7 @@ function AddEditForm(props: Props): ReactElement {
           label="Province"
           name="hospitalProvince"
           rules={[
-            { required: true, message: "Please input your province!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -241,8 +250,10 @@ function AddEditForm(props: Props): ReactElement {
           rules={[
             { required: true, message: "Please input Hospital phone number!" },
           ]}
+          hasFeedback
+          validateStatus={phoneNumStatus? 'success':'error'}
         >
-          <Input />
+          <Input onChange={onPhoneNumberChange} />
         </Form.Item>
 
         <Form.Item name="staff" label="Staff" rules={[{ required: true }]}>

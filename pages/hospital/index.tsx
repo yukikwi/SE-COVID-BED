@@ -100,7 +100,6 @@ const HospitalIndex: NextPage = () => {
 
   // onMount
   useEffect(() => {
-    console.log('baraEffect')
     fetchApi()
     setLoading(false);
   }, [])

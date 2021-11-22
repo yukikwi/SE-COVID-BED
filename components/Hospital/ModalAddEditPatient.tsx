@@ -8,6 +8,7 @@ import axios from "axios";
 import { getUserState } from "../../store/user/selectors";
 import tambon from '../../public/location.json';
 import { TambonType } from "../../class/data_struct/TamBonType";
+import { validatePhoneNumber } from "../../utils/validate";
 
 interface Props {
   patient: any;
@@ -30,6 +31,7 @@ function ModalAddPatient(props: Props): ReactElement {
   const [isSeverityChange, setIsSeverityChange] = useState(false);
   const [options, setOptions] = useState<{ value: string, label: JSX.Element }[]>([]);
   const tambonData:Array<TambonType> | any = tambon["TAMBON"]
+  const [phoneNumStatus, setPhoneNumStatus] = useState(false)
 
   // Antd component
   const { Option } = Select;
@@ -175,6 +177,13 @@ function ModalAddPatient(props: Props): ReactElement {
     }
   };
 
+  // validate phone number on change
+  const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // update validate status
+    const text = e.target.value
+    setPhoneNumStatus(validatePhoneNumber(text))
+  }
+
   return (
     <Modal
       title={`${mode} Patient Information`}
@@ -244,7 +253,7 @@ function ModalAddPatient(props: Props): ReactElement {
           label="District"
           name="patientDistrict"
           rules={[
-            { required: true, message: "Please input your district!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -254,7 +263,7 @@ function ModalAddPatient(props: Props): ReactElement {
           label="Province"
           name="patientProvince"
           rules={[
-            { required: true, message: "Please input your province!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -270,8 +279,10 @@ function ModalAddPatient(props: Props): ReactElement {
               message: "Please input your patient phone number!",
             },
           ]}
+          hasFeedback
+          validateStatus={phoneNumStatus? 'success':'error'}
         >
-          <Input disabled={isView} onChange={handleDataChange} />
+          <Input disabled={isView} onChange={(e) => {handleDataChange; onPhoneNumberChange(e)}} />
         </Form.Item>
 
         <Form.Item
@@ -292,7 +303,14 @@ function ModalAddPatient(props: Props): ReactElement {
           label="Email"
           name="patientEmail"
           rules={[
-            { required: true, message: "Please input your email!" },
+            {
+              required: true,
+              message: "Please input your email!"
+            },
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            }
           ]}
         >
           <Input disabled={isView}/>

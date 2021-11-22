@@ -9,6 +9,7 @@ import { getMapState } from '../../store/map/selectors';
 import { setLoc } from '../../store/map/actions';
 import axios from "axios";
 import { TambonType } from '../../class/data_struct/TamBonType';
+import { validatePhoneNumber } from '../../utils/validate';
 
 interface Props {
   
@@ -24,6 +25,7 @@ function ModalTicket({}: Props): ReactElement {
   const loc = useSelector(getMapState)
   const [preLat, setPreLat] = useState(0)
   const [preLong, setPreLong] = useState(0)
+  const [phoneNumStatus, setPhoneNumStatus] = useState(false)
 
   // antd component
   const { Option } = Select;
@@ -113,7 +115,6 @@ function ModalTicket({}: Props): ReactElement {
       })
 
       // update Map loc
-      console.log('Update prop')
       dispatch(setLoc({
         lat: Number(tambonDataResult[0].LAT),
         long: Number(tambonDataResult[0].LONG),
@@ -122,6 +123,13 @@ function ModalTicket({}: Props): ReactElement {
       setPreLong(Number(tambonDataResult[0].LONG))
     }
   };
+
+  // validate phone number on change
+  const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // update validate status
+    const text = e.target.value
+    setPhoneNumStatus(validatePhoneNumber(text))
+  }
 
   return (
     <Modal
@@ -186,7 +194,7 @@ function ModalTicket({}: Props): ReactElement {
           label="District"
           name="patientDistrict"
           rules={[
-            { required: true, message: "Please input your district!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -196,7 +204,7 @@ function ModalTicket({}: Props): ReactElement {
           label="Province"
           name="patientProvince"
           rules={[
-            { required: true, message: "Please input your province!" },
+            { required: true, message: "Please choose sub district from provided list!" },
           ]}
         >
           <Input disabled />
@@ -208,8 +216,10 @@ function ModalTicket({}: Props): ReactElement {
           rules={[
             { required: true, message: "Please input your phone number!" },
           ]}
+          hasFeedback
+          validateStatus={phoneNumStatus? 'success':'error'}
         >
-          <Input />
+          <Input onChange={onPhoneNumberChange} />
         </Form.Item>
 
         <Form.Item
@@ -230,7 +240,14 @@ function ModalTicket({}: Props): ReactElement {
           label="Email"
           name="patientEmail"
           rules={[
-            { required: true, message: "Please input your email!" },
+            {
+              required: true,
+              message: "Please input your email!"
+            },
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            }
           ]}
         >
           <Input />
