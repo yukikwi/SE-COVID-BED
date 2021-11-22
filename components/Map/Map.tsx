@@ -11,6 +11,7 @@ interface Props {
 }
 
 function Map(prop: Props): ReactElement {
+  // mapConfig, redux and state part
   const mapConfig = {
     center: {
       lat: 13.736717,
@@ -24,22 +25,26 @@ function Map(prop: Props): ReactElement {
   const [infoWindow, setInfoWindow] = useState<any>(null)
   const [mapObject, setMapObject] = useState<any>(null)
 
+  //event handle part
   const handleApiLoaded = (map:any, maps:any) => {
     setMapObject(map)
     setInfoWindow(new maps.InfoWindow())
     map.addListener("click", (mapsMouseEvent:any) => {handleGgMapLoc(mapsMouseEvent)});
   };
   
+  // handle if user click on map area
   const handleGgMapLoc = (mapsMouseEvent:any) => {
+    // get click position
     const clickLoc = mapsMouseEvent.latLng.toJSON()
+    // set to redux
     dispatch(setLoc({
       lat: Number(clickLoc.lat),
       long: Number(clickLoc.lng),
     }))
   }
 
+  // on map loaded or preLat or preLong change
   useEffect(() => {
-    console.log('useEffect')
     const pos = {
       lat: loc.lat,
       lng: loc.long
