@@ -29,7 +29,6 @@ function ModalAddEdit(props: Props): ReactElement {
   const initValue:THospital = {
     hospitalName: "",
     hospitalPhoneNumber: "",
-    hospitalConvince: "",
     hospitalAddress: "",
     hospitalLocation: {},
     isAvailable: true,
