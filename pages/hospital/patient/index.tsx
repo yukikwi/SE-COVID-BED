@@ -92,7 +92,7 @@ const HospitalResourceIndex: NextPage = () => {
         }
       );
 
-      let rawPatientData: Array<IPatient> = apiResonse.data.data.filter(
+      let rawPatientData: Array<IPatient> = apiResonse.data.filter(
         (item: any) => {
           return item.patientStatus === selectTab;
         }
@@ -100,7 +100,6 @@ const HospitalResourceIndex: NextPage = () => {
 
       setTableData(rawPatientData);
     } catch (error) {
-      
       notification.open({
         message: "Error",
         description:
