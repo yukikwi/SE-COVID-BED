@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from 'cookie'
 
-export default async function login(
+export default async function logout(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
