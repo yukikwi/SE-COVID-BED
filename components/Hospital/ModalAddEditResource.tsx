@@ -53,7 +53,7 @@ function ModalAddResource(props: Props): ReactElement {
     setAvaliableLimit(form.getFieldValue("maximum"))
   }, [show]);
 
-  const handleApprove = async (formData: any) => {
+  const handleSubmit = async (formData: any) => {
     // Api for call here
     if (mode === "Add") {
       try {
@@ -145,7 +145,7 @@ function ModalAddResource(props: Props): ReactElement {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         autoComplete="off"
-        onFinish={handleApprove}
+        onFinish={handleSubmit}
         form={form}
       >
         <Form.Item

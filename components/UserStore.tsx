@@ -17,7 +17,7 @@ function UserStore(props: Props) {
 
   const fetchUser = async () => {
     try{
-      const response:any = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/login`)
+      const response:any = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/user/login`)
       if(response.data.userData){
         const userData = response.data.userData
         dispatch(setUser(userData))
