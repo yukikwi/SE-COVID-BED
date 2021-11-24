@@ -31,33 +31,43 @@ function ModalTicket({}: Props): ReactElement {
   const { Option } = Select;
 
   // event handler
-  const handleApprove = async (formData: any) => {
-    try {
-      
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/patient/add-request-bed`,
-        {
-          ...formData,
-          patientLocation: {
-            lat: loc.lat,
-            long: loc.long,
+  const handleSubmit = async (formData: any) => {
+    if(phoneNumStatus){
+      try {
+        
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/patient/add-request-bed`,
+          {
+            ...formData,
+            patientLocation: {
+              lat: loc.lat,
+              long: loc.long,
+            }
           }
-        }
-      );
+        );
 
-      // Notification
-      notification.open({
-        message: "Success",
-        description: "Add patient information successful",
-      });
+        // Notification
+        notification.open({
+          message: "Success",
+          description: "Add patient information successful",
+        });
 
-      // Close this modal
-      // handleCancel();
-    } catch (error) {
+        // Close this modal
+        // handleCancel();
+      } catch (error) {
+        console.log(error)
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
+    }
+    else{
       notification.open({
         message: "Error",
         description:
-          "Cannot connect to api. Please contact admin for more information.",
+          "Please input valid phone number",
       });
     }
   }
@@ -153,7 +163,7 @@ function ModalTicket({}: Props): ReactElement {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         autoComplete="off"
-        onFinish={handleApprove}
+        onFinish={handleSubmit}
         form={form}
       >
         <Form.Item
