@@ -301,7 +301,7 @@ function AddEditForm(props: Props): ReactElement {
             htmlType="submit"
             disabled={mode === "Add" && addHospital._id ? true : false}
           >
-            Submit
+            Save
           </Button>
         </Form.Item>
 
