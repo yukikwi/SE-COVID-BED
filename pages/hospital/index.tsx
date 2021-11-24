@@ -73,7 +73,7 @@ const HospitalIndex: NextPage = () => {
     try{
       setLoading(true);
       await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
+        `${process.env.NEXT_PUBLIC_APP_API}/hospital/edit-hospital`,
         {
           id: userData.userinfo.hospitalId,
           newData: {

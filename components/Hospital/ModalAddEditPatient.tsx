@@ -45,8 +45,10 @@ function ModalAddPatient(props: Props): ReactElement {
       form.setFieldsValue(patient);
       if (isView === true)
         setMode("View");
-      else
+      else{
         setMode("Edit");
+        setPhoneNumStatus(validatePhoneNumber(patient.patientPhoneNumber))
+      }
     }
     else
       setMode("Add");
@@ -65,75 +67,83 @@ function ModalAddPatient(props: Props): ReactElement {
     setIsDataChange(true);
   }
 
-  const handleApprove = async (formData: any) => {
-    // Api for approve here
+  const handleSubmit = async (formData: any) => {
+    // Api for Submit here
+    if(phoneNumStatus){
+      const hospitalId = userData.userinfo.hospitalId;
+      if (mode === "Add") {
+        try {
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
+            {
+              ...formData,
+              patientHospital: hospitalId
+            }
+          );
 
-    const hospitalId = userData.userinfo.hospitalId;
-    if (mode === "Add") {
-      try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
-          {
-            ...formData,
-            patientHospital: hospitalId
-          }
-        );
-
-        // Notification
-        notification.open({
-          message: "Success",
-          description: "Add patient information successful",
-        });
-
-        // Close this modal
-        handleCancel();
-      } catch (error) {
-        notification.open({
-          message: "Error",
-          description:
-            "Cannot connect to api. Please contact admin for more information.",
-        });
-      }
-    } else if (mode === "Edit") {
-      try {
-        let newData = {};
-        let newPatientSeverityLog = {};
-        if(isDataChange && !isSeverityChange) {
-          newData = formData;
-          newPatientSeverityLog = {};
-        } else if (!isDataChange && isSeverityChange) {
-          newData = {};
-          newPatientSeverityLog = {
-            patientSeverityLabel: formData.patientSeverity,
-            patient: patient._id
-          };
-        } else {
-          newData = formData;
-          newPatientSeverityLog = {
-            patientSeverityLabel: formData.patientSeverity,
-            patient: patient._id
-          };
-        }
-
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_APP_API}/patient/edit-patient`,
-          {
-            id: patient._id,
-            newData,
-            newPatientSeverityLog,
-          });
+          // Notification
           notification.open({
             message: "Success",
-            description:
-              "Edit patient information successful.",
+            description: "Add patient information successful",
           });
-      } catch (error) {
-        notification.open({
-          message: "Error",
-          description:
-            "Cannot connect to api. Please contact admin for more information.",
-        });
+
+          // Close this modal
+          handleCancel();
+        } catch (error) {
+          notification.open({
+            message: "Error",
+            description:
+              "Cannot connect to api. Please contact admin for more information.",
+          });
+        }
+      } else if (mode === "Edit") {
+        try {
+          let newData = {};
+          let newPatientSeverityLog = {};
+          if(isDataChange && !isSeverityChange) {
+            newData = formData;
+            newPatientSeverityLog = {};
+          } else if (!isDataChange && isSeverityChange) {
+            newData = {};
+            newPatientSeverityLog = {
+              patientSeverityLabel: formData.patientSeverity,
+              patient: patient._id
+            };
+          } else {
+            newData = formData;
+            newPatientSeverityLog = {
+              patientSeverityLabel: formData.patientSeverity,
+              patient: patient._id
+            };
+          }
+
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_APP_API}/patient/edit-patient`,
+            {
+              id: patient._id,
+              newData,
+              newPatientSeverityLog,
+            });
+            notification.open({
+              message: "Success",
+              description:
+                "Edit patient information successful.",
+            });
+        } catch (error) {
+          notification.open({
+            message: "Error",
+            description:
+              "Cannot connect to api. Please contact admin for more information.",
+          });
+        }
       }
+    }
+    else{
+      notification.open({
+        message: "Error",
+        description:
+          "Please input valid phone number",
+      });
     }
   };
 
@@ -211,7 +221,7 @@ function ModalAddPatient(props: Props): ReactElement {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         autoComplete="off"
-        onFinish={handleApprove}
+        onFinish={handleSubmit}
         form={form}
       >
         <Form.Item

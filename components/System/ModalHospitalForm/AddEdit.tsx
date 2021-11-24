@@ -41,23 +41,25 @@ function AddEditForm(props: Props): ReactElement {
   useEffect(() => {
     setUserData();
   }, []);
+
   // reset form on hospitalData change or modal state change
   useEffect(() => {
     setAddHospital({ _id: null });
     form.resetFields();
-    if(mode === "Edit" && typeof(hospitalData.hospitalLocation?.lat) !== 'undefined'){
+    if(mode === "Edit" && typeof(hospitalData.hospitalLocation?.lat) !== 'undefined' && typeof(hospitalData.hospitalPhoneNumber) !== "undefined"){
       setPreLat(Number(hospitalData.hospitalLocation?.lat))
       setPreLong(Number(hospitalData.hospitalLocation?.long))
       dispatch(setLoc({
         lat: Number(hospitalData.hospitalLocation?.lat),
         long: Number(hospitalData.hospitalLocation?.long),
       }))
+      setPhoneNumStatus(validatePhoneNumber(hospitalData.hospitalPhoneNumber))
     }
   }, [hospitalData, show]);
 
   // Fetch Data
   const setUserData = async () => {
-    const userList = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/get-hospital-staff`) as any
+    const userList = await axios.get(`${process.env.NEXT_PUBLIC_APP_API}/user/get-hospital-staff`) as any
     setUserList(userList.data.data);
   };
 
@@ -68,57 +70,75 @@ function AddEditForm(props: Props): ReactElement {
 
   // handle add new hospital
   const handleAdd = async () => {
-    let formData = form.getFieldsValue()
-    try {
-      const res = (await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/hospital/add-hospital`,
-        {
-          ...formData,
-          hospitalLocationLat: loc.lat,
-          hospitalLocationLong: loc.long,
-          isAvailable
-        }
-      )) as any;
-      notification.open({
-        message: "Success",
-        description: "Add hospital information successful",
-      });
+    if(phoneNumStatus){
+      let formData = form.getFieldsValue()
+      try {
+        const res = (await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/hospital/add-hospital`,
+          {
+            ...formData,
+            hospitalLocationLat: loc.lat,
+            hospitalLocationLong: loc.long,
+            isAvailable
+          }
+        )) as any;
+        notification.open({
+          message: "Success",
+          description: "Add hospital information successful",
+        });
 
-      setAddHospital(res.data.hospitalData);
-    } catch (error) {
+        setAddHospital(res.data.hospitalData);
+      } catch (error) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
+    }
+    else{
       notification.open({
         message: "Error",
         description:
-          "Cannot connect to api. Please contact admin for more information.",
+          "Please input valid phone number",
       });
     }
   };
 
   // handle edit hospital
   const handleEdit = async () => {
-    try {
-      let formData = form.getFieldsValue()
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_APP_API}/edit-hospital`,
-        {
-          id: hospitalData._id,
-          newData: {
-            ...formData, 
-            hospitalLocationLat: loc.lat,
-            hospitalLocationLong: loc.long,
-            isAvailable
-          },
-        }
-      );
-      notification.open({
-        message: "Success",
-        description: "Edit hospital information successful",
-      });
-    } catch (err) {
+    if(phoneNumStatus){
+      try {
+        let formData = form.getFieldsValue()
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_APP_API}/hospital/edit-hospital`,
+          {
+            id: hospitalData._id,
+            newData: {
+              ...formData, 
+              hospitalLocationLat: loc.lat,
+              hospitalLocationLong: loc.long,
+              isAvailable
+            },
+          }
+        );
+        notification.open({
+          message: "Success",
+          description: "Edit hospital information successful",
+        });
+      } catch (err) {
+        notification.open({
+          message: "Error",
+          description:
+            "Cannot connect to api. Please contact admin for more information.",
+        });
+      }
+    }
+    else{
       notification.open({
         message: "Error",
         description:
-          "Cannot connect to api. Please contact admin for more information.",
+          "Please input valid phone number",
       });
     }
   };
