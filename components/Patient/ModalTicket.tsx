@@ -53,7 +53,8 @@ function ModalTicket({}: Props): ReactElement {
         });
 
         // Close this modal
-        // handleCancel();
+        handleCancel();
+        
       } catch (error) {
         console.log(error)
         notification.open({
