@@ -2,7 +2,7 @@
 export const validatePhoneNumber = (text:string) => {
     const regexPhone = new RegExp(/^0(6|8|9)[0-9]{8}$/ );
     const regexOffice = new RegExp(/^0(2|3)[0-9]{7}$/ );
-    let testString = ''
+    let testString = text
     // remove -
     if(
         text.length === 11 || // xxx-xxxxxxx, xx-xxx-xxxx
