@@ -117,7 +117,7 @@ const HospitalResourceIndex: NextPage = () => {
 
   return (
     <LayoutHospital
-      title="Capybara Hospital : Resource list"
+      title="Resource list"
       button={
         <Button
           id="add-resource"

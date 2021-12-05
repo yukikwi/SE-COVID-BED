@@ -34,7 +34,7 @@ TCF_login_001 Test login as hospital
     Input Text      id=basic_password       ${PASSWORD}
     Submit Form
     Sleep           3s
-    Page Should Contain                     Capybara Hospital : Information
+    Page Should Contain                     Hospital Information
     Run Keyword     KWF_HOS_001 Show patient list
     Run Keyword     KWF_HOS_007 Show resource list
     Run Keyword     KWF_logout Test logout

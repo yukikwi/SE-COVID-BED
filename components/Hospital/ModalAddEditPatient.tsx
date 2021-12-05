@@ -77,6 +77,7 @@ function ModalAddPatient(props: Props): ReactElement {
             `${process.env.NEXT_PUBLIC_APP_API}/patient/add-patient`,
             {
               ...formData,
+              patientSeverityLabel: formData.patientSeverity,
               patientHospital: hospitalId
             }
           );

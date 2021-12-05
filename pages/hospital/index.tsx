@@ -106,7 +106,7 @@ const HospitalIndex: NextPage = () => {
 
   return (
     <LayoutHospital
-      title="Capybara Hospital : Information"
+      title= "Hospital Information"
       button={<></>}
     >
       <List
